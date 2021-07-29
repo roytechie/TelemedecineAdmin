@@ -1,0 +1,77 @@
+<!-- <form [formGroup]="updateUser">
+    <div class="row">
+        <div class="col-sm-12"> 
+            <mat-form-field>
+                <mat-label>UserName</mat-label>
+                <mat-label>{{loginDetails.userName}</mat-label>
+            
+                <mat-label>Active</mat-label>
+                <mat-radio-group aria-label="" [(ngModel)]="loginDetails.isActiveUser" color="primary"> 
+                    <mat-radio-button class="col-sm-4" value="true">Yes </mat-radio-button>
+                    <mat-radio-button class="col-sm-4" value="false">No</mat-radio-button>
+                </mat-radio-group> 
+            </mat-form-field>
+        </div>
+        <div class="col-sm-1">
+            <button mat-button (click)="updateUser()"><mat-icon>add_box</mat-icon></button>
+        </div>
+    </div>
+</form>  -->
+
+<div class="row">
+    <div class="col-sm-12">
+      <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <table mat-table class="mat-elevation-z8" [dataSource]="dataSource" style="width: 100%;">
+            
+            <ng-container matColumnDef="firstName">
+                <th mat-header-cell *matHeaderCellDef>First Name</th>
+                <td mat-cell *matCellDef="let element;">{{element.firstName}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="lastName">
+                <th mat-header-cell *matHeaderCellDef>Last Name</th>
+                <td mat-cell *matCellDef="let element;">{{element.lastName}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="userName">
+                <th mat-header-cell *matHeaderCellDef>User Name</th>
+                <td mat-cell *matCellDef="let element;">{{element.userName}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef>Email</th>
+                <td mat-cell *matCellDef="let element;">{{element.email}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="phoneNo">
+                <th mat-header-cell *matHeaderCellDef>Phone Number</th>
+                <td mat-cell *matCellDef="let element;">{{element.phoneNumber}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="userId" >
+                <th mat-header-cell *matHeaderCellDef>Profile</th> 
+                <td mat-cell *matCellDef="let element;">
+                    <a [routerLink]="['./../authorization-form', element.userId]">View Profile</a>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="isActive">
+                <th mat-header-cell *matHeaderCellDef>Active</th>
+                <td mat-cell *matCellDef="let element;"> 
+                    <mat-radio-group aria-label="" [(value)]="element.isActiveUser" color="primary"> 
+                        <mat-radio-button class="col-sm-4" [value]="true" (change)="updateUserAccess(element,$event)">Yes</mat-radio-button>
+                        <mat-radio-button class="col-sm-4" [value]="false" (change)="updateUserAccess(element,$event)">No</mat-radio-button>
+                    </mat-radio-group> 
+                </td>  
+            </ng-container> 
+            
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> 
+        </table>
+        <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator> 
+    </div>
+</div>

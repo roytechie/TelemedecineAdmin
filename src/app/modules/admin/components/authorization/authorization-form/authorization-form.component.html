@@ -1,0 +1,703 @@
+<!-- </mat-card> class="container"> -->
+<form [formGroup]="basicForm" (ngSubmit)="uploadImage()" autocomplete="on">
+  <mat-card>   
+      <mat-card-title class="mat-card-title">Authorization Form</mat-card-title>
+      <mat-card-content>
+      <mat-accordion> 
+          <mat-expansion-panel >
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                  Basic Information 
+              </mat-panel-title>
+              <mat-panel-description>
+                  All Information Must Be Complete
+              </mat-panel-description> 
+            </mat-expansion-panel-header> 
+              <section class="example-section">
+                <h6>Check Profession: <span style="color: #B94A48;">*</span> </h6>
+                <span *ngFor="let skill of profession; let i=index">
+                  <mat-checkbox class="example-margin" 
+                  (change)="updateValues(skill,$event.checked, i)" [checked]="skill.selected" >
+                    {{skill.name}}</mat-checkbox>
+                </span>              
+              </section> 
+
+            <section>
+                <div class="row">
+                  <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>First Name</mat-label>
+                          <input matInput type="text" formControlName="firstName" 
+                          maxlength="50"
+                          [(ngModel)]="providerInfo.firstName">
+                         <mat-error *ngIf="f.firstName.errors?.required">First Name is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>Initial</mat-label>
+                          <input matInput type="text" 
+                          maxlength="50"
+                          formControlName="initial" [(ngModel)]="providerInfo.initial">
+                         <mat-error *ngIf="f.initial.errors?.required">Initial is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>Last</mat-label>
+                          <input matInput type="text" 
+                          maxlength="50"
+                          formControlName="lastName" [(ngModel)]="providerInfo.lastName">
+                         <mat-error *ngIf="f.lastName.errors?.required">Last Name is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-12">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>Mailing Address</mat-label>
+                          <input matInput type="text" 
+                          maxlength="250"
+                          formControlName="mailingAddress" [(ngModel)]="providerInfo.mailingAddress"> 
+                          <mat-error *ngIf="f.mailingAddress.errors?.required">Mailing Address is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>City</mat-label>
+                          <input matInput type="text" 
+                          maxlength="50"
+                          formControlName="city" [(ngModel)]="providerInfo.city">
+                          <mat-error *ngIf="f.city.errors?.required">City is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>State/Province</mat-label>
+                          <input matInput type="text"
+                          maxlength="50"
+                          formControlName="state" [(ngModel)]="providerInfo.state">
+                          <mat-error *ngIf="f.state.errors?.required">State is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>Zip/Postal</mat-label>
+                          <input matInput type="text"
+                          maxlength="50"
+                          formControlName="zipCode" [(ngModel)]="providerInfo.zipCode">
+                          <mat-error *ngIf="f.zipCode.errors?.required">Zip Code is required</mat-error>
+                        </mat-form-field>
+                  </div>
+
+                  <div class="col-md-4">
+                    <mat-form-field appearance="fill" style="width:100%;">
+                        <mat-label>Country</mat-label>
+                        <mat-select [(ngModel)]="providerInfo.country" formControlName="country">
+                          <mat-option value="">Please select from the dropdown list</mat-option>
+                          <mat-option [value]="obj.country" *ngFor="let obj of countryList.values">{{obj.country}}</mat-option> 
+                        </mat-select>
+                       <!-- <mat-error *ngIf="f.medicareValidation.errors?.required">Medicare Validated is required</mat-error> -->
+                      </mat-form-field>
+                  </div>
+ 
+                  <!-- <div class="col-md-4"> 
+                    <mat-select-country appearance="outline" formControlName="countryForm"
+                      label="Country"
+                      [value] = "country"
+                     
+                      (onCountrySelected)="onCountrySelected($event, false)">
+                    </mat-select-country> 
+                    <mat-error *ngIf="f.countryForm.errors?.required">Country is required</mat-error>
+                  </div>  -->
+                  <hr/>
+                  <div class="col-md-12">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>Practice Address</mat-label>
+                          <input matInput type="text"
+                          maxlength="250"
+                          formControlName="practiceAddress" [(ngModel)]="providerInfo.practiceAddress">
+                          <mat-error *ngIf="f.practiceAddress.errors?.required">Practice Address is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <!-- <div class="col-md-12">
+                      <mat-form-field class="example-full-width">
+                          <mat-label></mat-label>
+                          <input matInput type="text" formControlName="FirstName" >
+                        </mat-form-field>
+                  </div> -->
+                  <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>City</mat-label>
+                          <input matInput type="text"
+                          maxlength="50"
+                          formControlName="practiceCity" [(ngModel)]="providerInfo.practiceCity">
+                          <mat-error *ngIf="f.practiceCity.errors?.required">Practice City is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>State/Province</mat-label>
+                          <input matInput type="text"
+                          maxlength="50"
+                          formControlName="practiceState" [(ngModel)]="providerInfo.practiceState">
+                          <mat-error *ngIf="f.practiceState.errors?.required">Practice State is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>Zip/Postal</mat-label>
+                          <input matInput type="text" 
+                          maxlength="50"
+                          formControlName="practiceZipCode" [(ngModel)]="providerInfo.practiceZipCode">
+                          <mat-error *ngIf="f.practiceZipCode.errors?.required">Practice Zip Code is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <!-- <div class="col-md-4"> 
+                      <mat-select-country appearance="outline" formControlName="practiceCountry"
+                        label="Country"
+                        [value] = "practiceCountry"                       
+                        (onCountrySelected)="onCountrySelected($event,true)">
+                      </mat-select-country> 
+                      <mat-error *ngIf="f.practiceCountry.errors?.required">Practice Country is required</mat-error>
+                  </div> -->
+
+                  <div class="col-md-4">
+                    <mat-form-field appearance="fill" style="width:100%;">
+                        <mat-label>Practice Country</mat-label>
+                        <mat-select [(ngModel)]="providerInfo.practiceCountry" formControlName="practiceCountry">
+                          <mat-option value="">Please select from the dropdown list</mat-option>
+                          <mat-option [value]="obj.country" *ngFor="let obj of countryList.values">{{obj.country}}</mat-option> 
+                        </mat-select>
+                       <!-- <mat-error *ngIf="f.medicareValidation.errors?.required">Medicare Validated is required</mat-error> -->
+                      </mat-form-field>
+                  </div>
+
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>Email</mat-label>
+                          <input matInput type="email"
+                          maxlength="50"
+                          formControlName="email" [(ngModel)]="providerInfo.email">
+                          <mat-error *ngIf="f.email.errors?.required">Email is required</mat-error>
+                          <mat-error *ngIf="f.email.errors?.pattern">Email must be a valid email address</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>Phone Number</mat-label>
+                          <input matInput type="text"
+                          minlength="10"
+                          maxlength="15"
+                          formControlName="phoneNumber" [(ngModel)]="providerInfo.phoneNumber">
+                         <mat-error *ngIf="f.phoneNumber.errors?.required">Phone Number is required</mat-error>
+                      </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                          <mat-label >Mobile Number</mat-label>
+                          <input matInput type="text" 
+                          minlength="10"
+                          maxlength="15"
+                          formControlName="mobileNumber" [(ngModel)]="providerInfo.mobileNumber">
+                          <mat-hint align="left">For internal communication only. We will not give this information out.</mat-hint>
+                         <mat-error *ngIf="f.mobileNumber.errors?.required">Mobile Number is required</mat-error>
+                        </mat-form-field>
+                  </div> 
+                  <div class="col-md-4">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Fax Number</mat-label>
+                        <input matInput type="text" 
+                        maxlength="50"
+                        formControlName="faxNumber" [(ngModel)]="providerInfo.faxNumber">
+                       <mat-error *ngIf="f.faxNumber.errors?.required">Fax Number is required</mat-error>
+                      </mat-form-field>
+                  </div> 
+                  <div class="col-md-4">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Social Security</mat-label>
+                        <input matInput type="text" 
+                        maxlength="50"
+                        formControlName="socialSecurity" [(ngModel)]="providerInfo.socialSecurity">
+                       <mat-error *ngIf="f.socialSecurity.errors?.required">Social Security is required</mat-error>
+                      </mat-form-field>
+                  </div> 
+                  <div class="col-md-4">
+                    <!-- <mat-form-field class="example-full-width">
+                        <mat-label>Date Of Birth</mat-label>
+                        <input matInput type="text" formControlName="dob" [(ngModel)]="providerInfo.dob">
+                       <mat-error *ngIf="f.dob.errors?.required">Date Of Birth is required</mat-error>
+                      </mat-form-field> -->
+
+                      <mat-form-field class="example-full-width"> 
+                        <mat-label>Date Of Birth</mat-label>
+                        <input matInput [matDatepicker]="pickerdob" formControlName="dob" 
+                        [(ngModel)]="providerInfo.dob">  
+                        <mat-datepicker-toggle matSuffix [for]="pickerdob"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerdob></mat-datepicker>
+                        <mat-error *ngIf="f.dob.errors?.required">Date Of Birth is required</mat-error>  
+                      </mat-form-field>
+                  </div> 
+                  <div class="col-md-4">
+                    <mat-form-field class="example-full-width" style="padding-top: 30px;">
+                        <mat-label>Specialty</mat-label>
+                        <input matInput type="text"  maxlength="50"
+                         formControlName="speciality" [(ngModel)]="providerInfo.speciality">
+                       <mat-error *ngIf="f.speciality.errors?.required">Specialty is required</mat-error>
+                      </mat-form-field>
+                  </div> 
+                  <div class="col-md-4" style="padding-top: 30px;">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>NPI#</mat-label>
+                          <input matInput type="text"  maxlength="50"
+                           formControlName="npi" [(ngModel)]="providerInfo.npi">
+                         <mat-error *ngIf="f.npi.errors?.required">NPI is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                      Medicare Validated (if applicable)
+                      <mat-form-field appearance="fill" style="width:100%;">
+                          <!-- <mat-label>Medicare Validated (if applicable)</mat-label> -->
+                          <mat-select [(ngModel)]="providerInfo.medicareValidation" formControlName="medicareValidation">
+                            <mat-option value="">Please select from the dropdown list</mat-option>
+                            <mat-option value="yes" >Yes</mat-option>
+                            <mat-option value="no">No</mat-option>
+                            <mat-option value="unCertain">UnCertain</mat-option>
+                          </mat-select>
+                         <mat-error *ngIf="f.medicareValidation.errors?.required">Medicare Validated is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-5">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>Education (MD, DO, ADN, BSN, MSN, PhD)</mat-label>
+                          <input matInput type="text"  maxlength="100"
+                           formControlName="education" [(ngModel)]="providerInfo.education">
+                         <mat-error *ngIf="f.education.errors?.required">Education is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>Medical or Nursing School (Please List the School You Attended)</mat-label>
+                          <input matInput type="text" 
+                          maxlength="200"
+                          formControlName="nursingSchool" [(ngModel)]="providerInfo.nursingSchool">
+                         <mat-error *ngIf="f.nursingSchool.errors?.required">Medical or Nursing School is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>Year Of Graduation</mat-label>
+                          <input matInput type="text"
+                          maxlength="50"
+                          formControlName="nursingYearOfGraduation" [(ngModel)]="providerInfo.nursingYearOfGraduation">
+                         <mat-error *ngIf="f.nursingYearOfGraduation.errors?.required">Year Of Graduation is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4" style="padding-top:30px;">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>Post Graduate Education</mat-label>
+                          <input matInput type="text"
+                          maxlength="100"
+                          formControlName="pgEducation" [(ngModel)]="providerInfo.pgEducation">
+                         <mat-error *ngIf="f.pgEducation.errors?.required">Post Graduate Education is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4" style="padding-top:30px;">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>Year Of Graduation</mat-label>
+                          <input matInput type="text"
+                          maxlength="50"
+                          formControlName="pgYearOfGraduation" [(ngModel)]="providerInfo.pgYearOfGraduation">
+                         <mat-error *ngIf="f.pgYearOfGraduation.errors?.required">Year Of Graduation is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                        <!-- <mat-form-field class="example-full-width">
+                          <mat-label>Are you Board Eligible? (Physicians)</mat-label>
+                          <input matInput type="text" formControlName="FirstName" [(ngModel)]="providerInfo.pgYearOfGraduation">
+                        </mat-form-field> -->
+                        
+                        Are you Board Eligible? (Physicians)
+                        <mat-form-field appearance="fill" style="width:100%;">
+                          <!-- <mat-label>Are you Board Eligible? (Physicians)</mat-label> -->
+                          <mat-select [(ngModel)]="providerInfo.isBoardEligible" formControlName="isBoardEligible">
+                            <mat-option value="">Please select from the dropdown list</mat-option>
+                            <mat-option value="1" >Yes</mat-option>
+                            <mat-option value="0">No</mat-option>
+                          </mat-select>
+                         <mat-error *ngIf="f.isBoardEligible.errors?.required">Board Eligible is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                        <!-- <mat-form-field class="example-full-width">
+                          <mat-label>Are you Board Certified? (Physicians and Nurses)</mat-label>
+                          <input matInput type="text" formControlName="FirstName" >
+                        </mat-form-field> -->
+                        
+                        Are you Board Certified? (Physicians and Nurses)
+                        <mat-form-field appearance="fill" style="width:100%;">
+                          <!-- <mat-label>Are you Board Certified? (Physicians and Nurses)</mat-label> -->
+                          <mat-select [(ngModel)]="providerInfo.isBoardCertified" formControlName="isBoardCertified">
+                            <mat-option value="">Please select from the dropdown list</mat-option>
+                            <mat-option value="1" >Yes</mat-option>
+                            <mat-option value="0">No</mat-option>
+                          </mat-select>
+                         <mat-error *ngIf="f.isBoardCertified.errors?.required">Board Certified is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4" style="padding-top:30px;">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>If Yes, which Board? (Physicians and Nurses)</mat-label>
+                          <input matInput type="text"
+                          maxlength="50"
+                          formControlName="boardName" [(ngModel)]="providerInfo.boardName">
+                         <mat-error *ngIf="f.boardName.errors?.required">Board Name is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4" style="padding-top:30px;">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>Certification Number (Physicians and Nurses)</mat-label>
+                          <input matInput type="text"
+                          
+                          formControlName="certifiedNumber" [(ngModel)]="providerInfo.certifiedNumber">
+                         <mat-error *ngIf="f.certifiedNumber.errors?.required">Certification Number is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4"> 
+                      Gender
+                      <mat-form-field appearance="fill" style="width: 100%;">
+                          <!-- <mat-label>Gender</mat-label> -->
+                          <mat-select [(ngModel)]="providerInfo.gender" formControlName="gender">
+                            <mat-option value="">Please select from the dropdown list</mat-option>
+                            <mat-option value="male" >Male</mat-option>
+                            <mat-option value="female">Female</mat-option>
+                          </mat-select>
+                         <mat-error *ngIf="f.gender.errors?.required">Gender is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                      Name of your contact person
+                      <mat-form-field appearance="fill" style="width:100%;">
+                          <!-- <mat-label>Name of your contact person</mat-label> -->
+                          <mat-select [(ngModel)]="providerInfo.contactPerson" formControlName="contactPerson">
+                            <mat-option value="">Please select from the dropdown list</mat-option>
+                             <mat-option *ngFor="let obj of ContactPersionList" [value]="obj.name">{{obj.name}}</mat-option>
+                          </mat-select>
+                         <mat-error *ngIf="f.contactPerson.errors?.required">Contact Person is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                       Do you own your own practice?
+                      <mat-form-field appearance="fill" style="width: 100%;">
+                          <!-- <mat-label>Do you own your own practice?</mat-label> -->
+                          <mat-select [(ngModel)]="providerInfo.isOwnPractice" formControlName="isOwnPractice">
+                            <mat-option value="">Please select from the dropdown list</mat-option>
+                            <mat-option value="1">Yes</mat-option>
+                            <mat-option value="0">No</mat-option>
+                          </mat-select>
+                         <mat-error *ngIf="f.isOwnPractice.errors?.required">Own Practice is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                          <mat-label>Language(s) spoken? (other than English)</mat-label>
+                          <input matInput type="text" formControlName="languageKnown" 
+                          [(ngModel)]="providerInfo.languageKnown">
+                         <mat-error *ngIf="f.languageKnown.errors?.required">Language(s) is required</mat-error>
+                        </mat-form-field>
+                  </div>
+                </div>
+            </section>
+          </mat-expansion-panel>
+      </mat-accordion>
+  
+  <app-professional-references
+      [professionalReferencesListIn]="providerInfo.professionalReferencesList">
+  </app-professional-references>
+  <app-dearegistration 
+    [deaRegistraionStatusIn]="deaRegistraionStatus"
+    [deaRegistrationsListIn]="providerInfo.deaRegistrationsList">
+  </app-dearegistration>
+  
+  <app-license-registrations
+    [licenseRegistrationIn]="providerInfo.licenseRegistrationList">
+  </app-license-registrations>
+  
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Licensure And Claims History
+        </mat-panel-title>
+        <mat-panel-description>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <p>* If you answer "Yes"to any question, please provide a detailed explanation *</p>
+      <div class="row">
+      <div class="col-md-12">
+          <p>1. Have you ever been the subject of disciplinary or investigative proceedings or reprimand by a governmental, administrative agency, hospital or professional association?</p>
+          <mat-radio-group aria-label="Select an option" 
+          formControlName="isDiciplinaryByOthers"
+          [(ngModel)]="providerInfo.isDiciplinaryByOthers">
+            <mat-radio-button value="1" class="example-margin">Yes</mat-radio-button>
+            <mat-radio-button value="0" class="example-margin">No</mat-radio-button>
+            <mat-error *ngIf="f.isDiciplinaryByOthers.errors?.required">This field is required</mat-error>
+          </mat-radio-group>
+      </div>
+      <div class="col-md-12">
+        <p>2. Have you ever had any State professional license or license to prescribe or dispense narcotics refused, suspended, revoked, renewal refused, or accepted only on special terms or voluntary surrender of same? </p>
+        <mat-radio-group aria-label="Select an option" 
+        formControlName="isStateProfessionalLicense"
+        [(ngModel)]="providerInfo.isStateProfessionalLicense">
+          <mat-radio-button value="1" class="example-margin">Yes</mat-radio-button>
+          <mat-radio-button value="0" class="example-margin">No</mat-radio-button>
+          <mat-error *ngIf="f.isStateProfessionalLicense.errors?.required">This field is required</mat-error>
+        </mat-radio-group>
+    </div>
+    <div class="col-md-12">
+      <p>3. Have your hospital privileges and / or professional services ever been denied, revoked, suspended, refused, limited, placed on probation or placed under any disciplinary action?</p>
+      <mat-radio-group aria-label="Select an option" 
+      formControlName="isHospitalPrivilegesDenied"
+      [(ngModel)]="providerInfo.isHospitalPrivilegesDenied">
+        <mat-radio-button value="1" class="example-margin">Yes</mat-radio-button>
+        <mat-radio-button value="0" class="example-margin">No</mat-radio-button>
+        <mat-error *ngIf="f.isHospitalPrivilegesDenied.errors?.required">This field is required</mat-error>
+      </mat-radio-group>
+  </div>
+  <div class="col-md-12">
+    <p>4. Have there been or are there any pending malpractice claims, judgments, suits, settlements, or notices of intent to commence action involving you? </p>
+    <mat-radio-group aria-label="Select an option" 
+    formControlName="isPendingMalpractice"
+    [(ngModel)]="providerInfo.isPendingMalpractice"> 
+      <mat-radio-button value="1" class="example-margin">Yes</mat-radio-button>
+      <mat-radio-button value="0" class="example-margin">No</mat-radio-button>
+      <mat-error *ngIf="f.isPendingMalpractice.errors?.required">This field is required</mat-error>
+    </mat-radio-group>
+  </div>
+  <div class="col-md-12">
+    <p>5. Have you ever been convicted of an act committed in violation of any law or ordinance other than a traffic violation?</p>
+    <mat-radio-group aria-label="Select an option" 
+    formControlName="isConvictedVilationOfLaw"
+    [(ngModel)]="providerInfo.isConvictedVilationOfLaw"> 
+      <mat-radio-button value="1" class="example-margin">Yes</mat-radio-button>
+      <mat-radio-button value="0" class="example-margin">No</mat-radio-button>
+      <mat-error *ngIf="f.isConvictedVilationOfLaw.errors?.required">This field is required</mat-error>
+    </mat-radio-group>
+  </div>
+  <div class="col-md-12">
+    <p>6. Do you have now or have you ever had any problems with or been treated for drug or alcohol dependency?</p>
+    <mat-radio-group aria-label="Select an option" 
+    formControlName="isProblemWithDrugAlcohol"
+    [(ngModel)]="providerInfo.isProblemWithDrugAlcohol"> 
+      <mat-radio-button value="1" class="example-margin">Yes</mat-radio-button>
+      <mat-radio-button value="0" class="example-margin">No</mat-radio-button>
+      <mat-error *ngIf="f.isProblemWithDrugAlcohol.errors?.required">This field is required</mat-error>
+    </mat-radio-group>
+  </div>
+  <div class="col-md-12">
+    <p>7. Have you ever had any professional liability insurance company cancel, decline, refuse to renew, or accept only on special terms, their malpractice insurance?</p>
+    <mat-radio-group aria-label="Select an option"
+    formControlName="isDeclinedanyInsuraceCompany"
+    [(ngModel)]="providerInfo.isDeclinedanyInsuraceCompany"> 
+      <mat-radio-button value="1" class="example-margin">Yes</mat-radio-button>
+      <mat-radio-button value="0" class="example-margin">No</mat-radio-button>
+      <mat-error *ngIf="f.isDeclinedanyInsuraceCompany.errors?.required">This field is required</mat-error>
+    </mat-radio-group>
+  </div>
+  <div class="col-md-12">
+    <p>8. Have you ever had or do you now have any physical or mental condition that would compromise your ability to practice medicine or perform clinical assignments?</p>
+    <mat-radio-group aria-label="Select an option" 
+    formControlName="isPhysicalConditionFine"
+    [(ngModel)]="providerInfo.isPhysicalConditionFine"> 
+      <mat-radio-button value="1" class="example-margin">Yes</mat-radio-button>
+      <mat-radio-button value="0" class="example-margin">No</mat-radio-button>
+      <mat-error *ngIf="f.isPhysicalConditionFine.errors?.required">This field is required</mat-error>
+    </mat-radio-group>
+    </div>
+    </div>
+  </mat-expansion-panel>
+  </mat-accordion>
+  <!-- <mat-accordion>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Declaration Of Health
+        </mat-panel-title>
+        <mat-panel-description>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <p>I hereby declare that, to the best of my knowledge, I do not have a physical or mental condition that would adversely affect my ability to carry out the clinical privileges, which I have requested as a Locum Tenens physician.</p>
+      <div class="row">
+  
+          </div>
+    </mat-expansion-panel>
+  </mat-accordion>   --> 
+  
+  <mat-card>
+    <h6 class="colaps-color">Declaration Of Health</h6>
+    <p>I hereby declare that, to the best of my knowledge, I do not have a physical or mental condition that would adversely affect my ability to carry out the clinical privileges, which I have requested as a Locum Tenens physician.</p>
+  </mat-card> 
+
+  <mat-card>
+    <h6 class="colaps-color"> Attestation, Authorization and Warranty</h6>
+    <p>I authorize Locum Tenens USA, Inc. to release information to its Risk Management Department, insurance companies, and medical facility clients. I hereby authorize the disclosure by any institution (including but not limited to the Federation of State Medical Boards and State Licensing Boards) information regarding me, including my education, medical training and employment, skills, experience, fitness to practice medicine, character, work habits, job performance, certification, licensure, hospital staff or clinical privileges, DEA authorization and medical malpractice claims. The undersigned releases the above from any claims resulting from the disclosure of such opinions to LOCUM TENENS USA, Inc. I authorize the release of all information from Medical Schools, Colleges, Universities, Medical Institutions, Hospitals, Clinics, Physicians, State Medical Boards, Medical Malpractice Carriers, All Government Agencies, and any other source necessary to assist with my credentialing process. I understand that all information will be used to evaluate my professional qualifications, assist with credentialing at Health Care Facilities, and for use when applying to State Medical Boards for licensure are necessary.</p>
+    
+    <div class="row">
+      <div class="col-md-3">
+        <mat-form-field class="example-full-width"> 
+          <mat-label>Choose Date</mat-label> 
+          <input matInput  [matDatepicker]="picker" formControlName="submittedDate" [(ngModel)]="providerInfo.submittedDate">  
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="f.submittedDate.errors?.required">Submission Date is required</mat-error>  
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4" 
+      [ngClass]="{'sigPadNone' : !showSignaturePad, 'sigPadBlock' : showSignaturePad}">
+        <div class="signature-pad">
+          <div class="signature-pad--body">
+            <canvas #sPad style="touch-action: none;"></canvas>
+          </div>
+        </div>
+      </div> 
+      <img [ngClass]="{'sigPadNone' : showSignaturePad, 'sigPadBlock' : !showSignaturePad}" 
+      [src]="signatureUrl">
+
+      <div class="col-3" 
+      [ngClass]="{'sigPadNone' : !showSignaturePad, 'sigPadBlock' : showSignaturePad}">
+        <button class="btn btn-block btn-danger" (click)="clear()">Clear</button>
+        <button class="btn btn-block btn-warning" (click)="undo()">Undo</button> 
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <button class="btn btn-primary btn-block"  [class.spinner]="loading" [disabled]="loading" (click)="submitForm()">Save Changes</button> 
+
+      </div>
+    </div>
+</mat-card>  
+
+<mat-accordion  *ngIf="false">
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Attestation, Authorization and Warranty
+      </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p>I authorize Locum Tenens USA, Inc. to release information to its Risk Management Department, insurance companies, and medical facility clients. I hereby authorize the disclosure by any institution (including but not limited to the Federation of State Medical Boards and State Licensing Boards) information regarding me, including my education, medical training and employment, skills, experience, fitness to practice medicine, character, work habits, job performance, certification, licensure, hospital staff or clinical privileges, DEA authorization and medical malpractice claims. The undersigned releases the above from any claims resulting from the disclosure of such opinions to LOCUM TENENS USA, Inc. I authorize the release of all information from Medical Schools, Colleges, Universities, Medical Institutions, Hospitals, Clinics, Physicians, State Medical Boards, Medical Malpractice Carriers, All Government Agencies, and any other source necessary to assist with my credentialing process. I understand that all information will be used to evaluate my professional qualifications, assist with credentialing at Health Care Facilities, and for use when applying to State Medical Boards for licensure are necessary.</p>
+    <div class="row">
+      <div class="col-md-3">
+        <mat-form-field class="example-full-width"> 
+          <mat-label>Choose Date</mat-label> 
+          <input matInput  [matDatepicker]="picker" formControlName="submittedDate" [(ngModel)]="providerInfo.submittedDate">  
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="f.submittedDate.errors?.required">Submission Date is required</mat-error>  
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4" 
+      [ngClass]="{'sigPadNone' : !showSignaturePad, 'sigPadBlock' : showSignaturePad}">
+        <div class="signature-pad">
+          <div class="signature-pad--body">
+            <canvas #sPad style="touch-action: none;"></canvas>
+          </div>
+        </div>
+      </div> 
+      <img [ngClass]="{'sigPadNone' : showSignaturePad, 'sigPadBlock' : !showSignaturePad}" 
+      [src]="signatureUrl">
+
+      <div class="col-3" 
+      [ngClass]="{'sigPadNone' : !showSignaturePad, 'sigPadBlock' : showSignaturePad}">
+        <button class="btn btn-block btn-danger" (click)="clear()">Clear</button>
+        <button class="btn btn-block btn-warning" (click)="undo()">Undo</button> 
+      </div>
+
+    </div>
+
+    <div class="row" *ngIf="false">
+
+      <div class="container" appDnd (fileDropped)="onFileDropped($event)">
+        <input type="file" #fileDropRef id="fileDropRef" multiple (change)="fileBrowseHandler($event.target.files)" />
+        <svg xmlns="http://www.w3.org/2000/svg" width="63" height="64" viewBox="0 0 63 64">
+          <g fill="#3B454F" fill-rule="nonzero">
+            <path
+              d="M42.656 15.135a1.953 1.953 0 0 1-1.391-.578L31.5 4.795l-9.765 9.762a1.97 1.97 0 1 1-2.785-2.785L30.106.616a1.97 1.97 0 0 1 2.785 0l11.157 11.156a1.97 1.97 0 0 1-1.392 3.363z" />
+            <path
+              d="M31.5 36.791a1.97 1.97 0 0 1-1.969-1.969V2.01a1.97 1.97 0 0 1 3.938 0v32.812a1.97 1.97 0 0 1-1.969 1.969z" />
+            <path
+              d="M55.781 63.041H7.22A7.225 7.225 0 0 1 0 55.822V41.385a4.599 4.599 0 0 1 4.594-4.594h7.234a4.567 4.567 0 0 1 4.402 3.276l2.814 9.382a.658.658 0 0 0 .628.467h23.656a.658.658 0 0 0 .628-.467l2.814-9.385a4.572 4.572 0 0 1 4.402-3.273h7.234A4.599 4.599 0 0 1 63 41.385v14.437a7.225 7.225 0 0 1-7.219 7.219zM4.594 40.729a.656.656 0 0 0-.657.656v14.437a3.286 3.286 0 0 0 3.282 3.282H55.78a3.286 3.286 0 0 0 3.282-3.282V41.385a.656.656 0 0 0-.657-.656h-7.234a.65.65 0 0 0-.628.467L47.73 50.58a4.628 4.628 0 0 1-4.402 3.274H19.672a4.567 4.567 0 0 1-4.402-3.276l-2.814-9.382a.65.65 0 0 0-.628-.467H4.594z" />
+          </g>
+        </svg>
+      
+        <h3>Drag and drop file here</h3>
+        <h3>or</h3>
+        <label for="fileDropRef">Browse for file</label>
+      </div>
+      <div class="files-list">
+        <div class="single-file" *ngFor="let file of files; let i = index">
+          <div class="file-icon" style="width: 50px">
+            <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+              x="0px" y="0px" viewBox="0 0 58 58" style="enable-background:new 0 0 58 58;" xml:space="preserve">
+              <polygon style="fill:#EDEADA;" points="51.5,14 37.5,0 6.5,0 6.5,58 51.5,58 " />
+              <g>
+                <path style="fill:#CEC9AE;"
+                  d="M16.5,23h25c0.552,0,1-0.447,1-1s-0.448-1-1-1h-25c-0.552,0-1,0.447-1,1S15.948,23,16.5,23z" />
+                <path style="fill:#CEC9AE;"
+                  d="M16.5,15h10c0.552,0,1-0.447,1-1s-0.448-1-1-1h-10c-0.552,0-1,0.447-1,1S15.948,15,16.5,15z" />
+                <path style="fill:#CEC9AE;"
+                  d="M41.5,29h-25c-0.552,0-1,0.447-1,1s0.448,1,1,1h25c0.552,0,1-0.447,1-1S42.052,29,41.5,29z" />
+                <path style="fill:#CEC9AE;"
+                  d="M41.5,37h-25c-0.552,0-1,0.447-1,1s0.448,1,1,1h25c0.552,0,1-0.447,1-1S42.052,37,41.5,37z" />
+                <path style="fill:#CEC9AE;"
+                  d="M41.5,45h-25c-0.552,0-1,0.447-1,1s0.448,1,1,1h25c0.552,0,1-0.447,1-1S42.052,45,41.5,45z" />
+              </g>
+              <polygon style="fill:#CEC9AE;" points="37.5,0 37.5,14 51.5,14 " />
+            </svg>
+          </div>
+          <div class="info">
+            <h4 class="name">
+              {{ file?.name }}
+            </h4>
+            <p class="size">
+              {{ formatBytes(file?.size,0) }}
+            </p>
+            <app-progress [progress]="file?.progress"></app-progress>
+          </div>
+      
+          <div class="delete" (click)="deleteFile(i)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="18" viewBox="0 0 14 18">
+              <path fill="#B1B1B1" fill-rule="nonzero"
+                d="M1 16c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v10zm3.17-7.83a.996.996 0 0 1 1.41 0L7 9.59l1.42-1.42a.996.996 0 1 1 1.41 1.41L8.41 11l1.42 1.42a.996.996 0 1 1-1.41 1.41L7 12.41l-1.42 1.42a.996.996 0 1 1-1.41-1.41L5.59 11 4.17 9.58a.996.996 0 0 1 0-1.41zM10.5 1L9.79.29C9.61.11 9.35 0 9.09 0H4.91c-.26 0-.52.11-.7.29L3.5 1H1c-.55 0-1 .45-1 1s.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1h-2.5z" />
+            </svg>
+          </div> 
+        </div>
+      </div> 
+
+      <div *ngIf="messages.length > 0">
+          <span *ngFor="let msg of messages">
+              {{msg}}
+              <br />
+              </span>
+      </div>  
+    </div>  
+    <button class="btn btn-primary spinner" [class.spinner]="loading" [disabled]="loading" (click)="submitForm()">Save Changes</button> 
+  </mat-expansion-panel>
+</mat-accordion>  
+
+</mat-card-content>
+</mat-card> 
+</form>

@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="col-sm-12">
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+            <div class="col-sm-12"> 
+                <mat-form-field class="col-sm-12"> 
+                    <mat-label>User Name</mat-label>
+                    <input matInput type="text" formControlName="UserName" maxlength="15"
+                    [(ngModel)]="loginDetails.UserName">
+                    <mat-error *ngIf="f.UserName.errors?.required">User Name is required</mat-error>
+                </mat-form-field>
+                <mat-form-field class="col-sm-12"> 
+                    <mat-label>Password</mat-label>
+                    <input matInput type="password" formControlName="Password" maxlength="20"
+                    [(ngModel)]="loginDetails.Password">
+                    <mat-error *ngIf="f.Password.errors?.required">Password is required</mat-error>
+                </mat-form-field>
+                <mat-error *ngIf="isInvalidInput">Invalid User Name or Password</mat-error>
+            </div>
+            <div class="col-sm-12">
+                <div class="col-sm-12 text-right">
+                <button mat-raised-button color="primary" [disabled]="loading">Login</button>
+                <!-- <mat-spinner *ngIf="loading"></mat-spinner> -->
+                </div> 
+            </div> 
+            <div class="col-sm-12" style="padding: 20px 30px;">
+                <div class="row">
+                    <div class="col-sm-6"> <a [routerLink]="['../signup']" href="#"> Sign up</a></div>
+                    <div class="col-sm-6 text-right"> <a [routerLink]="['../forgot-password']" href="#"> Forget Password</a> </div>
+                </div> 
+                <!-- <div class="col-sm-6 text-left">
+                <a [routerLink]="['../signup']" href="#"> Sign up</a>
+                </div>  -->
+            </div> 
+        </form> 
+    </div> 
+</div>
+

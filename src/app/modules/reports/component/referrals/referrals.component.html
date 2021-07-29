@@ -1,0 +1,79 @@
+<div class="row">
+
+  </div>
+    <mat-card>
+        <h3>Referrals</h3>
+        <div class="row">
+          
+            <div class="col-md-2">
+                <mat-form-field >
+                  <mat-label>Choose start date</mat-label> 
+                  <input matInput [matDatepicker]="picker" [(ngModel)]="startDate" [max]="maxDate"> 
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field> 
+              </div>
+              <div class="col-md-2">
+                <mat-form-field >
+                  <mat-label>Choose end date</mat-label> 
+                  <input matInput [matDatepicker]="picker2" [(ngModel)]="endDate" [max]="maxDate"> 
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field> 
+              </div>
+            
+              <div class="col-md-2">
+                <button style="margin-left: 18px;margin-top: 13px;" 
+                  mat-raised-button 
+                  (click)="getPatientsList()">
+                  View details 
+                </button>  
+            </div> 
+
+            <div class="col-md-5">
+              <button (click)="exportToExcel()" style="margin: 13px 0 0 -72px;" 
+              class="mat-focus-indicator mat-raised-button mat-button-base mat-primary">Export To Excel</button> 
+            </div> 
+        </div>
+    </mat-card> 
+  <div class="row" *ngIf="rowsAdded">  
+      <div class="col-sm-12" >
+          <table mat-table id="excel-table" class="mat-elevation-z8" [dataSource]="dataSource" style="width:100%" matSort>        
+                <ng-container matColumnDef="referralName" >
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> ReferralName</th>
+                  <td mat-cell *matCellDef="let element" > {{element.referralName}} </td>
+                  <!-- <td mat-cell *matCellDef="let element; let j=index;"> {{j + 1}} </td> -->
+                </ng-container> 
+                <ng-container matColumnDef="fullLink" >
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> FullLink</th>
+                  <td mat-cell *matCellDef="let element" > {{element.fullLink}} </td>
+                  <!-- <td mat-cell *matCellDef="let element; let j=index;"> {{j + 1}} </td> -->
+                </ng-container> 
+                
+                <ng-container matColumnDef="ranking" >
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Ranking</th>
+                  <td mat-cell *matCellDef="let element" > {{element.ranking}} </td>
+                  <!-- <td mat-cell *matCellDef="let element; let j=index;"> {{j + 1}} </td> -->
+                </ng-container> 
+
+                <ng-container matColumnDef="noOfReferance" >
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> NoOfReference</th>
+                  <td mat-cell *matCellDef="let element" > {{element.noOfReferance}} </td>
+                  <!-- <td mat-cell *matCellDef="let element; let j=index;"> {{j + 1}} </td> -->
+                </ng-container> 
+                     
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table> 
+          <mat-paginator [pageSizeOptions]="[100, 200, 300]" showFirstLastButtons></mat-paginator> 
+      </div> 
+  </div>  
+
+  <mat-card style="text-align: center;margin-top: 2px;" 
+    *ngIf="dataSource.filteredData.length === 0 && showNoRecordsDiv">
+    Records not found
+  </mat-card> 
+    
+  
+
+

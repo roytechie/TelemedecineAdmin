@@ -1,0 +1,83 @@
+<mat-progress-bar mode="indeterminate" *ngIf="disabledButton"></mat-progress-bar>
+<div class="row">
+  <div class="col-md-12">
+      <mat-card>
+        <div class="row">
+        <mat-form-field  class="col-md-2">
+          <mat-label>Choose start date</mat-label>
+
+          <input matInput [matDatepicker]="picker" [(ngModel)]="startDate">
+
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field> 
+
+        <mat-form-field   class="col-md-2">
+          <mat-label>Choose end date</mat-label>
+          <input matInput [matDatepicker]="picker2"
+          [(ngModel)]="endDate" [min]="startDate"
+          >
+          <mat-datepicker-toggle matSuffix [for]="picker2">
+          </mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>          
+        <div class="col-md-5 align-bottom"> 
+          <div class="row">
+            <div class="col-md-2" style="padding-top: 8px;">
+              <button mat-raised-button (click)="getPatientsList(false)">View</button> 
+            </div>
+            <div class="col-md-2" style="padding-top: 8px;">
+              <button mat-raised-button (click)="getPatientsList(true)">Today</button> 
+            </div>
+          </div> 
+        </div>
+        <!-- <mat-form-field   class="col-md-3">
+          <mat-label>Filter</mat-label>
+          <input matInput type="text" matInput (keyup)="applyFilter($event)">
+        </mat-form-field> -->
+      </div>
+      </mat-card>
+  </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-12" *ngIf="rowsAdded">
+        <table mat-table class="mat-elevation-z8" [dataSource]="dataSource" style="width:100%" matSort>
+            
+              <ng-container matColumnDef="firstName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name</th>
+                <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="lastName" >
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name</th>
+                <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+              </ng-container> 
+             
+              <ng-container matColumnDef="paymentTime">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Payment Time</th>
+                <td mat-cell *matCellDef="let element"> {{element.paymentTime | date:"MM/dd/yyyy HH:mm" }} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="authTranId">
+                <th mat-header-cell *matHeaderCellDef> Transaction ID</th>
+                <td mat-cell *matCellDef="let element"> {{element.authTranId}} </td>
+              </ng-container>     
+
+              <ng-container matColumnDef="paymentAmount">
+                <th mat-header-cell *matHeaderCellDef> Payment Amount</th>
+                <td mat-cell *matCellDef="let element"> {{element.paymentAmount}} </td>
+              </ng-container>                
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[100, 200, 300]" showFirstLastButtons></mat-paginator> 
+    </div>
+</div> 
+<mat-card style="text-align: center; margin-top: 2px;"
+ *ngIf="dataSource.filteredData.length === 0 && showNoRecordsDiv">
+  Records not found
+</mat-card>

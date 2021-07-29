@@ -1,0 +1,27 @@
+<div class="row col-sm-12" *ngIf="!showSendButton">
+    <form [formGroup]="verifyForm" (ngSubmit)="verifyAccount()" class="col-sm-12">
+         
+        <mat-form-field class="col-sm-12">
+            <mat-label>Verification Code: </mat-label>
+            <input matInput type="text" formControlName="verificationCode">
+            <!-- <mat-error>Please fill the verificaation code</mat-error> -->
+            <mat-error *ngIf="!isVerifiedCode">Verification code is not valid</mat-error>
+        </mat-form-field>
+        
+    
+        <div class="col-sm-12 text-center"> 
+            <button mat-raised-button color="primary" [disabled]="submitted">Verify Account</button> 
+        </div> 
+        <p style="margin: 44px 0px 0px 84px;">Please check your mail for verification code</p>   
+        <p style="margin: 4px 0px 0px 108px;">Code will expired in <b>{{counter}}</b> seconds</p>
+    </form>  
+</div>
+<div class="row" *ngIf="showSendButton">
+    <div class="col-sm-12">
+        <div class="col-sm-12 text-center">
+            <button mat-raised-button color="primary"  
+            (click)="sendVerifcationCode()">Send Verification Code</button>
+        </div>  
+    </div>
+</div>
+

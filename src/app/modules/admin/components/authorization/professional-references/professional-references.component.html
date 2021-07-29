@@ -1,0 +1,132 @@
+<form [formGroup]="professionalRefForm">
+<mat-accordion>
+    <mat-expansion-panel >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+            Professional References
+        </mat-panel-title>
+        <mat-panel-description>
+        <p>Please add 2(two) professional references, that have worked with you for the past year, that we can contact for a Professional Reference.</p>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+        <div formArrayName="reference" *ngIf="showForm">
+            <div class="row" *ngFor="let ref of professionalRefForm.get('reference')['controls']; let i = index"
+                [formGroupName]="i">  
+                <ng-container>
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>First and Last Name </mat-label>
+                                    <input matInput formControlName="firstName" 
+                                    [(ngModel)]="professionalReferencesListIn[i].firstName"> 
+                                    
+                                    <!-- <mat-error *ngIf="ref.controls.firstName.errors?.required">First Name is required</mat-error> -->
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Phone </mat-label>
+                                    <input matInput formControlName="phoneNumber" 
+                                    [(ngModel)]="professionalReferencesListIn[i].phoneNumber"
+                                    >
+                                    <!-- <mat-error *ngIf="ref.controls.phoneNumber.errors?.required">Phone Number is required</mat-error> -->
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-12">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Email</mat-label>
+                                    <input matInput formControlName="email" 
+                                    [(ngModel)]="professionalReferencesListIn[i].email"
+                                     >
+                                     <!-- <mat-error *ngIf="ref.controls.email.errors?.required">Email is required</mat-error> -->
+                                     <mat-error *ngIf="ref.controls.email.errors?.pattern">Email must be a valid email address</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <mat-form-field class="example-full-width">
+                                            <mat-label>Address </mat-label>
+                                            <input matInput formControlName="mailingAddress" 
+                                            [(ngModel)]="professionalReferencesListIn[i].mailingAddress"
+                                            >
+                                        </mat-form-field>
+                                        <!-- <mat-error *ngIf="ref.controls.mailingAddress.errors?.required">Address is required</mat-error> -->
+                                    </div>
+                                    <!-- <div class="col-md-12">
+                                        <mat-form-field class="example-full-width">
+                                            <mat-label> </mat-label>
+                                            <input matInput formControlName="mailingAddress" 
+                                             >
+                                        </mat-form-field>
+                                    </div> -->
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <mat-label>City</mat-label>
+                                            <input matInput formControlName="city" 
+                                            [(ngModel)]="professionalReferencesListIn[i].city"
+                                             >
+                                             <mat-error *ngIf="ref.controls.city.errors?.required">City is required</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <mat-label>State/Province</mat-label>
+                                            <input matInput formControlName="state" 
+                                            [(ngModel)]="professionalReferencesListIn[i].state" >
+                                             <mat-error *ngIf="ref.controls.state.errors?.required">State/Province is required</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <mat-label>Zip/Postal </mat-label>
+                                            <input matInput formControlName="zipCode" 
+                                            [(ngModel)]="professionalReferencesListIn[i].zipCode"
+                                            >
+                                        <mat-error *ngIf="ref.controls.zipCode.errors?.required">Zip/Postal is required</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <!-- <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <mat-label>Country </mat-label>
+                                            <input matInput formControlName="country" 
+                                            [(ngModel)]="professionalReferencesListIn[i].country"
+                                             >
+                                             <mat-error *ngIf="ref.controls.country.errors?.required">Country is required</mat-error>
+                                        </mat-form-field>
+                                    </div> -->
+
+                                    <div class="col-md-12">
+                                        Country
+                                        <mat-form-field appearance="fill" style="width:100%;">
+                                            <!-- <mat-label>Country</mat-label> -->
+                                            <mat-select [(ngModel)]="professionalReferencesListIn[i].country" formControlName="country">
+                                              <mat-option value="">Please select from the dropdown list</mat-option>
+                                              <mat-option [value]="obj.country" *ngFor="let obj of countryList.values">{{obj.country}}</mat-option> 
+                                            </mat-select>
+                                           <!-- <mat-error *ngIf="f.medicareValidation.errors?.required">Medicare Validated is required</mat-error> -->
+                                          </mat-form-field>
+                                      </div>
+
+                                </div>
+                    </div> 
+                    <div class="col-md-3"> 
+                        <button mat-raised-button color="warn" (click)="removeControls(i)"><span class="material-icons">
+                        remove_circle_outline
+                        </span>Remove</button>
+                    </div>
+                </ng-container>  
+            </div> 
+        </div>
+        <button mat-raised-button color="primary"
+       
+        (click)="addControls()">
+            <span class="material-icons">add_circle_outline</span>
+            Add
+        </button>
+    </mat-expansion-panel>
+</mat-accordion>
+</form>

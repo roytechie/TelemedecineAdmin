@@ -1,0 +1,66 @@
+<div class="col-sm-12">
+  <div style="width: 100%;height: 500px;overflow-y: scroll;" > 
+      <div class="col-sm-12">Submission by : <span style="color:blue;">{{ data.firstName }} {{ data.lastName }}</span>
+      on
+      <span style="color:blue;">{{ data.submissionTime | date:"MM/dd/yyyy HH:mm" }}  </span>
+      <div class="col-sm-12 text-right">
+        <!-- <button mat-raised-button color="primary" style="margin-right: 97px;" (click)="showPrescriptionPopup('', true)"
+          cdkFocusInitial>Prescription Advice</button> -->
+        <button mat-raised-button mat-dialog-close style="margin: 0 16px 0 0;">Cancel</button> 
+        <button class="mat-focus-indicator mat-raised-button mat-button-base mat-primary" 
+        (click)="updatePatiantDetails()"
+        [mat-dialog-close]="patiantInformation" cdkFocusInitial>Update</button>
+      </div> 
+
+      </div>
+      <hr class="col-md-8">
+      <ng-container *ngIf="!answers">loading</ng-container>
+      <mat-tab-group>
+        <mat-tab  *ngFor="let step of answers" label="{{ step.title | replace : 'Telemedicine Survey | ' : '' }}">
+            <div *ngFor="let question of step.questions"
+                    [class.col-md-4]="question.itemsInRow == 3"
+                    [class.col-md-12]="question.itemsInRow == 1"
+                    [class.col-md-6]="question.itemsInRow == 2">
+              <span style="color: darkslategrey;">  {{ question.question }} : </span> <span style="color:blue;"> {{ question.answer }}</span>
+            </div>
+         </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
+  <div class="row">
+
+    <mat-form-field class="col-sm-6">
+      <mat-label>Status</mat-label> 
+      <mat-select required [(value)]="patiantInformation.Status">  
+        <mat-option (click)="showPrescriptionPopup(option.value)" *ngFor="let option of adminService.patientStatuses" 
+        [value]="option.value">{{option.name}}</mat-option> 
+      </mat-select>
+    </mat-form-field>  
+    <mat-form-field class="col-sm-6"> 
+        <mat-label>Notes</mat-label>
+        <textarea matInput [(ngModel)]="patiantInformation.Notes"></textarea>
+    </mat-form-field> 
+    <!-- <div class="col-sm-12 text-right">
+          <button mat-button mat-dialog-close>Cancel</button> 
+          <button mat-raised-button color="primary" (click)="updatePatiantDetails()"
+          [mat-dialog-close]="true" cdkFocusInitial>Update</button>
+    </div>  -->
+</div>
+
+<div class="row"> 
+  <mat-form-field class="col-sm-6" *ngIf="isAdmin">
+    <mat-label>Assign To</mat-label>
+    <mat-select required [(value)]="patiantInformation.UserId">  
+      <mat-option [value]="0" (click)="assignDoctors('Not Assigned')">--Select option--</mat-option> 
+      <mat-option *ngFor="let user of userList" [value]="user.userId" 
+      (click)="assignDoctors(user.firstName)">{{user.firstName | uppercase }}</mat-option> 
+    </mat-select>
+  </mat-form-field>  
+  <mat-form-field class="col-sm-6"> 
+      <mat-label>Followup Notes</mat-label>
+      <textarea matInput [(ngModel)]="patiantInformation.FollowupNotes"></textarea>
+  </mat-form-field>  
+</div>
+
+
+

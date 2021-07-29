@@ -1,0 +1,133 @@
+<div style=" max-height:600px;  overflow-y: scroll;overflow-x:hidden;">
+    <div class="row">
+    <div class="col-md-12 text-center"><h3>{{data.doctorName == 'Not Assigned' ? 'Admin' : data.doctorName }}</h3></div>
+      <!-- {{pharmacy | json}} -->
+    <div class="col-md-8">
+        <mat-form-field appearance="fill" style="width: 58%;">
+            <mat-label>change name</mat-label>
+            <mat-select [(ngModel)]="pharmacy" 
+                (selectionChange)="updatePharmacyValue($event)">
+              <mat-option value="">Please select dropdown value</mat-option>
+              <mat-option *ngFor="let obj of pharmacyList" [value]="obj">{{obj.pharmacyName}}</mat-option> 
+            </mat-select>
+          </mat-form-field> 
+    </div>
+
+    <div class="col-md-2" style="margin: 0 -54px 0px 0;">
+        <button mat-raised-button  mat-dialog-close>Cancel</button> 
+    </div>
+    <div class="col-md-2"> 
+        <button mat-raised-button color="primary" (click)="updatePharmacyDetails()"
+        [mat-dialog-close]="true" cdkFocusInitial>Update</button> 
+    </div>  
+
+    <!-- <div class="col-md-6">Date of Request : </div><div class="col-md-6">Allergies :  <br> Current Medication : </div> -->
+    <div class="col-md-6">
+        <h5>Patient Information</h5>
+        <div class="row">
+        <div class="col-md-4 text-right"> Name : </div><div class="col-md-8 text-left">{{data.firstName}}</div>
+        <div class="col-md-4 text-right"> Patient ID : </div><div class="col-md-8 text-left">{{data.submissionId}}</div>
+        <div class="col-md-4 text-right"> DOB : </div>
+        <div class="col-md-8 text-left">
+            <div *ngIf="data.submissionId > 95; else shoewDob"> 
+                {{(JSON.parse(data.profileDetails)[1].Answer).replaceAll('\\','')}} 
+            </div>
+            <ng-template #shoewDob>
+                {{JSON.parse(data.profileDetails)[1].Answer | date:"MM/dd/yyyy"}} 
+            </ng-template>  
+        </div> 
+        <!-- <div class="col-md-4 text-right"> Address : </div><div class="col-md-8 text-left"></div> -->
+        <!-- <div class="col-md-4 text-right"> City : </div><div class="col-md-8 text-left">City</div> -->
+        <div class="col-md-4 text-right"> State : </div><div class="col-md-8 text-left">{{JSON.parse(data.profileDetails)[0].Answer}}</div>
+        <!-- <div class="col-md-4 text-right"> Zip : </div><div class="col-md-8 text-left">Zip</div> -->
+        </div>
+    </div>
+    <!-- <div class="col-md-6">
+        <h5>Physician Information</h5>
+        <div class="row">
+        <div class="col-md-4 text-right"> Name : </div><div class="col-md-8 text-left">Name</div>
+        <div class="col-md-4 text-right"> Patient ID : </div><div class="col-md-8 text-left">ID</div>
+        <div class="col-md-4 text-right"> DOB : </div><div class="col-md-8 text-left">12/12/12</div>
+        <div class="col-md-4 text-right"> Address : </div><div class="col-md-8 text-left">address</div>
+        <div class="col-md-4 text-right"> City : </div><div class="col-md-8 text-left">City</div>
+        <div class="col-md-4 text-right"> State : </div><div class="col-md-8 text-left">State</div>
+        <div class="col-md-4 text-right"> Zip : </div><div class="col-md-8 text-left">Zip</div>
+        </div>
+    </div>   -->
+    <div class="col-md-12" style="padding-top:20px;">
+    <div class="row">
+    <div class="col-md-6">
+            <mat-checkbox class="example-margin"
+            [checked]="allComplete" [indeterminate]="someComplete()"           
+            (change)="setAll($event.checked)">
+            Default
+            </mat-checkbox>
+       <div  *ngFor="let subtask of changedData" class="mat-checkbox-layout">
+            <mat-checkbox  [(ngModel)]="subtask.value"                          
+            (ngModelChange)="updateAllComplete($event)">
+            <label class="wordbreak">{{subtask.medicine}}</label>
+            </mat-checkbox>
+        <!-- <div class="col-md-10" *ngIf="subtask.value">
+            <mat-form-field class="example-full-width"> -->
+            <!-- <mat-label>{{subtask.medicine}}</mat-label> -->
+            <!-- <textarea matInput placeholder="Prescription" [(ngModel)]="subtask.description"></textarea>
+            </mat-form-field> -->
+        <!-- </div> -->
+        </div>                    
+    </div>
+        <div class="col-md-6">
+            <h6>Prescribed</h6>
+            <li *ngFor="let priscribe of priscribedData">
+                {{priscribe.medicine}}
+            </li>
+        </div>
+    </div>
+    </div>
+
+
+    <div class="col-md-12">
+        <!-- <hr>
+        Pharmacy Preference : <br>
+        Prescription Delivery if Available ? : <br>
+        Pharmacy of Choice : <br>
+        <hr> -->
+        <!-- <mat-form-field class="col-sm-12">
+            <mat-label>ICD Codes</mat-label>
+            <input matInput >
+        </mat-form-field>
+        <hr>
+        <mat-form-field class="col-sm-8">
+            <mat-label>Medication Field</mat-label>
+            <input matInput >
+        </mat-form-field>
+        <mat-form-field class="col-sm-4">
+            <mat-label>Qty</mat-label>
+            <input matInput >
+        </mat-form-field>
+        <mat-form-field class="col-sm-12">
+            <mat-label>Search Medications Here</mat-label>
+            <input matInput >
+        </mat-form-field>
+        <mat-form-field class="col-sm-12">
+            <mat-label>Sig Field</mat-label>
+            <input matInput >
+        </mat-form-field> -->
+        <!-- <hr>
+        <button mat-raised-button>Add Additional Medication</button>
+        <hr>
+        <div class="row">
+        <div class="col-sm-4">Signature Image</div>
+        <div class="col-sm-4"> Refills : </div>
+        <div class="col-sm-4"> 09/26/2020 </div>
+        <hr>
+        <div class="col-sm-6 text-center"><strong>Signature</strong></div>
+        <div class="col-sm-6 text-center"><strong>Date</strong></div>
+        <hr>
+        <div class="col-sm-4">Doctor NPI #:</div>
+        <div class="col-sm-4"> Doctor DEA #: </div>
+        <div class="col-sm-4"> 09/26/2020 </div>
+        <hr>
+        </div> --> 
+    </div> 
+</div> 
+</div>

@@ -1,0 +1,25 @@
+.example-section {
+    margin: 12px 0;
+  }
+  
+  .example-margin {
+    margin: 0 12px;
+  }
+  .example-full-width {
+    width: 100%;
+  }
+  .mat-expansion-panel {
+    margin: 12px 0 !important;
+}
+button {
+    margin: 2px 4px !important;
+}
+ul {
+  list-style-type: none;
+  margin-top: 4px;
+}
+.mat-form-field-label {
+  display: block;
+  font-size: 16px;
+  color: #666;
+}

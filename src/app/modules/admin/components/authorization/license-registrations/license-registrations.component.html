@@ -1,0 +1,144 @@
+
+ <form [formGroup]="activeLicenceForm">
+    <mat-accordion>
+      <mat-expansion-panel >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Active Licenses and Registrations
+          </mat-panel-title>
+          <mat-panel-description>
+            <p>(Medical, Tele, Locums, RN, NP, etc., and/or Controlled Substance)</p> 
+          </mat-panel-description>
+        </mat-expansion-panel-header> 
+        
+        <!-- {{activeLicence | json}} -->
+        <!-- {{licenseRegistrationIn | json}} -->
+        
+        <div formArrayName="activeArray" *ngIf="showForm">
+          <div class="row" *ngFor="let aa of activeLicenceForm.get('activeArray')['controls']; let i = index"
+          [formGroupName]="i">        
+            <ng-container>
+              <div class="col-md-2">
+                <mat-form-field class="example-full-width">
+                  <mat-label>State</mat-label>
+                  <input matInput
+                  formControlName = "licenseState"
+                  [(ngModel)]="activeLicence[i].licenseState"
+                  >
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Type</mat-label>
+                  <input matInput
+                  formControlName = "licenseType"
+                    [(ngModel)]="activeLicence[i].licenseType"
+                    >
+                </mat-form-field>
+                <p>(Medical, Tele, Locums, RN, NP, etc., and/or Controlled Substance)</p>
+              </div>
+              <div class="col-md-2">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Number</mat-label>
+                  <input matInput
+                  formControlName = "licenseNumber"
+                  [(ngModel)]="activeLicence[i].licenseNumber"
+                  >
+                </mat-form-field>
+              </div>
+              <div class="col-md-2">
+                <mat-form-field class="example-full-width"> 
+                  <mat-label>Expiration Date</mat-label> 
+                  <input matInput [matDatepicker]="picker"
+                  formControlName = "licenseExpirationDate"
+                  [(ngModel)]="activeLicence[i].licenseExpirationDate"
+                  >  
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-md-3"> 
+              <button mat-raised-button (click)="removeControls(true,i)" color="warn"><span class="material-icons">
+                  remove_circle_outline
+                  </span>Remove</button>
+            </div>
+            
+            </ng-container>  
+          </div>         
+        </div> 
+        <button mat-raised-button  (click)="addControls(true)" color="primary"><span class="material-icons">
+          add_circle_outline
+        </span>Add</button> 
+      </mat-expansion-panel>
+    </mat-accordion>
+  </form>
+
+  <form [formGroup]="nonActiveLicenceForm">
+  <mat-accordion>
+    <mat-expansion-panel >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Non-Active Licenses Only
+        </mat-panel-title>
+        <mat-panel-description>
+          <p>(Expired, Lapsed, Superseded, Surrendered)</p>
+        </mat-panel-description>
+      </mat-expansion-panel-header> 
+      <div formArrayName="nonActiveArray" *ngIf="showForm">
+        <div class="row" *ngFor="let na of nonActiveLicenceForm.get('nonActiveArray')['controls']; let i = index"
+        [formGroupName]="i"> 
+ 
+          <ng-container >
+            <div class="col-md-2">
+              <mat-form-field class="example-full-width">
+                <mat-label>State</mat-label>
+                <input matInput
+                formControlName="licenseState"
+                [(ngModel)]="nonActiveLicence[i].licenseState">
+              </mat-form-field>
+            </div>
+            <div class="col-md-3">
+              <mat-form-field class="example-full-width">
+                <mat-label>Type</mat-label> 
+                <input matInput
+                formControlName="licenseType"
+                [(ngModel)]="nonActiveLicence[i].licenseType">
+              </mat-form-field>
+              <p>(Medical, Tele, Locums, RN, NP, etc., and/or Controlled Substance)</p>
+            </div>
+            <div class="col-md-2">
+              <mat-form-field class="example-full-width">
+                <mat-label>Number</mat-label>
+                <input matInput
+                formControlName="licenseNumber"
+                [(ngModel)]="nonActiveLicence[i].licenseNumber">
+              </mat-form-field>
+            </div>
+            <div class="col-md-2">
+              <mat-form-field class="example-full-width">  
+                <mat-label>Expiration Date</mat-label> 
+                <input matInput 
+                formControlName="licenseExpirationDate"
+                [matDatepicker]="picker"
+                [(ngModel)]="nonActiveLicence[i].licenseExpirationDate">  
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3"> 
+                <button mat-raised-button (click)="removeControls(false,i)" color="warn"><span class="material-icons">
+                  remove_circle_outline
+                </span>Remove</button>
+            </div>
+          </ng-container>  
+
+        </div>
+      </div>  
+
+      <button mat-raised-button  (click)="addControls(false)" color="primary"><span class="material-icons">
+        add_circle_outline
+      </span>Add</button>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+  </form>

@@ -1,0 +1,81 @@
+<div class="row">
+    <div class="col-md-12">
+        <mat-card>
+          <div class="row">
+          <mat-form-field  class="col-md-3">
+            <mat-label>Choose start date</mat-label>
+
+            <input matInput [matDatepicker]="picker" [(ngModel)]="startDate" 
+            >
+
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field> 
+
+          <mat-form-field   class="col-md-3">
+            <mat-label>Choose end date</mat-label>
+            <input matInput [matDatepicker]="picker2"
+            [(ngModel)]="endDate" [min]="startDate"
+            >
+            <mat-datepicker-toggle matSuffix [for]="picker2">
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>          
+          <div class="col-md-3 align-bottom">
+            <button mat-raised-button (click)="getPatientsList()">View</button>
+          </div>
+          <mat-form-field   class="col-md-3">
+            <mat-label>Filter</mat-label>
+            <input matInput type="text" matInput (keyup)="applyFilter($event)">
+          </mat-form-field>
+        </div>
+        </mat-card>
+    </div>
+</div>
+
+<div class="row" *ngIf="rowsAdded">
+    <div class="col-sm-12">
+        <table mat-table class="mat-elevation-z8" [dataSource]="dataSource" style="width:100%">
+              <ng-container matColumnDef="submissionId" >
+                <th mat-header-cell *matHeaderCellDef> Id</th>
+                <td mat-cell *matCellDef="let element;" > {{element.submissionId}} </td>
+              </ng-container>
+              <ng-container matColumnDef="firstName">
+                <th mat-header-cell *matHeaderCellDef> First Name</th>
+                <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+              </ng-container>
+              <ng-container matColumnDef="lastName">
+                <th mat-header-cell *matHeaderCellDef> Last Name</th>
+                <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+              </ng-container>
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef> Email</th>
+                <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+              </ng-container>
+              <ng-container matColumnDef="phone">
+                <th mat-header-cell *matHeaderCellDef> Phone</th>
+                <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+              </ng-container>
+             
+              <ng-container matColumnDef="submissionTime">
+                <th mat-header-cell *matHeaderCellDef> Submission Time</th>
+                <td mat-cell *matCellDef="let element"> {{element.submissionTime | date:"MM/dd/yyyy HH:mm" }} </td>
+                </ng-container>
+             
+              <ng-container matColumnDef="Action">
+                <th mat-header-cell *matHeaderCellDef> Action</th>
+                <td mat-cell *matCellDef="let element; let j = index;"> 
+                  <!-- <button mat-button (click)="addNotes(element)"><mat-icon>add_box</mat-icon></button> -->
+                   <a href="{{dynamicServiceUrls.pdfLink}}{{element.submissionId}}.pdf" target="_blank">PDF</a>
+                   <button style="margin-left: 18px;" mat-raised-button (click)="viewSubscription(element)">View details</button>
+                </td>
+              </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-card style="text-align: center;" *ngIf="dataSource2.filteredData.length === 0">
+          No Records
+        </mat-card>
+        <mat-paginator [pageSizeOptions]="[10, 20, 40]" showFirstLastButtons></mat-paginator> 
+    </div>
+</div> 

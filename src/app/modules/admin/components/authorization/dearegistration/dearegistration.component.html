@@ -1,0 +1,80 @@
+<mat-accordion>
+    <mat-expansion-panel >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          DEA Registration (Part 1)
+        </mat-panel-title>
+        <mat-panel-description>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <p>If you don’t have a DEA, please explain. You can work without one, but we need to know the status.</p>
+      <section class="example-section">
+        <span class="example-list-section">
+          <ul>
+            <li *ngFor="let obj of deaRegistraionStatusIn; let i=index;">
+              <mat-checkbox class="example-margin" 
+              (change)="updateValues($event.checked, i)" 
+              [checked]="obj.selected">{{dEARegistration.StatusText[i].text}}</mat-checkbox>
+            </li> 
+          </ul>
+        </span>
+      </section>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <form [formGroup]="deaRegistrationForm">
+  <mat-accordion>
+  <mat-expansion-panel >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        DEA Registration (Part 2)
+      </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <section class="example-section"> 
+ <!-- {{deaRegistrationsListIn | json}} --> 
+
+ <div *ngIf="showForm" formArrayName="deaArray">
+    <div id="i" class="row" *ngFor="let deaReg of deaRegistrationForm.get('deaArray')['controls']; let i = index"
+                [formGroupName]="i">  
+                <!-- {{deaRegistrationsListIn[i] | json}} --> 
+        <ng-container>
+          <div class="col-md-3">
+            <mat-form-field class="example-full-width">
+                <mat-label>DEA Number</mat-label>   
+                <input matInput id="deaNumber{{i}}"   
+                formControlName="deaNumber" 
+                [(ngModel)]="deaRegistrationsListIn[i].deaRegistrationNumber">
+                
+              </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field class="example-full-width">  
+              <mat-label>Expiration Date</mat-label> 
+              <input matInput id="expdate{{i}}"
+              formControlName="expirationDate" 
+              [matDatepicker]="picker" 
+              [(ngModel)]="deaRegistrationsListIn[i].expirationDate">  
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="col-md-3">  
+          <button mat-raised-button color="warn" (click)="removeControls(i)"><span class="material-icons">
+              remove_circle_outline
+          </span>Remove</button>
+        </div> 
+        </ng-container>  
+
+  </div>
+</div>
+
+  <button mat-raised-button color="primary" (click)="addControls()">
+    <span class="material-icons"> add_circle_outline </span>
+    Add
+  </button>  
+  </section>
+  </mat-expansion-panel>
+  </mat-accordion>
+</form>

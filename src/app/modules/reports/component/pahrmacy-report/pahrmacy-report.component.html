@@ -1,0 +1,115 @@
+<div class="row">
+  <div class="col-sm-12">
+    <mat-progress-bar mode="indeterminate" *ngIf="disabledButton"></mat-progress-bar>
+  </div>
+  </div>
+
+<mat-card> 
+  <div class="row">  
+      <div class="col-md-2">
+        <mat-form-field >
+          <mat-label>Choose start date</mat-label> 
+          <input matInput [matDatepicker]="picker" [(ngModel)]="startDate" [max]="maxDate"> 
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field> 
+      </div>
+      <div class="col-md-2">
+        <button style="margin-left: 18px;margin-top: 13px;" 
+          mat-raised-button 
+          (click)="getPatientsList()">
+          View details 
+        </button>  
+    </div> 
+     
+    <div class="col-md-5">
+      <button (click)="exportToExcel()" style="margin: 13px 0 0 -72px;" 
+      class="mat-focus-indicator mat-raised-button mat-button-base mat-primary">Export To Excel</button> 
+    </div> 
+
+    <div class="col-md-3">        
+      <mat-form-field style="width: inherit;">
+        <mat-label>Filter</mat-label>
+        <input matInput type="text" matInput (keyup)="applyFilter($event)">
+      </mat-form-field>
+    </div>
+  </div>
+</mat-card>
+
+<div class="row" *ngIf="rowsAdded">  
+    <div class="col-sm-12" >
+        <table mat-table id="excel-table" class="mat-elevation-z8" [dataSource]="dataSource" style="width:100%" matSort>
+            
+              <ng-container matColumnDef="id" >
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Id</th>
+                <td mat-cell *matCellDef="let element;" > {{element.submissionId}} </td>
+                <!-- <td mat-cell *matCellDef="let element; let j=index;"> {{j + 1}} </td> -->
+              </ng-container>
+
+              <ng-container matColumnDef="firstName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name</th>
+                <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="lastName" >
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name</th>
+                <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+              </ng-container> 
+              
+              <ng-container matColumnDef="dob" >
+                <th mat-header-cell *matHeaderCellDef> DOB</th>
+                <td mat-cell *matCellDef="let element" >  
+                  <div *ngIf="element.submissionId > 95; else shoewDob"> 
+                    {{(JSON.parse(element.profileDetails)[1].Answer).replaceAll('\\','')}} 
+                  </div>
+                  <ng-template #shoewDob>
+                    {{JSON.parse(element.profileDetails)[1].Answer | date:"MM/dd/yyyy"}} 
+                  </ng-template> 
+                </td>
+              </ng-container> 
+
+              <ng-container matColumnDef="phone">
+                <th mat-header-cell *matHeaderCellDef> Phone</th>
+                <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+              </ng-container>
+              
+              <ng-container matColumnDef="weight">
+                <th mat-header-cell *matHeaderCellDef> Weight</th>
+                <td mat-cell *matCellDef="let element"> {{JSON.parse(element.profileDetails)[2].Answer}} kg</td>
+              </ng-container>
+             
+              <ng-container matColumnDef="dateSeen">
+                <th mat-header-cell *matHeaderCellDef > Date seen (SubmissionTime)</th>
+                <td mat-cell *matCellDef="let element"> {{element.submissionTime | date:"MM/dd/yyyy HH:mm" }} </td>
+              </ng-container> 
+
+              <ng-container matColumnDef="state" >
+                <th mat-header-cell *matHeaderCellDef> State</th>
+                <td mat-cell *matCellDef="let element"> {{JSON.parse(element.profileDetails)[0].Answer}} </td>
+              </ng-container> 
+              
+              <ng-container matColumnDef="assignedTo" >
+                <th mat-header-cell *matHeaderCellDef  > Assigned To</th>
+                <td mat-cell *matCellDef="let element"> {{element.doctorName}} </td>
+              </ng-container> 
+              
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Status</th>
+                <td mat-cell *matCellDef="let element"> {{getStatusDetails(element.status)[0].name}}</td>
+              </ng-container>  
+
+              <ng-container matColumnDef="pharmacyName" >
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Pharmacy Name</th>
+                <td mat-cell *matCellDef="let element">{{element.pharmacyName}}</td>
+              </ng-container>  
+           
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table> 
+        <mat-paginator [pageSizeOptions]="[100, 200, 300]" showFirstLastButtons></mat-paginator> 
+    </div> 
+</div>  
+<mat-card style="text-align: center;margin-top: 2px;" 
+  *ngIf="dataSource.filteredData.length === 0 && showNoRecordsDiv">
+  Records not found
+</mat-card> 
