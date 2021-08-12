@@ -39,6 +39,11 @@ import { FilterPipe } from 'src/app/pipes/filter.pipe';
 import { SignaturePadComponent } from './components/authorization/signature-pad/signature-pad.component';
 import { ProgressComponent } from './components/progress/progress.component';
 import { UpdateSubmissionDialogComponent } from './components/authorization/update-submission-dialog/update-submission-dialog.component';
+import { SendmailPatientComponent } from './components/sendmail-patient/sendmail-patient.component';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
+import { PharmacyReportComponent } from './components/pharmacy-report/pharmacy-report.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -66,10 +71,15 @@ import { UpdateSubmissionDialogComponent } from './components/authorization/upda
     FilterPipe,
     SignaturePadComponent,
     ProgressComponent,
-    UpdateSubmissionDialogComponent
+    UpdateSubmissionDialogComponent,
+    SendmailPatientComponent,
+    AlertDialogComponent,
+    PharmacyReportComponent,
+    ConfirmDialogComponent
   ], 
   imports: [
     CommonModule,
+    AngularEditorModule,
     FormsModule,
     SharedModule,
     AppRoutingModule,

@@ -8,6 +8,7 @@ import { LoginDetails } from '../model/login-details';
 import { ReportRequest } from '../model/login-details'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { isNullOrUndefined } from 'util';
+import { EmailProperties } from '../model/email-properties';
 
 @Injectable({
   providedIn: 'root'
@@ -209,5 +210,17 @@ export class AdminService {
     this._snackBar.open(message, action, {
       duration: 2000,
     });
-  } 
+  }
+  sendmailToAllPatient(emailprop: EmailProperties){
+    this.postData = JSON.stringify(emailprop);
+    return this.http.post<any>(`${ this.adminService }SendMailToPatient`, this.postData,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  getPharmacyReport(searchModel: any){
+    this.postData = JSON.stringify(searchModel);
+    return this.http.post<any>(`${ this.adminService }PharmacyReport`, this.postData,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
 }

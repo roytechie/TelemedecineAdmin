@@ -18,8 +18,8 @@ export class DynamicServiceUrls {
     //virtualUrl_PMSUI = this.domainUrl + this.rootDomain +"/"; //this.getSvnRootName(this.rootDomain);
  
     //Service calling url 
-    //port = 'https://localhost:44316/'; 
-     port = 'https://localhost:5001/'; 
+    port = 'https://localhost:44316/'; 
+     //port = 'https://localhost:5001/'; 
     //port = virtualUrl_PMSUI + "";
     //port = "http://localhost/PMS.WebAPI/";
 

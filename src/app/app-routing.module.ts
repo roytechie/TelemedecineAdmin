@@ -17,6 +17,8 @@ import { AuthorizationFormComponent } from './modules/admin/components/authoriza
 import { PahrmacyReportComponent } from './modules/reports/component/pahrmacy-report/pahrmacy-report.component';
 import { RefillComponent } from './modules/reports/component/refill/refill.component';
 import {ReferralsComponent} from './modules/reports/component/referrals/referrals.component'
+import { SendmailPatientComponent } from './modules/admin/components/sendmail-patient/sendmail-patient.component';
+import { PharmacyReportComponent } from './modules/admin/components/pharmacy-report/pharmacy-report.component';
 
 
 const routes: Routes = [ {
@@ -88,6 +90,14 @@ const routes: Routes = [ {
       {
         path: 'authorization-form/:id',
         component : AuthorizationFormComponent
+      },
+      {
+        path: 'sendmailtopatient',
+        component : SendmailPatientComponent
+      }, 
+      {
+        path: 'pharmacy-report',
+        component : PharmacyReportComponent
       }, 
     ]
   },
