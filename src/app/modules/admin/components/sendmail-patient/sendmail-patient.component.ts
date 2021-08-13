@@ -31,7 +31,14 @@ export class SendmailPatientComponent implements OnInit {
     defaultParagraphSeparator: 'p',
     defaultFontName: 'Calibri',
     toolbarHiddenButtons: [
-
+      ['customClasses',
+      'link',
+      'unlink',
+      'insertImage',
+      'insertVideo',
+      'insertHorizontalRule',
+      'removeFormat',
+      'toggleEditorMode']
     ],
     customClasses: [
       {

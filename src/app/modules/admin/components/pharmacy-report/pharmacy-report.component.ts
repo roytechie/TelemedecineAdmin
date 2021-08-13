@@ -11,7 +11,7 @@ import { AdminService } from '../../service/admin.service';
 })
 export class PharmacyReportComponent implements OnInit {
   dataSource?: MatTableDataSource<any> = new MatTableDataSource<any>();
-  displayedColumns: string[] = ['name', 'birthDate', 'phoneNo', 'weight', 'email', 'isHydroxychloroquineTaken'];
+  displayedColumns: string[] = ['name', 'birthDate', 'phoneNo', 'weight', 'email'];
   endDate: Date = new Date();
   startDate: Date = new Date(new Date().getFullYear(), (new Date().getMonth() -1), new Date().getDate());
   showNoRecordsDiv: boolean = true;
