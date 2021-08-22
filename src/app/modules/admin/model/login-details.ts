@@ -14,6 +14,12 @@ export class LoginDetails {
     PhoneNumber: string
 }
 
+export enum AccessLavel {
+    Admin = 1,
+    Pharmacy = 9,
+    Other = 10
+}
+
 @Injectable()
 export class ReportRequest {
     startDate: string

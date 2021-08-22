@@ -3,11 +3,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ListSubmissionsComponent } from 'src/app/modules/admin/components/list-submissions/list-submissions.component';
-import { ReportRequest } from 'src/app/modules/admin/model/login-details';
+import { AccessLavel, ReportRequest } from 'src/app/modules/admin/model/login-details';
 import { AdminService } from 'src/app/modules/admin/service/admin.service';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver' 
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AthenticationService } from 'src/app/modules/admin/service/athentication.service';
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
@@ -37,7 +38,17 @@ export class PahrmacyReportComponent implements OnInit {
 
   constructor(public adminService: AdminService,
     private reportRequest: ReportRequest,
-    private router: ActivatedRoute) { 
+    private router: ActivatedRoute, private route: Router, private athenticationService: AthenticationService) { 
+      if(this.athenticationService.currentUserValue==null) {
+        this.route.navigate(['/login']);
+      }
+      else {
+        let accessValue: AccessLavel = this.athenticationService.checkAccessLavel(this.athenticationService.currentUserValue);
+        if(accessValue != AccessLavel.Admin) {
+          this.route.navigate(['/login']);
+        }
+      } 
+
       this.JSON = JSON;
       this.reportRequest.reportType = router.snapshot.params.type;
       if(this.reportRequest.reportType == undefined) this.reportRequest.reportType = 'Pharmacy';

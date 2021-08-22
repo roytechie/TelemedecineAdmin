@@ -5,7 +5,8 @@ import { MatRadioChange } from '@angular/material/radio';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { LoginDetails } from '../../../model/login-details';
+import { Router } from '@angular/router';
+import { AccessLavel, LoginDetails } from '../../../model/login-details';
 import { AdminService } from '../../../service/admin.service';
 import { AthenticationService } from '../../../service/athentication.service';
 
@@ -24,10 +25,19 @@ export class UserListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private adminService: AdminService,
+  constructor(private route: Router, private adminService: AdminService,
     private loginDetails: LoginDetails,
     private athenticationService: AthenticationService,
     private _snackBar: MatSnackBar) { 
+      if(this.athenticationService.currentUserValue==null) {
+        this.route.navigate(['/login']);
+      } 
+      else {
+        let accessValue: AccessLavel = this.athenticationService.checkAccessLavel(this.athenticationService.currentUserValue);
+        if(accessValue != AccessLavel.Admin) {
+          this.route.navigate(['/login']);
+        }
+      }
       if (this.athenticationService.currentUserValue) { 
         //this.route.navigate(['user/submissions-list']);
         //console.log(this.athenticationService.currentUserValue);

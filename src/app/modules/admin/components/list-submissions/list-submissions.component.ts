@@ -10,7 +10,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { DynamicServiceUrls } from 'src/app/shared/model/dynamic-service-urls';
 import { AthenticationService } from '../../service/athentication.service';
 import { isNullOrUndefined } from 'util';
-import { ReportRequest } from '../../model/login-details';
+import { AccessLavel, ReportRequest } from '../../model/login-details';
 import { UpdateSubmissionDialogComponent } from '../authorization/update-submission-dialog/update-submission-dialog.component';
 import { DatePipe } from '@angular/common';
 import * as XLSX from 'xlsx';
@@ -73,6 +73,11 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     private providerService: ProviderService) { 
       if(isNullOrUndefined(this.athenticationService.currentUserValue)) { 
         this.router.navigate(['/login']);
+      }
+      else {
+        let accessValue: AccessLavel;
+        accessValue = this.athenticationService.checkAccessLavel(this.athenticationService.currentUserValue);
+        this.athenticationService.defaultRerirectionAfterLogin(accessValue);
       }
       this.JSON = JSON;
       localStorage.pharmacyValue = "";

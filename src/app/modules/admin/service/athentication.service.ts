@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { AuthProperties, LoginDetails } from '../model/login-details';
+import { AccessLavel, AuthProperties, LoginDetails } from '../model/login-details';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { DynamicServiceUrls } from 'src/app/shared/model/dynamic-service-urls';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { isNullOrUndefined } from 'util';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -25,13 +26,35 @@ export class AthenticationService {
 
   constructor(private http : HttpClient,
     private dynamicServiceUrls: DynamicServiceUrls,
-    private _snackBar: MatSnackBar) {
+    private _snackBar: MatSnackBar, private router: Router) {
       this.currentUserSubject = new BehaviorSubject<LoginDetails>(JSON.parse(localStorage.getItem('currentUser')));
       this.currentUser = this.currentUserSubject.asObservable();
   } 
     
   public get currentUserValue(): any {
       return this.currentUserSubject.value;
+  }
+
+  public checkAccessLavel(user: any): AccessLavel {
+    if(user.accessLevel == AccessLavel.Admin){
+      return AccessLavel.Admin
+    }
+    else if(user.accessLevel == AccessLavel.Pharmacy){
+      return AccessLavel.Pharmacy
+    }
+    else {
+      return AccessLavel.Other
+    }
+  }
+
+  public defaultRerirectionAfterLogin(accessValue: AccessLavel) {
+    console.log(accessValue);
+    if(accessValue == AccessLavel.Admin) {
+      this.router.navigate(['/user/submissions-list']);
+    }
+    else if(accessValue == AccessLavel.Pharmacy) {
+      this.router.navigate(['/user/pharmacy-report']);
+    }
   }
 
   login(loginDetails: LoginDetails) {

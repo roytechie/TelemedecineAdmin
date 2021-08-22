@@ -2,9 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { AdminService } from '../../service/admin.service';
 import { AthenticationService } from '../../service/athentication.service';
-import { ReportRequest } from './../../model/login-details'
+import { AccessLavel, ReportRequest } from './../../model/login-details'
 
 @Component({
   selector: 'app-activity-logs',
@@ -24,8 +25,19 @@ export class ActivityLogsComponent implements OnInit {
   startDate: Date = new Date();
   endDate: Date = new Date();
 
-  constructor(private adminService: AdminService,
-    private reportRequest: ReportRequest) { }
+  constructor(private route: Router, private adminService: AdminService,
+    private reportRequest: ReportRequest, private athenticationService: AthenticationService) { 
+      if(this.athenticationService.currentUserValue==null) {
+        this.route.navigate(['/login']);
+      } 
+      else {
+        let accessValue: AccessLavel = this.athenticationService.checkAccessLavel(this.athenticationService.currentUserValue);
+        if(accessValue != AccessLavel.Admin) {
+          this.route.navigate(['/login']);
+        }
+      }
+
+    }
 
   ngOnInit() {
     //this.getHistoryDetails();

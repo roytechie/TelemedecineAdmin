@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginDetails } from '../../model/login-details';
+import { AccessLavel, LoginDetails } from '../../model/login-details';
 import {AthenticationService} from '../../service/athentication.service'
 
 @Component({
@@ -11,10 +11,17 @@ import {AthenticationService} from '../../service/athentication.service'
 export class LayoutComponent implements OnInit {
   userName: string;
   isAdmin : boolean = false;
+  accessValue: AccessLavel = 0;
   constructor(private route: Router,
     private loginDetails: LoginDetails,
     private athenticationService: AthenticationService) 
-    { 
+    {
+      if(this.athenticationService.currentUserValue==null) {
+        this.route.navigate(['/login']);
+      }
+      else {
+        this.accessValue = this.athenticationService.checkAccessLavel(this.athenticationService.currentUserValue);
+      }
       if (this.athenticationService.currentUserValue) { 
         //this.route.navigate(['user/submissions-list']);
         //console.log(this.athenticationService.currentUserValue);
