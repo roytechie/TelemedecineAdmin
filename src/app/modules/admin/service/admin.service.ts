@@ -48,12 +48,15 @@ export class AdminService {
   // }
 
   getPatientsList(reportRequest: ReportRequest): Observable<any>{
+    console.log("InsideAdminService");
+    console.log(reportRequest);
     this.webApiUrl = `${this.adminService}GetPatientsList`;
 
     //this.postData = JSON.stringify({ startDate: startDate, endDate : endDate });
 
     this.postData = JSON.stringify(reportRequest);
-
+    console.log(this.postData);
+    
     return this.http.post(this.webApiUrl, this.postData, { headers: this.headers}).pipe(
       catchError(this.errorHandler)
     )
