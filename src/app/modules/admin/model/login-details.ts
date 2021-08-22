@@ -23,6 +23,8 @@ export class ReportRequest {
     submissionId : number
     isSingleSubmission: boolean = false;
     reportType : string
+    symptomList: any
+    status: any
 }
 
 export class AuthProperties {

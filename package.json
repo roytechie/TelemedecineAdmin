@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4301", 
+    "start": "ng serve --port 4301",
     "build": "ng build",
     "betaaot": "ng build --aot --base-href /PMSUI-SVN/Admin/",
     "prodbuild": "ng build --prod --base-href /PMSUI-SVN/Admin/",

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import {FormControl} from '@angular/forms';
 import { AdminService } from '../../service/admin.service'; 
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -25,6 +26,11 @@ import { ProviderService } from '../../service/provider.service';
   styleUrls: ['./list-submissions.component.scss']
 })
 export class ListSubmissionsComponent implements OnInit, AfterViewInit  {  
+  
+  bySymptoms = new FormControl();
+  symptomList: string[] = ['All', 'Covid', 'NonCovid'];
+  
+  
   patientsList: any
   displayedColumns: string[] = ['submissionId', 'firstName', 'lastName', 'DOB',
    'phone', 'isCovid', 'submissionTime', 'state','doctorName', 'returningPatient', 'status', 'Action'];
@@ -55,7 +61,7 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
 
   events: string[] = [];
   isCovid: boolean = false;
-  symptomsFilter : string = "All";
+  //symptomsFilter : string = "All";
   statusFilter: any = '-1';
   isTodayList: boolean = false;
   JSON: any;
@@ -117,10 +123,11 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     });
   }
 
+  
   getPatientsList(isTodayList: boolean, isTest: boolean = false): any {
-
+    console.log("HERE2");
     this.statusFilter = '-1';
-    this.symptomsFilter = 'All';
+    //this.symptomsFilter = 'All';
     var newEndDate : Date = this.endDate; 
     if(isTodayList)
     {
@@ -140,8 +147,12 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     this.reportRequest.userId = JSON.parse(localStorage.currentUser).id;
     this.reportRequest.isSingleSubmission = false; 
     this.reportRequest.reportType = 'Submission';
+    this.reportRequest.symptomList = this.symptomsFilter;
+    this.reportRequest.status = this.statusFilter;
 
     this.adminService.getPatientsList(this.reportRequest).subscribe(response=>{
+      console.log("HERE1");
+      console.log(this.reportRequest);
       this.patientsList = response;
       console.log(this.patientsList);
       
@@ -178,6 +189,8 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     if(filterType == 'symptomsFilter')
     {
       this.symptomsFilter = event.value;
+      console.log("Inside Update Filter: " + this.symptomList);
+      console.log("Inside Update Filter: " + this.symptomsFilter);
     }
     else
     {
@@ -216,6 +229,7 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     this.reportRequest.reportType = 'Submission';
  
     this.adminService.getPatientsList(this.reportRequest).subscribe(response=>{
+      console.log("HERE3")
       patiantDetails = response[0]; 
       localStorage.patiantData = JSON.stringify(patiantDetails); 
       const dialogRef = this.dialog.open(ViewSubmissionComponent, { data : patiantDetails });
