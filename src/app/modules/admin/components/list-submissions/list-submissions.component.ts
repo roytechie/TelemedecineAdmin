@@ -27,7 +27,7 @@ import { ProviderService } from '../../service/provider.service';
 export class ListSubmissionsComponent implements OnInit, AfterViewInit  {  
   patientsList: any
   displayedColumns: string[] = ['submissionId', 'firstName', 'lastName', 'DOB',
-   'phone', 'isCovid', 'submissionTime', 'state','doctorName', 'returningPatient', 'status', 'Action'];
+   'phone', 'isCovid', 'submissionTime', 'state','doctorName', 'transactionDescription', 'returningPatient', 'status', 'Action'];
   covidQuestions : number [];
 
   displayedColumnForExcel: string[] = [
