@@ -49,14 +49,40 @@
                   <mat-option value="NonCovid">Non Covid </mat-option>
                 </mat-select>
               </mat-form-field> 
-              
---> 
+
+
               <mat-form-field appearance="fill">
                 <mat-label>by symptoms</mat-label>
                 <mat-select [formControl]="bySymptoms" multiple (selectionChange)="updateFilter($event, 'symptomsFilter')">
                   <mat-option *ngFor="let symptom of symptomList" [value]="symptom">{{symptom}}</mat-option>
                 </mat-select>
               </mat-form-field>
+              
+--> 
+
+              <mat-form-field appearance="fill">
+                <mat-label>by symptoms</mat-label>
+                <mat-select [formControl]="bySymptoms" multiple (selectionChange)="updateFilter($event, 'symptomsFilter')">
+                  <mat-option *ngFor="let symptom of symptomList" [value]="symptom">{{symptom}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+<!--
+              <mat-form-field>
+                <mat-label>Symptoms</mat-label>
+                <mat-select  #select multiple>
+                  <div class="select-all">
+                      <mat-checkbox [(ngModel)]="allSelected"
+                                      [ngModelOptions]="{standalone: true}"
+                                      (change)="toggleAllSelection()"
+                                      >Select All</mat-checkbox>
+                  </div>
+                  <mat-option (click)="optionClick()" *ngFor="let symptoms of covidSymptoms" [value]="symptoms.value">
+                    {{symptoms.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+-->
 
 
               </div>
@@ -70,6 +96,14 @@
                   </mat-select>
                 </mat-form-field> 
               </div>
+
+
+
+              <div class="col-md-5">
+                <button (click)="exportToExcel12()" style="margin: 13px 0 0 -72px;" 
+                class="mat-focus-indicator mat-raised-button mat-button-base mat-primary">Export To Excel</button> 
+              </div>
+
             </div> 
           </div> 
           <mat-form-field class="col-md-2">
@@ -83,7 +117,7 @@
 
 <div class="row">
     <div class="col-sm-12" *ngIf="rowsAdded">
-        <table mat-table class="mat-elevation-z8" [dataSource]="dataSource" style="width:100%" matSort>
+        <table mat-table id="excel-table" mat-table class="mat-elevation-z8" [dataSource]="dataSource" style="width:100%" matSort>
               <ng-container matColumnDef="submissionId" >
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Id</th>
                 <td mat-cell *matCellDef="let element;" > {{element.submissionId}} </td>
@@ -157,8 +191,10 @@
         </table> 
         <mat-paginator [pageSizeOptions]="[100, 200, 300]" showFirstLastButtons></mat-paginator> 
     </div> 
-</div>  
+</div>
+<!--  
 <mat-card style="text-align: center;margin-top: 2px;" 
   *ngIf="dataSource.filteredData.length === 0 && showNoRecordsDiv">
   Records not found
 </mat-card>   
+-->

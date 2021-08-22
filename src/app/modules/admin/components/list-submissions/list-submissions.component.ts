@@ -19,6 +19,8 @@ import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { ProviderService } from '../../service/provider.service';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/core';
  
 @Component({
   selector: 'app-list-submissions',
@@ -30,6 +32,38 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
   bySymptoms = new FormControl();
   symptomList: string[] = ['All', 'Covid', 'NonCovid'];
   
+  
+
+  
+  //@ViewChild('select') select: MatSelect;
+
+ /* allSelected=false;
+   covidSymptoms: any[] = [
+    {value: '1', viewValue: 'Covid'},
+    {value: '0', viewValue: 'NonCovid'}
+  ];
+  toggleAllSelection() {
+    if (this.allSelected) {
+      this.select.options.forEach((item: MatOption) => item.select());
+      this.select.options.forEach(element => {
+        this.symptomsFilter.
+      });
+      this.symptomsFilter
+    } else {
+      this.select.options.forEach((item: MatOption) => item.deselect());
+    }
+  }
+   optionClick() {
+    let newStatus = true;
+    this.select.options.forEach((item: MatOption) => {
+      if (!item.selected) {
+        newStatus = false;
+      }
+    });
+    this.allSelected = newStatus;
+  }
+*/
+
   
   patientsList: any
   displayedColumns: string[] = ['submissionId', 'firstName', 'lastName', 'DOB',
@@ -61,7 +95,7 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
 
   events: string[] = [];
   isCovid: boolean = false;
-  //symptomsFilter : string = "All";
+  symptomsFilter : string; // = "All";
   statusFilter: any = '-1';
   isTodayList: boolean = false;
   JSON: any;
@@ -150,9 +184,13 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     this.reportRequest.symptomList = this.symptomsFilter;
     this.reportRequest.status = this.statusFilter;
 
+    if(this.reportRequest.symptomList == undefined || this.reportRequest.symptomList == 'All' || this.reportRequest.symptomList == ''){
+      this.reportRequest.symptomList = "Covid,NonCovid";
+    }
+
+    console.log("Symptom List :  " + this.reportRequest.symptomList);
+
     this.adminService.getPatientsList(this.reportRequest).subscribe(response=>{
-      console.log("HERE1");
-      console.log(this.reportRequest);
       this.patientsList = response;
       console.log(this.patientsList);
       
@@ -599,7 +637,7 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
       //let url = window.URL.createObjectURL(data);
       //window.open(url);
  
-      this.exportToExcel(response);
+      this.exportToExcel(response); //Commented for Download excel
 
       // setTimeout(() => {
       //   this.exportToExcel(response);
@@ -607,12 +645,36 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     });
   }
 
+  exportToExcel12(): void
+  {
+    /* pass here the table id */
+    let element = document.getElementById('excel-table');
+    console.log(element);
+    const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+    console.log(ws);
+
+    ws['!cols'] = [];
+    ws['!cols'][11] = { hidden: true };
+    ws['!cols'][11] = {width : 0 };
+    /* here 12 is your column number (n-1) */
+    
+    console.log(ws);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+ 
+    /* save to file */  
+    XLSX.writeFile(wb, this.fileName); 
+  }
+
   exportToExcel(response: any): void
   { 
+    //console.log(response);
     let data = response;
     let readyToExport : any = [{
       PatientFirstName : JSON.parse(data.patiantInformation.profileDetails)[0].Answer,	
-      PatientMiddleName : JSON.parse(data.patiantInformation.profileDetails)[1].Answer	,
+      PatientMiddleName : JSON.parse(data.patiantInformation.profileDetails)[1].Answer,
       PatientLastName : JSON.parse(data.patiantInformation.profileDetails)[2].Answer,	
       PatientDOB : JSON.parse(data.patiantInformation.profileDetails)[8].Answer,
       PatientGender : JSON.parse(data.patiantInformation.profileDetails)[3].Answer,
