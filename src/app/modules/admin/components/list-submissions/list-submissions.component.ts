@@ -469,21 +469,23 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit {
 
   downloadInvoicePDF(patientDetails) {
     //console.log(patientDetails)
+    //console.log(patientDetails)
     this.adminService.getAnswers(patientDetails).subscribe(response => {
-      var steps = response;
-      var answers: { [id: number]: string; } = {};
+      console.log(response);
+      var transactionDescription = response.transactionDescription
+      var steps = response.surveySteps;  
+      var answers: { [id: number] : string; } = {};
       steps.forEach(step => {
         step.questions.forEach(question => {
           answers[question.questionID] = question.answer;
         });
       });
 
-      var itemdesc;
-      if (patientDetails.isCovid)
-        itemdesc = 'Medical Review Charges (Patient With Covid-19 Symptoms)'
-      else
-        itemdesc = 'Medical Review Charges (Patient With No Covid-19 Symptoms)'
-
+      var itemdesc = transactionDescription;
+      // if(patientDetails.isCovid)
+      //   itemdesc = 'Medical Review Charges (Patient With Covid-19 Symptoms)'
+      // else
+      //   itemdesc = 'Medical Review Charges (Patient With No Covid-19 Symptoms)'
       var name = answers[1] + ' ' + answers[3];
       var address = answers[5] + '\n' + answers[6] + '\n' + answers[7] + ' ' + answers[8];
 
