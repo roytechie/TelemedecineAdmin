@@ -38,6 +38,8 @@
                 <div class="col-md-2" style="padding-top: 8px;padding-right: -3px;padding-left: 36px;">
                   <button mat-raised-button (click)="getPatientsList(true)" [disabled]="disabledButton">Today</button>
                 </div>
+
+                <!--
                 <div class="col-md-4">
                   <mat-form-field appearance="fill">
                     <mat-label>by symptoms</mat-label>
@@ -48,6 +50,18 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
+                -->
+                
+                <div class="col-md-4">
+                  <mat-form-field appearance="fill">
+                    <mat-label>by symptoms</mat-label>
+                    <mat-select [formControl]="bySymptoms" multiple (selectionChange)="updateFilter($event, 'symptomsFilter')">
+                      <mat-option *ngFor="let symptom of symptomList" [value]="symptom">{{symptom}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+
                 <div class="col-md-3">
                   <mat-form-field appearance="fill">
                     <mat-label>by status</mat-label>

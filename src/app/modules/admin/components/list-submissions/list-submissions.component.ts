@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import {FormControl} from '@angular/forms';
 import { AdminService } from '../../service/admin.service'; 
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -25,6 +26,12 @@ import { ProviderService } from '../../service/provider.service';
   styleUrls: ['./list-submissions.component.scss']
 })
 export class ListSubmissionsComponent implements OnInit, AfterViewInit  {  
+
+  bySymptoms = new FormControl();
+  symptomList: string[] = ['All', 'Covid', 'NonCovid'];
+  
+
+
   patientsList: any
   displayedColumns: string[] = ['submissionId', 'firstName', 'lastName', 'DOB',
    'phone', 'isCovid', 'submissionTime', 'state','doctorName', 'transactionDescription', 'returningPatient', 'status', 'Action'];
@@ -153,8 +160,6 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     if (this.reportRequest.symptomList == undefined || this.reportRequest.symptomList == null || this.reportRequest.symptomList == "") {
       this.reportRequest.symptomList = "All";
     }
-
-
 
     this.adminService.getPatientsList(this.reportRequest).subscribe(response=>{
       this.patientsList = response;

@@ -29,7 +29,7 @@ export class ReportRequest {
     submissionId : number
     isSingleSubmission: boolean = false;
     reportType: string
-    symptomFilter:string
+    symptomList:string
 }
 
 export class AuthProperties {
