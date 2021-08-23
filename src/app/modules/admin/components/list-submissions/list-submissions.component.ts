@@ -314,7 +314,8 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit {
 
   downloadPDF(patientDetails) {
     this.adminService.getAnswers(patientDetails).subscribe(response => {
-      var answers = response;
+      //var answers = response;
+      var answers = response.SurveySteps
       console.log(answers);
       let docDefinition: any = {
         pageMargins: [40, 70, 40, 40],

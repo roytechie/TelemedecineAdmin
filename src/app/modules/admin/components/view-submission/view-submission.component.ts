@@ -43,7 +43,8 @@ export class ViewSubmissionComponent implements OnInit {
   ngOnInit() {  
       //this.options = this.stausOptions.options; 
       this.adminService.getAnswers(this.data).subscribe(response => {
-        this.answers = response; 
+        //this.answers = response; 
+        this.answers = response.surveySteps;
       }); 
 
       this.getUsersList();
