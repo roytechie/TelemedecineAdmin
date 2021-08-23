@@ -28,7 +28,8 @@ export class ReportRequest {
     userId : number
     submissionId : number
     isSingleSubmission: boolean = false;
-    reportType : string
+    reportType: string
+    symptomFilter:string
 }
 
 export class AuthProperties {

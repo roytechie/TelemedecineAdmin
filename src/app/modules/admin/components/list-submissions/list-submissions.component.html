@@ -8,63 +8,68 @@
     <div class="col-md-12">
         <mat-card>
           <div class="row">
-          <mat-form-field  class="col-md-2">
-            <mat-label>Choose start date</mat-label> 
-            <input matInput [matDatepicker]="picker" [(ngModel)]="startDate"  
-            [max]="endDate">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field> 
+            <mat-form-field class="col-md-2">
+              <mat-label>Choose start date</mat-label>
+              <input matInput [matDatepicker]="picker" [(ngModel)]="startDate"
+                     [max]="endDate">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
 
-          <!-- <div class="col-md-2">
-            <button mat-raised-button  (click)="getXMLFile()" id="download_link">View XML</button> 
-            <a id="download_link" (click)="getXMLFile()" download="my_exported_file.txt" href='' >Download as Text File</a>
-          </div>  -->
+            <!-- <div class="col-md-2">
+    <button mat-raised-button  (click)="getXMLFile()" id="download_link">View XML</button>
+    <a id="download_link" (click)="getXMLFile()" download="my_exported_file.txt" href='' >Download as Text File</a>
+  </div>  -->
 
-          <mat-form-field class="col-md-2">
-            <mat-label>Choose end date</mat-label>
-            <input matInput [matDatepicker]="picker2"
-            [(ngModel)]="endDate" [min]="startDate">
-            <mat-datepicker-toggle matSuffix [for]="picker2">
-            </mat-datepicker-toggle>
-            <mat-datepicker #picker2></mat-datepicker>
-          </mat-form-field>      
+            <mat-form-field class="col-md-2">
+              <mat-label>Choose end date</mat-label>
+              <input matInput [matDatepicker]="picker2"
+                     [(ngModel)]="endDate" [min]="startDate">
+              <mat-datepicker-toggle matSuffix [for]="picker2">
+              </mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
 
-          <div class="col-md-6 align-bottom"> 
-            <div class="row">
-              <div class="col-md-1" style="padding-top: 8px;"> 
-                <button mat-raised-button (click)="getPatientsList(false)" [disabled]="disabledButton">View</button> 
+            <div class="col-md-6 align-bottom">
+              <div class="row">
+                <div class="col-md-1" style="padding-top: 8px;">
+                  <button mat-raised-button (click)="getPatientsList(false)" [disabled]="disabledButton">View</button>
+                </div>
+                <div class="col-md-2" style="padding-top: 8px;padding-right: -3px;padding-left: 36px;">
+                  <button mat-raised-button (click)="getPatientsList(true)" [disabled]="disabledButton">Today</button>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field appearance="fill">
+                    <mat-label>by symptoms</mat-label>
+                    <mat-select [(ngModel)]="symptomsFilter" (selectionChange)="updateFilter($event, 'symptomsFilter')">
+                      <mat-option value="All">All </mat-option>
+                      <mat-option value="Covid">Covid </mat-option>
+                      <mat-option value="NonCovid">Non Covid </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                  <mat-form-field appearance="fill">
+                    <mat-label>by status</mat-label>
+                    <mat-select [(ngModel)]="statusFilter" (selectionChange)="updateFilter($event, 'statusFilter')">
+                      <mat-option value="-1"> --Select status-- </mat-option>
+                      <mat-option *ngFor="let status of adminService.patientStatuses" [value]="status.value">
+                        {{status.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
               </div>
-              <div class="col-md-2" style="padding-top: 8px;padding-right: -3px;padding-left: 36px;">
-                <button mat-raised-button (click)="getPatientsList(true)" [disabled]="disabledButton">Today</button> 
-              </div>
-              <div class="col-md-4">  
-              <mat-form-field appearance="fill">
-                <mat-label>by symptoms</mat-label>
-                <mat-select [(ngModel)]="symptomsFilter" (selectionChange)="updateFilter($event, 'symptomsFilter')">
-                  <mat-option value="All">All </mat-option>
-                  <mat-option value="Covid">Covid </mat-option>
-                  <mat-option value="NonCovid">Non Covid </mat-option>
-                </mat-select>
-              </mat-form-field> 
-              </div>
-              <div class="col-md-3">  
-                <mat-form-field appearance="fill">
-                  <mat-label>by status</mat-label>
-                  <mat-select [(ngModel)]="statusFilter" (selectionChange)="updateFilter($event, 'statusFilter')">
-                    <mat-option value="-1"> --Select status-- </mat-option>
-                    <mat-option *ngFor="let status of adminService.patientStatuses" [value]="status.value">
-                      {{status.name}}</mat-option> 
-                  </mat-select>
-                </mat-form-field> 
-              </div>
-            </div> 
-          </div> 
-          <mat-form-field class="col-md-2">
-            <mat-label>Filter</mat-label>
-            <input matInput type="text" matInput (keyup)="applyFilter($event)">
-          </mat-form-field>
-        </div>
+            </div>
+            <mat-form-field class="col-md-2">
+              <mat-label>Filter</mat-label>
+              <input matInput type="text" matInput (keyup)="applyFilter($event)">
+            </mat-form-field>
+
+            <div class="col-md-2" style="text-align: right;">
+              <button mat-button mat-raised-button color="primary" [disabled]="exportButtonDisabled" (click)="exportexcel()"> Export to Excel</button>
+            </div>
+          </div>
         </mat-card>
     </div>
 </div> 

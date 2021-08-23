@@ -43,6 +43,7 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
   dataSource = new MatTableDataSource<any>(); 
   dataSourceOriginal = new MatTableDataSource<any>();
   rowsAdded: boolean = false;
+  exportButtonDisabled: boolean = true;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -55,7 +56,7 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
 
   events: string[] = [];
   isCovid: boolean = false;
-  symptomsFilter : string = "All";
+  symptomsFilter: string; // = "All";
   statusFilter: any = '-1';
   isTodayList: boolean = false;
   JSON: any;
@@ -125,8 +126,10 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
   getPatientsList(isTodayList: boolean, isTest: boolean = false): any {
 
     this.statusFilter = '-1';
-    this.symptomsFilter = 'All';
-    var newEndDate : Date = this.endDate; 
+    this.symptomsFilter; // = 'All';
+    this.exportButtonDisabled = false;
+    var newEndDate: Date = this.endDate;
+
     if(isTodayList)
     {
       this.startDate = new Date();
@@ -138,13 +141,20 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
       //newEndDate.setDate( newEndDate.getDate() + 1 ) 
     }  
 
-    this.disabledButton = true; 
+    this.disabledButton = true;
     this.reportRequest.startDate = this.adminService.returnFormatedDate(this.startDate);
     this.reportRequest.endDate = this.adminService.returnFormatedDate(this.endDate);;
     this.reportRequest.isAdmin = JSON.parse(localStorage.currentUser).isAdmin;
     this.reportRequest.userId = JSON.parse(localStorage.currentUser).id;
-    this.reportRequest.isSingleSubmission = false; 
+    this.reportRequest.isSingleSubmission = false;
     this.reportRequest.reportType = 'Submission';
+    this.reportRequest.symptomList = this.symptomsFilter;
+
+    if (this.reportRequest.symptomList == undefined || this.reportRequest.symptomList == null || this.reportRequest.symptomList == "") {
+      this.reportRequest.symptomList = "All";
+    }
+
+
 
     this.adminService.getPatientsList(this.reportRequest).subscribe(response=>{
       this.patientsList = response;
@@ -658,5 +668,97 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     /* save to file */  
     XLSX.writeFile(wb, data.patiantInformation.submissionId + '_' + this.fileName, { bookType: 'xlsx', type: 'buffer' }); 
   }
- 
+
+  exportexcel() {
+    //debugger;
+    let fileName = 'Submissions.xlsx';
+    /* table id is passed over here */
+    let readyToExport = this.dataSource.data;
+
+    for (var j in readyToExport) {
+      //Remove Unwanted Columns
+      delete readyToExport[j]["patientId"];
+      delete readyToExport[j]["email"];
+      delete readyToExport[j]["dobString"];
+      delete readyToExport[j]["paymentTime"];
+      delete readyToExport[j]["authTranId"];
+      delete readyToExport[j]["notes"];
+      delete readyToExport[j]["paymentAmount"];
+      //delete readyToExport[j]["profileDetails"];
+      delete readyToExport[j]["loginDetails"];
+      delete readyToExport[j]["activities"];
+      delete readyToExport[j]["followupNotes"];
+      delete readyToExport[j]["activitiesDetails"];
+      delete readyToExport[j]["userId"];
+      delete readyToExport[j]["isAssigneeChanged"];
+      delete readyToExport[j]["pharmacyName"];
+      delete readyToExport[j]["pharmacySequenceId"];
+      delete readyToExport[j]["lastUpdatedDate"];
+      delete readyToExport[j]["otp"];
+      delete readyToExport[j]["address"];
+      delete readyToExport[j]["city"];
+      delete readyToExport[j]["zip"];
+      delete readyToExport[j]["gender"];
+      delete readyToExport[j]["answers"];
+      delete readyToExport[j]["isCompleted"];
+      delete readyToExport[j]["patientType"];
+      delete readyToExport[j]["pharmacyRefIndicator"];
+      delete readyToExport[j]["isPrescribed"];
+      delete readyToExport[j]["transactionDescription"];
+
+      //Format required columns
+
+      //Status
+      readyToExport[j].status = this.getStatusDetails(readyToExport[j].status)[0].name;
+      console.log(readyToExport[j].status);
+      //ReturningPatient
+      readyToExport[j].isReturningPatient = readyToExport[j].isReturningPatient ? "No" : "Yes";
+      //DOB 
+      let jsonPart: any = JSON.parse(readyToExport[j].profileDetails)[1].Answer;
+      readyToExport[j].dob = jsonPart;
+      //State
+      readyToExport[j].state = JSON.parse(readyToExport[j].profileDetails)[0].Answer;
+
+      delete readyToExport[j]["profileDetails"];
+    }
+
+    //var a = JSON.stringify(this.dataSource.data);
+    //delete readyToExport["pharmacyId"];
+
+    //readyToExport[0].keys = ["Id","First Name","Last Name","DOB","Phone","Covid","Submission Time","State","Assigned To","New Patient","Status"];
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(readyToExport)
+    var header = Object.keys(readyToExport[0]); // columns name
+
+
+    var wscols = [];
+    for (var i = 0; i < header.length; i++) {  // columns length added
+      wscols.push({ wch: header[i].length + 5 });
+    }
+    ws['!cols'] = wscols;
+
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, fileName, { bookType: 'xlsx', type: 'buffer' });
+  }
+
+
+  exportToExcelNew(): void {
+    /* pass here the table id */
+    let element = document.getElementById('excel-table');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
+  }
+
+
 }
