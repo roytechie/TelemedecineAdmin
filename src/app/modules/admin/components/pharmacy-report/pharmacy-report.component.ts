@@ -16,7 +16,7 @@ import * as XLSX from 'xlsx';
 export class PharmacyReportComponent implements OnInit {
   dataSource?: MatTableDataSource<any> = new MatTableDataSource<any>();
   displayedColumns: string[] = [ 
-  'patientName', 'pharmacyName', 'patientAddress', 'patientState', 'phone', 'email', 'prescribedDate', 'prescribedMedicineNames'];
+  'patientName', 'pharmacyName', 'patientDOB', 'weight','transactionDescription','patientAddress', 'patientState', 'phone',  'prescribedDate', 'prescribedMedicineNames'];
   endDate: Date = new Date();
   startDate: Date = new Date(new Date().getFullYear(), (new Date().getMonth() -1), new Date().getDate());
   showNoRecordsDiv: boolean = true;
