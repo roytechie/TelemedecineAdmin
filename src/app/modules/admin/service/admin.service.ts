@@ -223,4 +223,36 @@ export class AdminService {
     { headers: this.headers}).pipe(catchError(this.errorHandler));
   }
 
+  getMedicine(){
+    return this.http.get<any>(`${ this.adminService }GetMedicineDetails`,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  getMedicineById(id){
+    return this.http.get<any>(`${ this.adminService }GetMedicineById?id=` + id,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  getMedicineCategories(){
+    return this.http.get<any>(`${ this.adminService }GetMedicineCategory`,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  insertnedicine(medicineDetail: any){
+    this.postData = JSON.stringify(medicineDetail);
+    console.log(this.postData);
+    return this.http.post<any>(`${ this.adminService }AddMedicineDetails`, this.postData,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  UpdateMedicineDetails(medicineDetail: any){
+    this.postData = JSON.stringify(medicineDetail);
+    console.log(this.postData);
+    return this.http.post<any>(`${ this.adminService }UpdateMedicineDetails`, this.postData,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+  DeleteMedicineDetails(id: any){
+    return this.http.get<any>(`${ this.adminService }DeleteMedicineDetails?id=` + id,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
 }

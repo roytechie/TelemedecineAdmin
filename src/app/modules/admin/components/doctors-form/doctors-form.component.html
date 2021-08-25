@@ -62,18 +62,36 @@
             (change)="setAll($event.checked)">
             Default
             </mat-checkbox>
-       <div  *ngFor="let subtask of changedData" class="mat-checkbox-layout">
+            <div *ngFor="let cat of listedMedicineCategories" class="mat-checkbox-layout">
+                <strong><u>{{cat.medicine}}</u></strong>
+
+                <div *ngFor="let subtask of getCategorizedMedicine(cat.medicineId)" class="mat-checkbox-layout" style="margin-left: 10px;">
+                    <mat-checkbox  [(ngModel)]="subtask.value"                          
+                    (ngModelChange)="updateAllComplete($event)">
+                    <label class="wordbreak">{{subtask.medicine}}</label>
+                    </mat-checkbox>
+                <!-- <div class="col-md-10" *ngIf="subtask.value">
+                    <mat-form-field class="example-full-width"> -->
+                    <!-- <mat-label>{{subtask.medicine}}</mat-label> -->
+                    <!-- <textarea matInput placeholder="Prescription" [(ngModel)]="subtask.description"></textarea>
+                    </mat-form-field> -->
+                <!-- </div> -->
+                </div>
+                
+            </div>
+       <!-- <div  *ngFor="let subtask of changedData" class="mat-checkbox-layout">
             <mat-checkbox  [(ngModel)]="subtask.value"                          
             (ngModelChange)="updateAllComplete($event)">
             <label class="wordbreak">{{subtask.medicine}}</label>
             </mat-checkbox>
+        </div>  -->
         <!-- <div class="col-md-10" *ngIf="subtask.value">
             <mat-form-field class="example-full-width"> -->
             <!-- <mat-label>{{subtask.medicine}}</mat-label> -->
             <!-- <textarea matInput placeholder="Prescription" [(ngModel)]="subtask.description"></textarea>
             </mat-form-field> -->
         <!-- </div> -->
-        </div>                    
+                           
     </div>
         <div class="col-md-6">
             <h6>Prescribed</h6>

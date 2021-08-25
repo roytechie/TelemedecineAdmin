@@ -18,7 +18,8 @@ export class DoctorsFormComponent implements OnInit {
   priscribedData : any ;
   JSON: any;  
   pharmacyID : number;  
-  allComplete: boolean = false;  
+  allComplete: boolean = false;
+  listedMedicineCategories: any;  
   constructor(private adminService: AdminService,
     @Inject(MAT_DIALOG_DATA) public data:any,) { 
       this.JSON = JSON;
@@ -87,10 +88,18 @@ export class DoctorsFormComponent implements OnInit {
     {    
       this.pharmacyID = Id;
       this.adminService.getMedicineDetails(this.pharmacyID).subscribe(response=>{
-      this.changedData = response;    
+        this.changedData = response;
+        this.listedMedicineCategories = response.filter(f => f.parentId == 0);
+          console.log(this.listedMedicineCategories);
       this.allComplete = this.changedData!= null && this.changedData.every(t => t.value);       
-    })
+    });
     }
+
+    getCategorizedMedicine(parentId): any {
+      console.log(parentId);
+      return this.changedData.filter(f => f.parentId == parentId);
+    }
+
     setAll(completed: boolean) {
       this.allComplete = completed;      
       if (this.changedData == null) {
