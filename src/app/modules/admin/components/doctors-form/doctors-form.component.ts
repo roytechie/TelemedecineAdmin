@@ -20,12 +20,14 @@ export class DoctorsFormComponent implements OnInit {
   pharmacyID : number;  
   allComplete: boolean = false;
   listedMedicineCategories: any;  
+  prescriptionNote: string;
   constructor(private adminService: AdminService,
     @Inject(MAT_DIALOG_DATA) public data:any,) { 
       this.JSON = JSON;
     }
 
   ngOnInit() {
+    this.prescriptionNote = this.data.prescriptionNote;
     this.getPharmacyDetails();
     this.getMedicineDetails(this.data.submissionId);
     this.getPriscriptionDetails();
@@ -62,7 +64,7 @@ export class DoctorsFormComponent implements OnInit {
 
   updatePharmacyDetails() {   
     if(this.pharmacy != ""){
-      this.adminService.updatePharmacyDetails(this.pharmacy,this.data.submissionId).subscribe(response=>{
+      this.adminService.updatePharmacyDetails(this.pharmacy,this.data.submissionId, this.prescriptionNote).subscribe(response=>{
         this.updateMedicineDetails();
         this.getPriscriptionDetails();
         this.adminService.openSnackBar('updated successfully', '');        
@@ -74,7 +76,7 @@ export class DoctorsFormComponent implements OnInit {
     updateMedicineDetails()
     {
       var medicine = this.changedData;
-      this.adminService.insertMedicineDetails(medicine,this.data.submissionId).subscribe(response=>{        
+      this.adminService.insertMedicineDetails(medicine,this.data.submissionId, this.prescriptionNote).subscribe(response=>{        
         });      
     }
 

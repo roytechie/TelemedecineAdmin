@@ -153,16 +153,16 @@ export class AdminService {
   }
 
   
-  updatePharmacyDetails(pharmcyDetails: any, submissionId: number) {
+  updatePharmacyDetails(pharmcyDetails: any, submissionId: number, prescriptionNote: string) {
     this.postData = JSON.stringify(pharmcyDetails);
-    return this.http.post<any>(`${ this.adminService }UpdatePharmacyInSubmissionDetails?submissionId=`+ submissionId,
+    return this.http.post<any>(`${ this.adminService }UpdatePharmacyInSubmissionDetails?submissionId=`+ submissionId + '&prescriptionNote=' + prescriptionNote,
     this.postData,
     { headers: this.headers}).pipe(catchError(this.errorHandler));
   } 
 
-  insertMedicineDetails(medicineDetails: any, userId: number) {
+  insertMedicineDetails(medicineDetails: any, userId: number, prescriptionNote: string) {
     this.postData = JSON.stringify(medicineDetails);
-    return this.http.post<any>(`${ this.adminService }InsertMedicineDetails?userId=`+ userId,
+    return this.http.post<any>(`${ this.adminService }InsertMedicineDetails?userId=`+ userId + '&prescriptionNote=' + prescriptionNote,
     this.postData,
     { headers: this.headers}).pipe(catchError(this.errorHandler));
   } 

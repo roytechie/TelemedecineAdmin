@@ -36,10 +36,25 @@
                 {{JSON.parse(data.profileDetails)[1].Answer | date:"MM/dd/yyyy"}} 
             </ng-template>  
         </div> 
+        <div class="col-md-4 text-right">Weight: </div>
+        <div class="col-md-8 text-left">{{JSON.parse(data.profileDetails)[2].Answer}} lbs</div> 
+         
         <!-- <div class="col-md-4 text-right"> Address : </div><div class="col-md-8 text-left"></div> -->
         <!-- <div class="col-md-4 text-right"> City : </div><div class="col-md-8 text-left">City</div> -->
         <div class="col-md-4 text-right"> State : </div><div class="col-md-8 text-left">{{JSON.parse(data.profileDetails)[0].Answer}}</div>
         <!-- <div class="col-md-4 text-right"> Zip : </div><div class="col-md-8 text-left">Zip</div> -->
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-10">
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Prescription Note</mat-label>
+                    <textarea matInput placeholder="Enter prescription note here..."
+                    [(ngModel)]="prescriptionNote"
+                    ></textarea>
+                  </mat-form-field>
+            </div>
         </div>
     </div>
     <!-- <div class="col-md-6">
