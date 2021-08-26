@@ -45,6 +45,11 @@
     <div class="col-sm-12" *ngIf="rowsAdded">
         <table mat-table class="mat-elevation-z8" [dataSource]="dataSource" style="width:100%" matSort>
             
+          <ng-container matColumnDef="patientId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Patient Id</th>
+            <td mat-cell *matCellDef="let element"> {{element.patientId}} </td>
+          </ng-container>
+
               <ng-container matColumnDef="firstName">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name</th>
                 <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
