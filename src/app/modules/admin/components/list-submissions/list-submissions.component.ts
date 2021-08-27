@@ -388,7 +388,7 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
                 ]
               });      
         docDefinition.content.push({canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595-2*40, y2: 5, lineWidth: 2 }]});
-        answers.forEach(step => {
+        answers.surveySteps.forEach(step => {
           docDefinition.content.push( ['\n']);
           docDefinition.content.push({
             layout: 'lightHorizontalLines', // optional

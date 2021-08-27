@@ -27,11 +27,9 @@ export class DoctorsFormComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.prescriptionNote = this.data.prescriptionNote;
     this.getPharmacyDetails();
     this.getMedicineDetails(this.data.submissionId);
     this.getPriscriptionDetails();
-
   }
 
   updatePharmacyValue(event: any){    
@@ -83,7 +81,11 @@ export class DoctorsFormComponent implements OnInit {
     getPriscriptionDetails()
     {               
       this.adminService.getPriscriptionDetails(this.data.submissionId).subscribe(response=>{
-        this.priscribedData = response;        
+        this.priscribedData = response;
+        if(response) {
+          this.prescriptionNote = response[0].prescriptionNote;
+          console.log(this.prescriptionNote);
+        }        
     })      
     }
     getMedicineDetails(Id : number)
