@@ -39,31 +39,7 @@
                   <button mat-raised-button (click)="getPatientsList(true)" [disabled]="disabledButton">Today</button>
                 </div>
 
-                <!--
-                <div class="col-md-4">
-                  <mat-form-field appearance="fill">
-                    <mat-label>by symptoms</mat-label>
-                    <mat-select [(ngModel)]="symptomsFilter" (selectionChange)="updateFilter($event, 'symptomsFilter')">
-                      <mat-option value="All">All </mat-option>
-                      <mat-option value="Covid">Covid </mat-option>
-                      <mat-option value="NonCovid">Non Covid </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                -->
-                
-                <!--
-                <div class="col-md-4">
-                  <mat-form-field appearance="fill">
-                    <mat-label>by symptoms</mat-label>
-                    <mat-select [formControl]="bySymptoms" multiple (selectionChange)="updateFilter($event, 'symptomsFilter')">
-                      <mat-option *ngFor="let symptom of symptomList" [value]="symptom">{{symptom}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                -->     
-
-                <!--- NEW CODE --->
+                <!--- NEW CODE FOR MULTI SELECT SYMPTOMS --->
                 <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Symptoms</mat-label>
@@ -80,7 +56,6 @@
                   </mat-select>
                 </mat-form-field>
                 </div>
-
 
                 <div class="col-md-3">
                   <mat-form-field appearance="fill">
