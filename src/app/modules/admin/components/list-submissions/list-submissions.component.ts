@@ -18,6 +18,11 @@ import * as XLSX from 'xlsx';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { ProviderService } from '../../service/provider.service';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/core';
+import { PatiantInformationForExcel } from '../../model/PatiantInformation'; 
+
+//import { formatDate } from '@angular/common';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
  
 @Component({
@@ -27,9 +32,75 @@ import { ProviderService } from '../../service/provider.service';
 })
 export class ListSubmissionsComponent implements OnInit, AfterViewInit  {  
 
-  bySymptoms = new FormControl();
-  symptomList: string[] = ['All', 'Covid', 'NonCovid'];
+  //bySymptoms = new FormControl();
+  //symptomList: string[] = ['All', 'Covid', 'NonCovid'];
   
+  /**************************************************/
+  @ViewChild('select') select: MatSelect;
+
+   allSelected=false;
+    covidSymptoms: any[] = [
+     {value: '1', viewValue: 'Covid'},
+     {value: '0', viewValue: 'NonCovid'}
+   ];
+   toggleAllSelection(event: any) {
+     if (this.allSelected) {
+       this.select.options.forEach((item: MatOption) => item.select());
+       this.select.options.forEach(element => {
+         this.symptomsFilter
+       });
+       //this.symptomsFilter
+     } else {
+       this.select.options.forEach((item: MatOption) => item.deselect());
+     }
+     this.optionClick(event);   
+   }
+    optionClick(event: any) {
+     let newStatus = true;
+     var count1:number = 0;
+     var symptomInfo:string = "";
+     this.select.options.forEach((item: MatOption) => {
+       if (!item.selected) {
+         newStatus = false;
+       }
+       
+       //For Option Covid
+       if(item.value == 1){
+         if(item.selected == true) //Selected Covid
+         { 
+            if(count1>0)
+            {
+              symptomInfo = symptomInfo + ",Covid";
+            }
+            else
+            {
+            symptomInfo = symptomInfo + "Covid";
+            }
+            count1++;
+         }
+       }
+       if(item.value == 0){
+        if(item.selected == true) //Selected NonCovid
+        {
+            if(count1>0)
+            {
+              symptomInfo = symptomInfo + ",NonCovid";
+            }
+            else
+            {
+            symptomInfo = symptomInfo + "NonCovid";
+            }
+            count1++;
+        }
+      }
+      
+       event.value = symptomInfo;
+       this.updateFilter(event, 'symptomsFilter'); 
+     });
+     this.allSelected = newStatus;
+   }
+
+  /**************************************************/
 
 
   patientsList: any
@@ -125,6 +196,7 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
   }
 
   getStatusDetails(input : any){ 
+    //console.log(input);
     return this.adminService.patientStatuses.filter(function(item) {
       return (item.value == input);
     });
@@ -197,6 +269,12 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
   { 
     if(filterType == 'symptomsFilter')
     {
+      if(event.value == 'All'){
+        event.value = 'All,Covid,NonCovid';
+      }
+      if(event.value == 'Covid,NonCovid'){
+        event.value = 'All,Covid,NonCovid';
+      }
       this.symptomsFilter = event.value;
     }
     else
@@ -219,7 +297,6 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     }
 
     let searchString = this.symptomsFilter + 'with' + statusString;
-    //console.log(searchString);
     this.getFilterdResult(searchString);
   } 
  
@@ -328,7 +405,45 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
         this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
           return (item.isCovid == false && item.status == completeStatusId );
         });
-        break;         
+        break;     
+        
+      //This will be the cases when Both Covid And Non Covid Patients are evaluated
+      case 'All,Covid,NonCovidwithNoStatus':  
+        this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
+          return (item.status != completeStatusId );
+        });
+        break;
+
+      case 'All,Covid,NonCovidwithStatus':  
+        this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
+          return (item.status != completeStatusId && item.status == status);
+        });
+        break;
+
+      case 'All,Covid,NonCovidwithComplete':  
+        this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
+          return (item.status == completeStatusId );
+        });
+        break;
+      
+      //This will be the cases when neither Covid nor Non Covid Patients are evaluated
+      case 'withNoStatus':  
+        this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
+          return (item.status != completeStatusId );
+        });
+        break;
+
+      case 'withStatus':  
+        this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
+          return (item.status != completeStatusId && item.status == status);
+        });
+        break;
+
+      case 'withComplete':  
+        this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
+          return (item.status == completeStatusId );
+        });
+        break;
     }
   }
 
@@ -403,7 +518,7 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
                 ]
               });      
         docDefinition.content.push({canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595-2*40, y2: 5, lineWidth: 2 }]});
-        answers.forEach(step => {
+        answers.surveySteps.forEach(step => {
           docDefinition.content.push( ['\n']);
           docDefinition.content.push({
             layout: 'lightHorizontalLines', // optional
@@ -678,67 +793,36 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     //debugger;
     let fileName = 'Submissions.xlsx';
     /* table id is passed over here */
-    let readyToExport = this.dataSource.data;
+    var tempDataSource = this.dataSource.data;
 
-    for (var j in readyToExport) {
-      //Remove Unwanted Columns
-      delete readyToExport[j]["patientId"];
-      delete readyToExport[j]["email"];
-      delete readyToExport[j]["dobString"];
-      delete readyToExport[j]["paymentTime"];
-      delete readyToExport[j]["authTranId"];
-      delete readyToExport[j]["notes"];
-      delete readyToExport[j]["paymentAmount"];
-      //delete readyToExport[j]["profileDetails"];
-      delete readyToExport[j]["loginDetails"];
-      delete readyToExport[j]["activities"];
-      delete readyToExport[j]["followupNotes"];
-      delete readyToExport[j]["activitiesDetails"];
-      delete readyToExport[j]["userId"];
-      delete readyToExport[j]["isAssigneeChanged"];
-      delete readyToExport[j]["pharmacyName"];
-      delete readyToExport[j]["pharmacySequenceId"];
-      delete readyToExport[j]["lastUpdatedDate"];
-      delete readyToExport[j]["otp"];
-      delete readyToExport[j]["address"];
-      delete readyToExport[j]["city"];
-      delete readyToExport[j]["zip"];
-      delete readyToExport[j]["gender"];
-      delete readyToExport[j]["answers"];
-      delete readyToExport[j]["isCompleted"];
-      delete readyToExport[j]["patientType"];
-      delete readyToExport[j]["pharmacyRefIndicator"];
-      delete readyToExport[j]["isPrescribed"];
-      delete readyToExport[j]["transactionDescription"];
+    var readyToExport:PatiantInformationForExcel[] = [];
 
-      //Format required columns
+    
+    for (var j in tempDataSource)
+    {
+      var patientInfo:PatiantInformationForExcel = new PatiantInformationForExcel();
+      patientInfo.Id = tempDataSource[j]["submissionId"];
+      patientInfo['First Name'] = tempDataSource[j]["firstName"];
+      patientInfo['Last Name'] = tempDataSource[j]["lastName"];
+      patientInfo.DOB = JSON.parse(tempDataSource[j].profileDetails)[1].Answer;
+      patientInfo.Phone = tempDataSource[j]["phone"];
+      patientInfo['Covid Patient'] = tempDataSource[j]["isCovidPatient"];
+      patientInfo.SubmissionTime = tempDataSource[j]["submissionTime"];
+      patientInfo.State = JSON.parse(tempDataSource[j].profileDetails)[0].Answer;
+      patientInfo.AssignedTo = tempDataSource[j]["doctorName"];
+      patientInfo.Package = tempDataSource[j].transactionDescription;
+      patientInfo['New Patient'] = tempDataSource[j].isReturningPatient ? "No" : "Yes";//["isReturningPatient"];
+      patientInfo.CurrentStatus = this.submissionListStatusDecoder(tempDataSource[j].status);
 
-      //Status
-      readyToExport[j].status = this.getStatusDetails(readyToExport[j].status)[0].name;
-      console.log(readyToExport[j].status);
-      //ReturningPatient
-      readyToExport[j].isReturningPatient = readyToExport[j].isReturningPatient ? "No" : "Yes";
-      //DOB 
-      let jsonPart: any = JSON.parse(readyToExport[j].profileDetails)[1].Answer;
-      readyToExport[j].dob = jsonPart;
-      //State
-      readyToExport[j].state = JSON.parse(readyToExport[j].profileDetails)[0].Answer;
-
-      delete readyToExport[j]["profileDetails"];
+      readyToExport.push(patientInfo);
     }
-
-    //var a = JSON.stringify(this.dataSource.data);
-    //delete readyToExport["pharmacyId"];
-
-    //readyToExport[0].keys = ["Id","First Name","Last Name","DOB","Phone","Covid","Submission Time","State","Assigned To","New Patient","Status"];
-
+    
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(readyToExport)
     var header = Object.keys(readyToExport[0]); // columns name
 
-
     var wscols = [];
     for (var i = 0; i < header.length; i++) {  // columns length added
-      wscols.push({ wch: header[i].length + 5 });
+       wscols.push({ wch: header[i].length + 5 });
     }
     ws['!cols'] = wscols;
 
@@ -748,9 +832,53 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
     /* save to file */
-    XLSX.writeFile(wb, fileName, { bookType: 'xlsx', type: 'buffer' });
+     XLSX.writeFile(wb, fileName, { bookType: 'xlsx', type: 'buffer' });
   }
 
+  submissionListStatusDecoder(statusVal:number) : string{
+    let decodedStatus:string = "";
+    if(statusVal == 1)
+      {
+        decodedStatus = "Pending";
+      }
+      if(statusVal == 2)
+      {
+        decodedStatus = "Under Review";
+      }
+      if(statusVal == 3)
+      {
+        decodedStatus = "Prescription Advice";
+      }
+      if(statusVal == 4)
+      {
+        decodedStatus = "Appointment Fixed";
+      }
+      if(statusVal == 5)
+      {
+        decodedStatus = "NoAnswer";
+      }
+      if(statusVal == 6)
+      {
+        decodedStatus = "Followup";
+      }
+      if(statusVal == 7)
+      {
+        decodedStatus = "Complete";
+      }
+      if(statusVal == 8)
+      {
+        decodedStatus = "Refund";
+      }
+      if(statusVal == 9)
+      {
+        decodedStatus = "Recovered";
+      }
+      if(statusVal == 10)
+      {
+        decodedStatus = "NP";
+      }
+      return decodedStatus;
+  }
 
   exportToExcelNew(): void {
     /* pass here the table id */

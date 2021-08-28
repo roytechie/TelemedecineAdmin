@@ -37,4 +37,20 @@ export class PatiantInformation
         this.UserId = data.loginDetails.userId;
         this.DoctorName = data.doctorName;
     }
+
 } 
+
+export class PatiantInformationForExcel{ //extends PatiantInformation{
+    Id: number
+    "First Name" : string
+    "Last Name" : string
+    DOB : Date
+    Phone: string
+    "Covid Patient" : string
+    SubmissionTime: string
+    State : string
+    AssignedTo : string
+    Package : string
+    "New Patient" : string
+    CurrentStatus : string
+}
