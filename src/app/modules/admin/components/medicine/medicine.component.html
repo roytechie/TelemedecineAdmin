@@ -1,0 +1,71 @@
+<div class="row" style="width: 100%;">
+    <form [formGroup]="addEditMedicinForm" (ngSubmit)="addEditMedicine()">
+        <mat-card>
+            <div class="col-md-6">
+                <mat-radio-group aria-label="Select an option" (change)="operationChange($event)">
+                    <mat-radio-button [checked]="true" value="1" style="margin-right: 25px;">Add Medicine</mat-radio-button>
+                    <mat-radio-button [checked]="(operationId === 2)" value="2">Add Category</mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Name</mat-label>
+                            <input matInput placeholder="Enter details here..." formControlName="medicineName">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-2" *ngIf="isCategoryVisible">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Select Category</mat-label>
+                            <mat-select formControlName="CategoryId">
+                                <mat-option *ngFor="let cat of categories" [value]="cat.id">
+                                    {{cat.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-2">
+                        <button mat-raised-button color="primary" type="submit" [disabled]="!addEditMedicinForm.valid">Save</button>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+    </form>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <mat-card>
+            <div class="row">
+                <div class="col-md-12">
+                    <table mat-table class="mat-elevation-z8" [dataSource]="dataSource" style="width:100%" matSort>
+                        <ng-container matColumnDef="medicineId">
+                            <th mat-header-cell *matHeaderCellDef>Id</th>
+                            <td mat-cell *matCellDef="let element"> {{element.medicineId}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="medicineName">
+                            <th mat-header-cell *matHeaderCellDef>Medicine Name</th>
+                            <td mat-cell *matCellDef="let element"> {{element.medicineName}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="parentName">
+                            <th mat-header-cell *matHeaderCellDef>Category Name</th>
+                            <td mat-cell *matCellDef="let element"> {{element.parentName}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;">Action</th>   
+                            <td mat-cell *matCellDef="let element" style="text-align: center;"> 
+                              <button mat-raised-button (click)="openEditForm(element)" style="margin-top: 0;">Edit</button> 
+                              <button mat-raised-button (click)="deleteMedicine(element.medicineId)" style="margin-top: 0; margin-left: 10px;">Delete</button> 
+                            </td>
+                          </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                    <mat-paginator [pageSizeOptions]="[100, 200, 300]" showFirstLastButtons></mat-paginator>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</div>

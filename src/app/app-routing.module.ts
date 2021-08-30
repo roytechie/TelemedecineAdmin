@@ -19,6 +19,8 @@ import { RefillComponent } from './modules/reports/component/refill/refill.compo
 import {ReferralsComponent} from './modules/reports/component/referrals/referrals.component'
 import { SendmailPatientComponent } from './modules/admin/components/sendmail-patient/sendmail-patient.component';
 import { PharmacyReportComponent } from './modules/admin/components/pharmacy-report/pharmacy-report.component';
+import { MedicineComponent } from './modules/admin/components/medicine/medicine.component';
+import { MedicineDeliveryReportComponent } from './modules/reports/component/medicine-delivery-report/medicine-delivery-report.component';
 
 
 const routes: Routes = [ {
@@ -98,7 +100,12 @@ const routes: Routes = [ {
       {
         path: 'pharmacy-report',
         component : PharmacyReportComponent
-      }, 
+      },
+      {
+        path: 'medicine',
+        component : MedicineComponent
+      },
+
     ]
   },
   {
@@ -127,6 +134,10 @@ const routes: Routes = [ {
     {
       path: 'pharmacy/:type',
       component: PahrmacyReportComponent
+    },
+    {
+      path: 'medicine-Delivery-report',
+      component: MedicineDeliveryReportComponent
     }]
   }
 ];

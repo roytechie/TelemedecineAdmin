@@ -175,6 +175,7 @@ export class ViewSubmissionComponent implements OnInit {
   } 
   
   showPrescriptionPopup(status : number) { 
+    console.log(this.data);
     if(status == 3) { 
       this.dialog.open( DoctorsFormComponent, { data : this.data})
     }  

@@ -153,16 +153,16 @@ export class AdminService {
   }
 
   
-  updatePharmacyDetails(pharmcyDetails: any, submissionId: number) {
+  updatePharmacyDetails(pharmcyDetails: any, submissionId: number, prescriptionNote: string) {
     this.postData = JSON.stringify(pharmcyDetails);
-    return this.http.post<any>(`${ this.adminService }UpdatePharmacyInSubmissionDetails?submissionId=`+ submissionId,
+    return this.http.post<any>(`${ this.adminService }UpdatePharmacyInSubmissionDetails?submissionId=`+ submissionId + '&prescriptionNote=' + prescriptionNote,
     this.postData,
     { headers: this.headers}).pipe(catchError(this.errorHandler));
   } 
 
-  insertMedicineDetails(medicineDetails: any, userId: number) {
+  insertMedicineDetails(medicineDetails: any, userId: number, prescriptionNote: string) {
     this.postData = JSON.stringify(medicineDetails);
-    return this.http.post<any>(`${ this.adminService }InsertMedicineDetails?userId=`+ userId,
+    return this.http.post<any>(`${ this.adminService }InsertMedicineDetails?userId=`+ userId + '&prescriptionNote=' + prescriptionNote,
     this.postData,
     { headers: this.headers}).pipe(catchError(this.errorHandler));
   } 
@@ -223,4 +223,50 @@ export class AdminService {
     { headers: this.headers}).pipe(catchError(this.errorHandler));
   }
 
+  getMedicine(){
+    return this.http.get<any>(`${ this.adminService }GetMedicineDetails`,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  getMedicineById(id){
+    return this.http.get<any>(`${ this.adminService }GetMedicineById?id=` + id,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  getMedicineCategories(){
+    return this.http.get<any>(`${ this.adminService }GetMedicineCategory`,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  insertnedicine(medicineDetail: any){
+    this.postData = JSON.stringify(medicineDetail);
+    console.log(this.postData);
+    return this.http.post<any>(`${ this.adminService }AddMedicineDetails`, this.postData,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  UpdateMedicineDetails(medicineDetail: any){
+    this.postData = JSON.stringify(medicineDetail);
+    console.log(this.postData);
+    return this.http.post<any>(`${ this.adminService }UpdateMedicineDetails`, this.postData,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+  DeleteMedicineDetails(id: any){
+    return this.http.get<any>(`${ this.adminService }DeleteMedicineDetails?id=` + id,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  GetMedicineDeliveryReport(deliveryModel: any){
+    this.postData = JSON.stringify(deliveryModel);
+    console.log(this.postData);
+    return this.http.post<any>(`${ this.adminService }GetMedicineDeliveryReport`, this.postData,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  updatePharmacyForMedicineDelivery (pharmacyUpdatemodel) {
+    this.postData = JSON.stringify(pharmacyUpdatemodel);
+    console.log(this.postData);
+    return this.http.post<any>(`${ this.adminService }UpdatePharmacyForMedicineDelivery`, this.postData,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
 }

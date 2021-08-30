@@ -15,8 +15,9 @@ import * as XLSX from 'xlsx';
 })
 export class PharmacyReportComponent implements OnInit {
   dataSource?: MatTableDataSource<any> = new MatTableDataSource<any>();
+  dataSummary: any;
   displayedColumns: string[] = [ 
-  'patientName', 'pharmacyName', 'patientAddress', 'patientState', 'phone', 'email', 'prescribedDate', 'prescribedMedicineNames'];
+  'patientName', 'pharmacyName', 'patientDOB', 'weight','transactionDescription','patientAddress', 'patientState', 'phone',  'prescribedDate', 'amount', 'PrescriptionNote', 'prescribedMedicineNames'];
   endDate: Date = new Date();
   startDate: Date = new Date(new Date().getFullYear(), (new Date().getMonth() -1), new Date().getDate());
   showNoRecordsDiv: boolean = true;
@@ -36,20 +37,24 @@ export class PharmacyReportComponent implements OnInit {
       this.route.navigate(['/login']);
     }
     else {
-      this.selectedPharmacyId = this.athenticationService.currentUserValue.id;
+      
       let accessValue: AccessLavel = this.athenticationService.checkAccessLavel(this.athenticationService.currentUserValue);
       if(accessValue == AccessLavel.Admin){
         this.isAdminAccess = true;
+      }
+      else {
+        this.selectedPharmacyId = this.athenticationService.currentUserValue.id;
       }
     }
   }
 
   ngOnInit(): void {
     this.getPharmacyDetails();
+    if(this.pharmacy)
+    this.disabledButton = true;
   }
 
   updatePharmacyValue(event: any) {
-    debugger;
     this.selectedPharmacyId = event.value.pharmacySequenceId
   }
 
@@ -79,7 +84,6 @@ export class PharmacyReportComponent implements OnInit {
     console.log(searchModel);
     this.disabledButton = true;
     this.adminService.getPharmacyReport(searchModel).subscribe(response => {
-      console.log(response);
       for(var j in response) {
         response[j].prescribedMedicineNames = response[j].prescribedMedicineNames.replace("&lt;", "<")
         .replace("&gt;", ">")
@@ -88,6 +92,14 @@ export class PharmacyReportComponent implements OnInit {
         .replace('&gt;200lbs', "<200lbs");
      }
       this.exportButtonDisabled = false;
+      if(response.length > 0) {
+        this.dataSummary = {
+          totalAmount: response.map(curr => parseFloat(curr.amount)).reduce(function(a, b)
+          {
+            return a + b;
+          }),
+        };
+      }
       this.dataSource = new MatTableDataSource<any>(response);
       setTimeout(() => this.dataSource.paginator = this.paginator);
       setTimeout(() => this.dataSource.sort = this.sort);

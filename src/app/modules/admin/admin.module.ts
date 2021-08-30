@@ -44,6 +44,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
 import { PharmacyReportComponent } from './components/pharmacy-report/pharmacy-report.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { MedicineComponent } from './components/medicine/medicine.component';
+import { EditMedicineComponent } from './components/medicine/edit-medicine/edit-medicine.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +77,9 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     SendmailPatientComponent,
     AlertDialogComponent,
     PharmacyReportComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    MedicineComponent,
+    EditMedicineComponent
   ], 
   imports: [
     CommonModule,

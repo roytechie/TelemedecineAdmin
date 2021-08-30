@@ -18,7 +18,9 @@ export class DoctorsFormComponent implements OnInit {
   priscribedData : any ;
   JSON: any;  
   pharmacyID : number;  
-  allComplete: boolean = false;  
+  allComplete: boolean = false;
+  listedMedicineCategories: any;  
+  prescriptionNote: string;
   constructor(private adminService: AdminService,
     @Inject(MAT_DIALOG_DATA) public data:any,) { 
       this.JSON = JSON;
@@ -28,7 +30,6 @@ export class DoctorsFormComponent implements OnInit {
     this.getPharmacyDetails();
     this.getMedicineDetails(this.data.submissionId);
     this.getPriscriptionDetails();
-
   }
 
   updatePharmacyValue(event: any){    
@@ -61,7 +62,7 @@ export class DoctorsFormComponent implements OnInit {
 
   updatePharmacyDetails() {   
     if(this.pharmacy != ""){
-      this.adminService.updatePharmacyDetails(this.pharmacy,this.data.submissionId).subscribe(response=>{
+      this.adminService.updatePharmacyDetails(this.pharmacy,this.data.submissionId, this.prescriptionNote).subscribe(response=>{
         this.updateMedicineDetails();
         this.getPriscriptionDetails();
         this.adminService.openSnackBar('updated successfully', '');        
@@ -73,24 +74,36 @@ export class DoctorsFormComponent implements OnInit {
     updateMedicineDetails()
     {
       var medicine = this.changedData;
-      this.adminService.insertMedicineDetails(medicine,this.data.submissionId).subscribe(response=>{        
+      this.adminService.insertMedicineDetails(medicine,this.data.submissionId, this.prescriptionNote).subscribe(response=>{        
         });      
     }
 
     getPriscriptionDetails()
     {               
       this.adminService.getPriscriptionDetails(this.data.submissionId).subscribe(response=>{
-        this.priscribedData = response;        
+        this.priscribedData = response;
+        if(response) {
+          this.prescriptionNote = response[0].prescriptionNote;
+          console.log(this.prescriptionNote);
+        }        
     })      
     }
     getMedicineDetails(Id : number)
     {    
       this.pharmacyID = Id;
       this.adminService.getMedicineDetails(this.pharmacyID).subscribe(response=>{
-      this.changedData = response;    
+        this.changedData = response;
+        this.listedMedicineCategories = response.filter(f => f.parentId == 0);
+          console.log(this.listedMedicineCategories);
       this.allComplete = this.changedData!= null && this.changedData.every(t => t.value);       
-    })
+    });
     }
+
+    getCategorizedMedicine(parentId): any {
+      console.log(parentId);
+      return this.changedData.filter(f => f.parentId == parentId);
+    }
+
     setAll(completed: boolean) {
       this.allComplete = completed;      
       if (this.changedData == null) {

@@ -1,0 +1,31 @@
+<div class="row">
+    
+    <form [formGroup]="addEditMedicinForm" (ngSubmit)="addEditMedicine()" style="width: 100%;">
+        <mat-card>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-7">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Name</mat-label>
+                            <input matInput placeholder="Enter details here..." formControlName="medicineName">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-2" *ngIf="isCategoryVisible">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Select Category</mat-label>
+                            <mat-select formControlName="CategoryId">
+                                <mat-option *ngFor="let cat of categories" [value]="cat.id">
+                                    {{cat.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <button mat-raised-button color="primary" type="submit" [disabled]="!addEditMedicinForm.valid">Update</button>
+                        <button mat-raised-button (click)="closeDialog()" style="margin-left:10px ;" type="button">cancel</button>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+    </form>
+</div>
