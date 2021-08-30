@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -9,6 +9,9 @@ import { AdminService } from '../../service/admin.service';
 import { AthenticationService } from '../../service/athentication.service';
 import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/core';
 
 @Component({
   selector: 'app-sendmail-patient',
@@ -18,6 +21,81 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 export class SendmailPatientComponent implements OnInit {
 
   emailprop: EmailProperties;
+
+  startDate: Date = new Date();
+  endDate : Date = new Date();
+
+  symptomsFilter: string;
+  statusFilter: any = '-1';
+
+  dataSource = new MatTableDataSource<any>(); 
+  dataSourceOriginal = new MatTableDataSource<any>();
+
+  /**************************************************/
+  @ViewChild('select') select: MatSelect;
+
+  allSelectedPatientStatus=false;
+
+  //Patient Status To Be Shown In The DropDown
+  patientStatusMultiSelectDropDown: any[] = [
+    {value: '1', viewValue: 'Pending'},
+    {value: '2', viewValue: 'Under Review'},
+    {value: '3', viewValue: 'Prescription Advice'},
+    {value: '4', viewValue: 'Appointment Fixed'},
+    {value: '5', viewValue: 'No Answer'},
+    {value: '6', viewValue: 'Followup'},
+    {value: '7', viewValue: 'Complete'},
+    {value: '8', viewValue: 'Refund'},
+    {value: '9', viewValue: 'Recovered'},
+    {value: '10', viewValue: 'NP'}
+  ];
+
+  toggleAllSelectionPatientStatus(event: any) {
+    if (this.allSelectedPatientStatus) {
+      this.select.options.forEach((item: MatOption) => item.select());
+      this.select.options.forEach(element => {
+        this.symptomsFilter
+      });
+      //this.symptomsFilter
+    } else {
+      this.select.options.forEach((item: MatOption) => item.deselect());
+    }
+    this.optionClickPatientStatus(event);   
+  }
+  optionClickPatientStatus(event: any) {
+    let newStatus = true;
+    var count1:number = 0;
+    var statusInfo:string = "";
+    this.select.options.forEach((item: MatOption) => {
+      if (!item.selected) {
+        newStatus = false;
+      }
+      
+      if(item.selected == true){
+        if(statusInfo == "")
+        {
+          statusInfo = item.value;
+        }
+        else{
+          statusInfo = statusInfo + "," + item.value;
+        }
+
+      }
+
+    });
+    //event.value = statusInfo;
+    //console.log("** StatusInfo : " + statusInfo);
+    //this.updateFilter(event, 'symptomsFilter'); 
+    this.statusFilter = statusInfo;
+    
+    this.allSelectedPatientStatus = newStatus;
+  }
+
+  /**************************************************/
+
+
+
+
 
   emailForm = new FormGroup({
     subject: new FormControl('', [Validators.required]),
@@ -88,6 +166,7 @@ export class SendmailPatientComponent implements OnInit {
     });
   }
 
+
   sendMailWithConfirmation() {
     if (this.emailForm.invalid) {
       console.log(this.emailForm.value['body']);
@@ -96,7 +175,7 @@ export class SendmailPatientComponent implements OnInit {
      else{
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         data: {
-          message: 'Are you sure want to send email to all patients?',
+          message: 'Are you sure want to send email to selected patients?',
           buttonText: {
             ok: 'Send',
             cancel: 'No'
@@ -110,11 +189,21 @@ export class SendmailPatientComponent implements OnInit {
           a.click();
           a.remove();
 
+
           this.emailprop = {
             Subject: this.emailForm.value['subject'],
-            EmailBody: this.emailForm.value['body']
+            EmailBody: this.emailForm.value['body'],
+            StartDate: this.adminService.returnFormatedDate(this.startDate),
+            EndDate: this.adminService.returnFormatedDate(this.endDate),
+            Status: this.statusFilter < 0 ? null:this.statusFilter
           };
   
+          console.log("Subject : " + this.emailprop.Subject);
+          console.log("EmailBody : " + this.emailprop.EmailBody);
+          console.log("StartDate : " + this.emailprop.StartDate);
+          console.log("EndDate : " + this.emailprop.EndDate);
+          console.log("Status : " + this.emailprop.Status);
+
           this.adminService.sendmailToAllPatient(this.emailprop).subscribe(response => {
             if(response == true){
               //this.emailForm.reset();

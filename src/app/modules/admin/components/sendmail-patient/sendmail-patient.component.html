@@ -1,4 +1,48 @@
 <div class="row">
+    <div class="col-md-12">
+        <mat-card>
+            <div class="row">
+                <mat-form-field class="col-md-2">
+                <mat-label>Choose start date</mat-label>
+                <input matInput [matDatepicker]="picker" [(ngModel)]="startDate"
+                        [max]="endDate">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+            
+
+                <mat-form-field class="col-md-2">
+                    <mat-label>Choose end date</mat-label>
+                    <input matInput [matDatepicker]="picker2"
+                        [(ngModel)]="endDate" [min]="startDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker2">
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+
+                <div class="col-md-4">
+                    <mat-form-field>
+                      <mat-label>Status</mat-label>
+                      <mat-select  #select multiple>
+                        <div class="select-all" style="padding-left: 16px; padding-top: 15px; padding-bottom: 7px;">
+                            <mat-checkbox [(ngModel)]="allSelectedPatientStatus"
+                                            [ngModelOptions]="{standalone: true}"
+                                            (change)="toggleAllSelectionPatientStatus($event)"
+                                            >Select All</mat-checkbox>
+                        </div>
+                        <mat-option (click)="optionClickPatientStatus($event)" *ngFor="let status of patientStatusMultiSelectDropDown" [value]="status.value">
+                          {{status.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                </div>
+
+            </div>
+        </mat-card>
+    </div>
+</div> 
+
+<div class="row">
     <form [formGroup]="emailForm" (ngSubmit)="sendMailWithConfirmation()">
         <div class="col-md-12">
             <mat-card>
@@ -34,7 +78,7 @@
             <mat-card>
                 <div class="row">
                     <div class="col-md-12">
-                        <button class="mat-focus-indicator mat-raised-button mat-button-base mat-primary">Send Mail to All Patient</button>
+                        <button class="mat-focus-indicator mat-raised-button mat-button-base mat-primary">Send Mail to Selected Patient</button>
                     </div>
                 </div>
             </mat-card>
