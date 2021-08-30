@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import {FormControl} from '@angular/forms';
 import { AdminService } from '../../service/admin.service'; 
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -17,6 +18,11 @@ import * as XLSX from 'xlsx';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { ProviderService } from '../../service/provider.service';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/core';
+import { PatiantInformationForExcel } from '../../model/PatiantInformation'; 
+
+//import { formatDate } from '@angular/common';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
  
 @Component({
@@ -25,6 +31,123 @@ import { ProviderService } from '../../service/provider.service';
   styleUrls: ['./list-submissions.component.scss']
 })
 export class ListSubmissionsComponent implements OnInit, AfterViewInit  {  
+
+  /**************************************************/
+  @ViewChild('SelectSymptom') SubmissionListSelectSymptom: MatSelect;
+  @ViewChild('SelectStatus') SubmissionListSelectStatus: MatSelect;
+  
+
+   allSelected=false;
+    covidSymptoms: any[] = [
+     {value: '1', viewValue: 'Covid'},
+     {value: '2', viewValue: 'NonCovid'}
+   ];
+   toggleAllSelection(event: any) {
+
+     if (this.allSelected) {
+       this.SubmissionListSelectSymptom.options.forEach((item: MatOption) => item.select());
+       this.SubmissionListSelectSymptom.options.forEach(element => {
+         this.symptomsFilter
+       });
+       //this.symptomsFilter
+     } else {
+       this.SubmissionListSelectSymptom.options.forEach((item: MatOption) => item.deselect());
+     }
+     this.optionClick(event);   
+   }
+    optionClick(event: any) {
+     let newStatus = true;
+     var symptomInfo:string = "";
+     this.SubmissionListSelectSymptom.options.forEach((item: MatOption) => {
+       if (!item.selected) {
+         newStatus = false;
+       }
+       
+       if(item.selected == true){
+        if(symptomInfo == "")
+        {
+          symptomInfo = item.value;
+        }
+        else{
+          symptomInfo = symptomInfo + "," + item.value;
+        }
+
+      }
+      
+       
+     });
+
+     this.symptomsFilter = symptomInfo;
+     event.value = symptomInfo;
+     this.updateFilter(event, 'symptomsFilter'); 
+     this.allSelected = newStatus;
+   }
+
+   //This will be for Status MultiSelect DD
+   allSelectedPatientStatus=false;
+
+   //Patient Status To Be Shown In The DropDown
+   patientStatusMultiSelectDropDown: any[] = [
+     {value: '1', viewValue: 'Pending'},
+     {value: '2', viewValue: 'Under Review'},
+     {value: '3', viewValue: 'Prescription Advice'},
+     {value: '4', viewValue: 'Appointment Fixed'},
+     {value: '5', viewValue: 'No Answer'},
+     {value: '6', viewValue: 'Followup'},
+     {value: '7', viewValue: 'Complete'},
+     {value: '8', viewValue: 'Refund'},
+     {value: '9', viewValue: 'Recovered'},
+     {value: '10', viewValue: 'NP'}
+   ];
+ 
+   toggleAllSelectionPatientStatus(event: any) {
+    if (this.allSelectedPatientStatus) {
+       this.SubmissionListSelectStatus.options.forEach((item: MatOption) => item.select());
+       this.SubmissionListSelectStatus.options.forEach(element => {
+         this.statusFilter
+       });
+    } else {
+       this.SubmissionListSelectStatus.options.forEach((item: MatOption) => item.deselect());
+    }
+     
+     this.optionClickPatientStatus(event);   
+   }
+   optionClickPatientStatus(event: any) {
+     let newStatusPatientStatus = true;
+     var statusInfo:string = "";
+     this.SubmissionListSelectStatus.options.forEach((item: MatOption) => {
+       if (!item.selected) {
+         newStatusPatientStatus = false;
+       }
+       
+       if(item.selected == true){
+         if(statusInfo == "")
+         {
+           statusInfo = item.value;
+         }
+         else{
+           statusInfo = statusInfo + "," + item.value;
+         }
+ 
+       }
+ 
+     });
+
+     console.log("************ StatusInfo : " + statusInfo + "...." + this.statusFilter);
+     this.statusFilter = statusInfo;
+     event.value = statusInfo;
+     this.updateFilter(event, 'statusFilter'); 
+
+     this.allSelectedPatientStatus = newStatusPatientStatus;
+   }
+
+
+
+
+
+  /**************************************************/
+
+
   patientsList: any
   displayedColumns: string[] = ['submissionId', 'firstName', 'lastName', 'DOB',
    'phone', 'isCovid', 'submissionTime', 'state','doctorName', 'transactionDescription', 'returningPatient', 'status', 'Action'];
@@ -43,6 +166,7 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
   dataSource = new MatTableDataSource<any>(); 
   dataSourceOriginal = new MatTableDataSource<any>();
   rowsAdded: boolean = false;
+  exportButtonDisabled: boolean = true;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -55,7 +179,7 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
 
   events: string[] = [];
   isCovid: boolean = false;
-  symptomsFilter : string = "All";
+  symptomsFilter: string; // = "All";
   statusFilter: any = '-1';
   isTodayList: boolean = false;
   JSON: any;
@@ -117,6 +241,7 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
   }
 
   getStatusDetails(input : any){ 
+    //console.log(input);
     return this.adminService.patientStatuses.filter(function(item) {
       return (item.value == input);
     });
@@ -125,8 +250,14 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
   getPatientsList(isTodayList: boolean, isTest: boolean = false): any {
 
     this.statusFilter = '-1';
-    this.symptomsFilter = 'All';
-    var newEndDate : Date = this.endDate; 
+    this.symptomsFilter; //'All';
+    this.exportButtonDisabled = false;
+    var newEndDate: Date = this.endDate;
+
+    //Resetting the multiselect drop down
+    this.SubmissionListSelectSymptom.options.forEach((item: MatOption) => item.deselect());
+    this.SubmissionListSelectStatus.options.forEach((item: MatOption) => item.deselect());
+
     if(isTodayList)
     {
       this.startDate = new Date();
@@ -138,13 +269,18 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
       //newEndDate.setDate( newEndDate.getDate() + 1 ) 
     }  
 
-    this.disabledButton = true; 
+    this.disabledButton = true;
     this.reportRequest.startDate = this.adminService.returnFormatedDate(this.startDate);
     this.reportRequest.endDate = this.adminService.returnFormatedDate(this.endDate);;
     this.reportRequest.isAdmin = JSON.parse(localStorage.currentUser).isAdmin;
     this.reportRequest.userId = JSON.parse(localStorage.currentUser).id;
-    this.reportRequest.isSingleSubmission = false; 
+    this.reportRequest.isSingleSubmission = false;
     this.reportRequest.reportType = 'Submission';
+    this.reportRequest.symptomList = this.symptomsFilter;
+
+    if (this.reportRequest.symptomList == undefined || this.reportRequest.symptomList == null || this.reportRequest.symptomList == "") {
+      this.reportRequest.symptomList = "All";
+    }
 
     this.adminService.getPatientsList(this.reportRequest).subscribe(response=>{
       this.patientsList = response;
@@ -180,18 +316,13 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
 
   updateFilter(event: any, filterType: string) 
   { 
-    if(filterType == 'symptomsFilter')
-    {
-      this.symptomsFilter = event.value;
-    }
-    else
-    {
-      this.statusFilter = event.value;
-    }
+    console.log("this.symptomsFilter : " + this.symptomsFilter);
+    let symptomString : string = (this.symptomsFilter == "" || this.symptomsFilter == undefined) ? "0" : this.symptomsFilter;
+    //let statusString : string ; //= (this.statusFilter == "" || this.statusFilter == -1) ? "0" : this.statusFilter; 
+    let statusString : string = (this.statusFilter == "" || this.statusFilter == -1) ? "0" : this.statusFilter; 
 
-    let statusString; 
-
-    if(this.statusFilter == '-1')
+    /*
+    if(this.statusFilter == '-1' || this.statusFilter == '' )
     {
       statusString = 'NoStatus';
     }
@@ -201,10 +332,11 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     else
     {
       statusString = 'Status';
-    }
+    }*/
+    
 
-    let searchString = this.symptomsFilter + 'with' + statusString;
-    //console.log(searchString);
+    let searchString = symptomString + 'with' + statusString;
+    console.log(searchString);
     this.getFilterdResult(searchString);
   } 
  
@@ -259,62 +391,163 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     let status = parseInt(this.statusFilter);
     let completeStatusId = 7;
 
+    console.log("DataSourceOriginal : " + this.dataSourceOriginal);
+
+    /*
     switch(searchString) 
     {
-      case 'AllwithNoStatus':  
+      case '1,2withNoStatus':  
         this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
           return (item.status != completeStatusId);
         });
         break;
 
-      case 'AllwithStatus':  
+      case '1,2withStatus':  
         this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
           return (item.status != completeStatusId && item.status == status);
         });
         break;
 
-      case 'AllwithComplete':  
+      case '1,2withComplete':  
         this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
           return (item.status == completeStatusId);
         });
         break;
 
-      case 'CovidwithNoStatus':  
+      case '1withNoStatus':  
         this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
           return (item.isCovid == true && item.status != completeStatusId);
         });
         break;
 
-      case 'CovidwithStatus':  
+      case '1withStatus':  
         this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
           return (item.isCovid == true && item.status != completeStatusId && item.status == status);
         });
         break;
 
-      case 'CovidwithComplete':  
+      case '1withComplete':  
         this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
           return (item.isCovid == true && item.status == completeStatusId );
         });
         break;
 
-      case 'NonCovidwithNoStatus':  
+      case '2withNoStatus':  
         this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
           return (item.isCovid == false && item.status != completeStatusId );
         });
         break;
 
-      case 'NonCovidwithStatus':  
+      case '2withStatus':  
         this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
           return (item.isCovid == false && item.status != completeStatusId && item.status == status);
         });
         break;
 
-      case 'NonCovidwithComplete':  
+      case '2withComplete':  
         this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
           return (item.isCovid == false && item.status == completeStatusId );
         });
-        break;         
+        break;     
+        
+      //This will be the cases when neither Covid nor Non Covid Patients are evaluated
+      case '0withNoStatus':  
+        this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
+          return (item.status != completeStatusId );
+        });
+        break;
+
+      case '0withStatus':  
+        this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
+          return (item.status != completeStatusId && item.status == status);
+        });
+        break;
+
+      case '0withComplete':  
+        this.dataSource.data = this.dataSourceOriginal.filteredData.filter(function(item) { 
+          return (item.status == completeStatusId );
+        });
+        break;
     }
+    */
+
+
+    
+    var symptomArr = searchString.split("with") [0];
+    var symptomArrVal = symptomArr.split(',');
+
+    var statusArr = searchString.split("with") [1]
+    var statusArrVal = statusArr.split(',');
+
+
+   
+    this.dataSource.data = this.dataSourceOriginal.data;
+
+    if(symptomArr != '0'){
+      //We will check for only Covid and Non-Covid as All Condition or No Conditions Check are default
+      if(symptomArr == '1'){
+        this.dataSource.data = this.dataSource.filteredData.filter(function(item) { 
+          return (item.isCovid == true);
+        });
+      }
+      if(symptomArr == '2'){
+        this.dataSource.data = this.dataSource.filteredData.filter(function(item) { 
+          return (item.isCovid == false);
+        });
+      }
+    }
+
+    if(statusArr != '0'){
+
+      let status1:number = 0,
+          status2:number = 0,
+          status3:number = 0,
+          status4:number = 0,
+          status5:number = 0,
+          status6:number = 0,
+          status7:number = 0,
+          status8:number = 0,
+          status9:number = 0,
+          status10:number = 0;
+
+      statusArrVal.forEach(element => {
+        if(parseInt(element) == 1){
+          status1 = 1;
+        }
+        if(parseInt(element) == 2){
+          status2 = 2;
+        } 
+        if(parseInt(element) == 3){
+          status3 = 3;
+        }
+        if(parseInt(element) == 4){
+          status4 = 4;
+        }
+        if(parseInt(element) == 5){
+          status5 = 5;
+        }
+        if(parseInt(element) == 6){
+          status6 = 6;
+        }
+        if(parseInt(element) == 7){
+          status7 = 7;
+        }
+        if(parseInt(element) == 8){
+          status8 = 8;
+        }
+        if(parseInt(element) == 9){
+          status9 = 9;
+        }
+        if(parseInt(element) == 10){
+          status10 = 10;
+        }
+      });
+
+      this.dataSource.data = this.dataSource.filteredData.filter(function(item) { 
+        return (item.status == status1 || item.status == status2 || item.status == status3 || item.status == status4 || item.status == status5 || item.status == status6 || item.status == status7 || item.status == status8 || item.status == status9 || item.status == status10);
+      });
+    }
+
   }
 
   downloadPDF(patientDetails){
@@ -658,5 +891,110 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     /* save to file */  
     XLSX.writeFile(wb, data.patiantInformation.submissionId + '_' + this.fileName, { bookType: 'xlsx', type: 'buffer' }); 
   }
- 
+
+  exportexcel() {
+    //debugger;
+    let fileName = 'Submissions.xlsx';
+    /* table id is passed over here */
+    var tempDataSource = this.dataSource.data;
+
+    var readyToExport:PatiantInformationForExcel[] = [];
+
+    
+    for (var j in tempDataSource)
+    {
+      var patientInfo:PatiantInformationForExcel = new PatiantInformationForExcel();
+      patientInfo.Id = tempDataSource[j]["submissionId"];
+      patientInfo['First Name'] = tempDataSource[j]["firstName"];
+      patientInfo['Last Name'] = tempDataSource[j]["lastName"];
+      patientInfo.DOB = JSON.parse(tempDataSource[j].profileDetails)[1].Answer;
+      patientInfo.Phone = tempDataSource[j]["phone"];
+      patientInfo['Covid Patient'] = tempDataSource[j]["isCovidPatient"];
+      patientInfo.SubmissionTime = tempDataSource[j]["submissionTime"];
+      patientInfo.State = JSON.parse(tempDataSource[j].profileDetails)[0].Answer;
+      patientInfo.AssignedTo = tempDataSource[j]["doctorName"];
+      patientInfo.Package = tempDataSource[j].transactionDescription;
+      patientInfo['New Patient'] = tempDataSource[j].isReturningPatient ? "No" : "Yes";//["isReturningPatient"];
+      patientInfo.CurrentStatus = this.submissionListStatusDecoder(tempDataSource[j].status);
+
+      readyToExport.push(patientInfo);
+    }
+    
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(readyToExport)
+    var header = Object.keys(readyToExport[0]); // columns name
+
+    var wscols = [];
+    for (var i = 0; i < header.length; i++) {  // columns length added
+       wscols.push({ wch: header[i].length + 5 });
+    }
+    ws['!cols'] = wscols;
+
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+     XLSX.writeFile(wb, fileName, { bookType: 'xlsx', type: 'buffer' });
+  }
+
+  submissionListStatusDecoder(statusVal:number) : string{
+    let decodedStatus:string = "";
+    if(statusVal == 1)
+      {
+        decodedStatus = "Pending";
+      }
+      if(statusVal == 2)
+      {
+        decodedStatus = "Under Review";
+      }
+      if(statusVal == 3)
+      {
+        decodedStatus = "Prescription Advice";
+      }
+      if(statusVal == 4)
+      {
+        decodedStatus = "Appointment Fixed";
+      }
+      if(statusVal == 5)
+      {
+        decodedStatus = "NoAnswer";
+      }
+      if(statusVal == 6)
+      {
+        decodedStatus = "Followup";
+      }
+      if(statusVal == 7)
+      {
+        decodedStatus = "Complete";
+      }
+      if(statusVal == 8)
+      {
+        decodedStatus = "Refund";
+      }
+      if(statusVal == 9)
+      {
+        decodedStatus = "Recovered";
+      }
+      if(statusVal == 10)
+      {
+        decodedStatus = "NP";
+      }
+      return decodedStatus;
+  }
+
+  exportToExcelNew(): void {
+    /* pass here the table id */
+    let element = document.getElementById('excel-table');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
+  }
+
+
 }
