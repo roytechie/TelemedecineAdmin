@@ -7,5 +7,7 @@ export interface EmailProperties {
     CC?: string;
     Subject?: string;
     EmailBody?: string;
-        
+    StartDate: Date;
+    EndDate: Date;
+    Status?: string;    
 }
