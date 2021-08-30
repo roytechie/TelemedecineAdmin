@@ -9,5 +9,5 @@ export interface EmailProperties {
     EmailBody?: string;
     StartDate: Date;
     EndDate: Date;
-    Status?: number;    
+    Status?: string;    
 }

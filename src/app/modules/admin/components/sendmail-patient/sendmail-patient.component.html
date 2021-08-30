@@ -20,17 +20,22 @@
                     <mat-datepicker #picker2></mat-datepicker>
                 </mat-form-field>
 
-                <div class="col-md-3">
-                    <mat-form-field appearance="fill">
-                      <mat-label>by status</mat-label>
-                      <mat-select [(ngModel)]="statusFilter" (selectionChange)="updateFilter($event, 'statusFilter')">
-                        <mat-option value="-1"> --Select status-- </mat-option>
-                        <mat-option *ngFor="let status of adminService.patientStatuses" [value]="status.value">
-                          {{status.name}}
+                <div class="col-md-4">
+                    <mat-form-field>
+                      <mat-label>Status</mat-label>
+                      <mat-select  #select multiple>
+                        <div class="select-all" style="padding-left: 16px; padding-top: 15px; padding-bottom: 7px;">
+                            <mat-checkbox [(ngModel)]="allSelectedPatientStatus"
+                                            [ngModelOptions]="{standalone: true}"
+                                            (change)="toggleAllSelectionPatientStatus($event)"
+                                            >Select All</mat-checkbox>
+                        </div>
+                        <mat-option (click)="optionClickPatientStatus($event)" *ngFor="let status of patientStatusMultiSelectDropDown" [value]="status.value">
+                          {{status.viewValue}}
                         </mat-option>
                       </mat-select>
                     </mat-form-field>
-                  </div>
+                </div>
 
             </div>
         </mat-card>
