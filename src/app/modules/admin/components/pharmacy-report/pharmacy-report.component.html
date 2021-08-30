@@ -58,10 +58,6 @@
 <div class="row">
   <div class="col-md-12" *ngIf="rowsAdded">
     <mat-card>
-      <div class="col-md-12">
-        {{dataSummary.totalAmount}}
-        <mat-divider></mat-divider>
-      </div>
       <div class="row">
         <div class="col-md-12">
           <table mat-table class="mat-elevation-z8" [dataSource]="dataSource" style="width:100%" matSort>
@@ -156,18 +152,33 @@
               <td mat-footer-cell *matFooterCellDef></td>
             </ng-container>
             <ng-container matColumnDef="PrescriptionNote">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Note</th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Prescribed Note</th>
               <td mat-cell *matCellDef="let element"> {{element.prescriptionNote}} </td>
               <td mat-footer-cell *matFooterCellDef></td>
             </ng-container>
+
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+              <td mat-cell *matCellDef="let element"> 
+                <button mat-raised-button (click)="openCompleteDelivery(element)" 
+                [disabled]="disableDeliveryOperation(element.deliveryNote)" style="margin-top: 0;">{{deliveryOperationText}}</button>
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+            <ng-container matColumnDef="deliveryNote">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header  style="text-align: center;">Delivery Note</th>
+              <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.deliveryNote}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
             <!-- <ng-container matColumnDef="isHydroxychloroquineTaken">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Hydroxychloroquine or Ivermectin</th>
               <td mat-cell *matCellDef="let element"> {{element.isHydroxychloroquineTaken}} </td>
             </ng-container> -->
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true" class="example-first-footer-row"></tr>
-            <!-- <mat-footer-row class="sticky-footer" *matFooterRowDef="displayedColumns; sticky: true"></mat-footer-row> -->
+            <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true" class="example-first-footer-row" style="background-color: lightgray;"></tr>
+            
           </table>
           <mat-paginator [pageSizeOptions]="[100, 200, 300]" showFirstLastButtons></mat-paginator>
         </div>

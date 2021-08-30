@@ -46,6 +46,7 @@ import { PharmacyReportComponent } from './components/pharmacy-report/pharmacy-r
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { MedicineComponent } from './components/medicine/medicine.component';
 import { EditMedicineComponent } from './components/medicine/edit-medicine/edit-medicine.component';
+import { EditNoteComponent } from './components/pharmacy-report/edit-note/edit-note.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { EditMedicineComponent } from './components/medicine/edit-medicine/edit-
     PharmacyReportComponent,
     ConfirmDialogComponent,
     MedicineComponent,
-    EditMedicineComponent
+    EditMedicineComponent,
+    EditNoteComponent
   ], 
   imports: [
     CommonModule,

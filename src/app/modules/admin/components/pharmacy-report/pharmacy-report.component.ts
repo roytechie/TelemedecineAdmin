@@ -7,6 +7,8 @@ import { AccessLavel } from '../../model/login-details';
 import { AdminService } from '../../service/admin.service';
 import { AthenticationService } from '../../service/athentication.service';
 import * as XLSX from 'xlsx';
+import { EditNoteComponent } from './edit-note/edit-note.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-pharmacy-report',
@@ -17,7 +19,8 @@ export class PharmacyReportComponent implements OnInit {
   dataSource?: MatTableDataSource<any> = new MatTableDataSource<any>();
   dataSummary: any;
   displayedColumns: string[] = [ 
-  'patientName', 'pharmacyName', 'patientDOB', 'weight','transactionDescription','patientAddress', 'patientState', 'phone',  'prescribedDate', 'amount', 'PrescriptionNote', 'prescribedMedicineNames'];
+  'patientName', 'pharmacyName', 'patientDOB', 'weight','transactionDescription','patientAddress', 'patientState', 
+  'phone',  'prescribedDate', 'amount', 'PrescriptionNote', 'prescribedMedicineNames', 'action', 'deliveryNote'];
   endDate: Date = new Date();
   startDate: Date = new Date(new Date().getFullYear(), (new Date().getMonth() -1), new Date().getDate());
   showNoRecordsDiv: boolean = true;
@@ -28,11 +31,13 @@ export class PharmacyReportComponent implements OnInit {
   isAdminAccess: boolean = false;
   selectedPharmacyId: number;
   exportButtonDisabled: boolean = true;
+  deliveryOperationText: string = "Delivery";
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   
-  constructor(public adminService: AdminService, private route: Router, private athenticationService: AthenticationService) { 
+  constructor(public adminService: AdminService, private route: Router, 
+    private athenticationService: AthenticationService, private dialog: MatDialog) { 
     if(this.athenticationService.currentUserValue==null) {
       this.route.navigate(['/login']);
     }
@@ -115,6 +120,25 @@ export class PharmacyReportComponent implements OnInit {
     
     const symptomsFilter = (event.target as HTMLInputElement).value;
     this.dataSource.filter = symptomsFilter.trim().toLowerCase();
+  }
+
+  openCompleteDelivery(element) {
+    const dialogRef = this.dialog.open(EditNoteComponent, { data : element });
+    dialogRef.afterClosed().subscribe(data => {
+      alert();
+      this.getPharmacyDetails();
+    });
+  }
+
+  disableDeliveryOperation (deliveryNote) {
+    if (deliveryNote != "") {
+      this.deliveryOperationText = "Completed";
+      return true;
+    }
+    else {
+      this.deliveryOperationText = "Delivery";
+      return false;
+    }
   }
 
   exportexcel() {

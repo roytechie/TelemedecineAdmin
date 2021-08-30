@@ -269,4 +269,11 @@ export class AdminService {
     return this.http.post<any>(`${ this.adminService }UpdatePharmacyForMedicineDelivery`, this.postData,
     { headers: this.headers}).pipe(catchError(this.errorHandler));
   }
+
+  updateDeliveryNote(pharmacyModel) {
+    this.postData = JSON.stringify(pharmacyModel);
+    console.log(this.postData);
+    return this.http.post<any>(`${ this.adminService }updateDeliveryNote`, this.postData,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
 }
