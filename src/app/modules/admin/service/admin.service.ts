@@ -255,4 +255,18 @@ export class AdminService {
     return this.http.get<any>(`${ this.adminService }DeleteMedicineDetails?id=` + id,
     { headers: this.headers}).pipe(catchError(this.errorHandler));
   }
+
+  GetMedicineDeliveryReport(deliveryModel: any){
+    this.postData = JSON.stringify(deliveryModel);
+    console.log(this.postData);
+    return this.http.post<any>(`${ this.adminService }GetMedicineDeliveryReport`, this.postData,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  updatePharmacyForMedicineDelivery (pharmacyUpdatemodel) {
+    this.postData = JSON.stringify(pharmacyUpdatemodel);
+    console.log(this.postData);
+    return this.http.post<any>(`${ this.adminService }UpdatePharmacyForMedicineDelivery`, this.postData,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
 }

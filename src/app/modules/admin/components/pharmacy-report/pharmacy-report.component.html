@@ -40,6 +40,9 @@
             </div>
           </div>
         </div>
+
+
+        
         <mat-form-field class="col-md-2">
           <mat-label>Filter</mat-label>
           <input matInput type="text" matInput (keyup)="applyFilter($event)">
@@ -55,6 +58,10 @@
 <div class="row">
   <div class="col-md-12" *ngIf="rowsAdded">
     <mat-card>
+      <div class="col-md-12">
+        {{dataSummary.totalAmount}}
+        <mat-divider></mat-divider>
+      </div>
       <div class="row">
         <div class="col-md-12">
           <table mat-table class="mat-elevation-z8" [dataSource]="dataSource" style="width:100%" matSort>
@@ -73,27 +80,39 @@
             <ng-container matColumnDef="patientName">
               <th mat-header-cell *matHeaderCellDef>PatientName</th>
               <td mat-cell *matCellDef="let element"> {{element.patientName}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+
             </ng-container>
              
             <ng-container matColumnDef="patientDOB">
               <th mat-header-cell *matHeaderCellDef>PatientDOB</th>
               <td mat-cell *matCellDef="let element"> {{element.patientDOB}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+
             </ng-container>
             <ng-container matColumnDef="prescription">
               <th mat-header-cell *matHeaderCellDef>Prescription</th>
               <td mat-cell *matCellDef="let element"> {{element.transactionDescription}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+
             </ng-container>
             <ng-container matColumnDef="patientAddress">
               <th mat-header-cell *matHeaderCellDef>Patient Address</th>
               <td mat-cell *matCellDef="let element"> {{element.patientAddress}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+
             </ng-container>
             <ng-container matColumnDef="patientState">
               <th mat-header-cell *matHeaderCellDef>Patient State</th>
               <td mat-cell *matCellDef="let element"> {{element.patientState}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+
             </ng-container>
             <ng-container matColumnDef="pharmacyName">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Pharmacy Name</th>
               <td mat-cell *matCellDef="let element"> {{element.pharmacyName}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+
             </ng-container>
 
             <!-- <ng-container matColumnDef="email">
@@ -104,28 +123,42 @@
             <ng-container matColumnDef="phone">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone</th>
               <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+
             </ng-container>
 
             <ng-container matColumnDef="prescribedDate">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>PrescribedDate</th>
               <td mat-cell *matCellDef="let element"> {{element.prescribedDate}} </td>
+              <td mat-footer-cell *matFooterCellDef>Total</td>
+
+            </ng-container>
+
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+              <td mat-cell *matCellDef="let element"> {{element.amount | currency}} </td>
+              <td mat-footer-cell *matFooterCellDef> {{dataSummary.totalAmount | currency }} </td>
             </ng-container>
 
             <ng-container matColumnDef="prescribedMedicineNames">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>PrescribedMedicine Names</th>
               <td mat-cell *matCellDef="let element"> {{element.prescribedMedicineNames}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
             </ng-container>
             <ng-container matColumnDef="transactionDescription">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Package</th>
               <td mat-cell *matCellDef="let element"> {{element.transactionDescription}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
             </ng-container>
             <ng-container matColumnDef="weight">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Weight</th>
               <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
             </ng-container>
             <ng-container matColumnDef="PrescriptionNote">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Note</th>
               <td mat-cell *matCellDef="let element"> {{element.prescriptionNote}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
             </ng-container>
             <!-- <ng-container matColumnDef="isHydroxychloroquineTaken">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Hydroxychloroquine or Ivermectin</th>
@@ -133,6 +166,8 @@
             </ng-container> -->
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true" class="example-first-footer-row"></tr>
+            <!-- <mat-footer-row class="sticky-footer" *matFooterRowDef="displayedColumns; sticky: true"></mat-footer-row> -->
           </table>
           <mat-paginator [pageSizeOptions]="[100, 200, 300]" showFirstLastButtons></mat-paginator>
         </div>
