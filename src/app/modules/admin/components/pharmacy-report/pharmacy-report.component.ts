@@ -99,7 +99,7 @@ export class PharmacyReportComponent implements OnInit {
       this.exportButtonDisabled = false;
       if(response.length > 0) {
         this.dataSummary = {
-          totalAmount: response.map(curr => parseFloat(curr.amount)).reduce(function(a, b)
+          totalAmount: response.map(curr => parseFloat(curr.pharmacyCharges)).reduce(function(a, b)
           {
             return a + b;
           }),
@@ -125,7 +125,6 @@ export class PharmacyReportComponent implements OnInit {
   openCompleteDelivery(element) {
     const dialogRef = this.dialog.open(EditNoteComponent, { data : element });
     dialogRef.afterClosed().subscribe(data => {
-      alert();
       this.getPharmacyDetails();
     });
   }
@@ -151,6 +150,9 @@ export class PharmacyReportComponent implements OnInit {
       delete readyToExport[j].pharmacyId;
       delete readyToExport[j].submisionId;
       delete readyToExport[j].patientId;
+      delete readyToExport[j].amount;
+      delete readyToExport[j].pharmacyCharges;
+      delete readyToExport[j].submissionType;
       readyToExport[j].prescribedMedicineNames = readyToExport[j].prescribedMedicineNames.replace("&lt;", "<").replace("&gt;", ">").replace("&le;", "≤").replace("&ge;", "≥");
    }
     //var a = JSON.stringify(this.dataSource.data);

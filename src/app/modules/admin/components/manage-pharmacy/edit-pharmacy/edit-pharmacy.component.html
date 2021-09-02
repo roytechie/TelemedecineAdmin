@@ -1,0 +1,103 @@
+<div class="row">
+
+    <form [formGroup]="editPharmacyForm" (ngSubmit)="submitPharmacyForm()" style="width: 100%;">
+        <mat-card>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Pharmacy Name</mat-label>
+                            <input matInput placeholder="Enter pharmacy name..." formControlName="PharmacyName">
+                            <mat-error *ngIf="checkError('PharmacyName', 'required')">Pharmacy Name is required</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Pharmacy Login User Name</mat-label>
+                            <input matInput (keydown)="disallowSpace($event)" placeholder="Enter user name..." 
+                            formControlName="LoginUserName" [readonly]="disableInEditMode" (change)="ckeckExistingUserName($event)">
+                            <mat-error *ngIf="checkError('LoginUserName', 'required')">Pharmacy login user name is required</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Contact No.</mat-label>
+                            <input matInput placeholder="Enter contact no..." formControlName="PharmacyContactNum">
+                            <mat-error *ngIf="checkError('PharmacyContactNum', 'required')">Contact no is required</mat-error>
+                            <mat-error *ngIf="checkError('PharmacyContactNum', 'maxlength')">Contact no should be 10 digits</mat-error>
+                            <mat-error *ngIf="checkError('PharmacyContactNum', 'minlength')">Contact no should be 10 digits</mat-error>
+                            <mat-error *ngIf="checkError('PharmacyContactNum', 'pattern')">Contact no should be digits only</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Email</mat-label>
+                            <input matInput placeholder="Enter email..." formControlName="PharmacyEmailAddress">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Address</mat-label>
+                            <input matInput placeholder="Enter address..." formControlName="PharmacyAddress">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field appearance="standard">
+                            <mat-label>City</mat-label>
+                            <input matInput placeholder="Enter city..." formControlName="PharmacyCity">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <mat-form-field appearance="standard">
+                            <mat-label>State</mat-label>
+                            <input matInput placeholder="Enter state..." formControlName="PharmacyState">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Fax</mat-label>
+                            <input matInput placeholder="Enter fax..." formControlName="PharmacyFax">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Zip Code</mat-label>
+                            <input matInput placeholder="Enter zip code..." formControlName="PharmacyZipCode">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Country</mat-label>
+                            <input matInput placeholder="Enter country..." formControlName="PharmacyCountry">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Pharmacy Password</mat-label>
+                            <input matInput placeholder="Enter password..." formControlName="PharmacyPassword" [readonly]="disableInEditMode">
+                            <mat-error *ngIf="checkError('PharmacyPassword', 'required')">Password is required</mat-error>
+                            <mat-error *ngIf="checkError('PharmacyPassword', 'minlength')">Password length should be greater than 8</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-6" style="text-align: right; margin-top: 25px;">
+                        <button mat-raised-button color="primary" type="submit"
+                            [disabled]="!editPharmacyForm.valid">{{submitButtonText}}</button>
+                        <button mat-raised-button (click)="closeDialog()" style="margin-left:10px ;"
+                            type="button">cancel</button>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+    </form>
+</div>
