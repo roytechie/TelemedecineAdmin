@@ -276,4 +276,26 @@ export class AdminService {
     return this.http.post<any>(`${ this.adminService }updateDeliveryNote`, this.postData,
     { headers: this.headers}).pipe(catchError(this.errorHandler));
   }
+
+  getPharmacyUserLoginDetails(){
+    return this.http.get<any>(`${ this.adminService }GetPharmacyUserLoginDetails`,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  GetPharmacyUserLoginDetailsById(id){
+    return this.http.get<any>(`${ this.adminService }GetPharmacyUserLoginDetailsById?id=` + id,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  insertUpdatePharmacyLoginDetails (pharmacy) {
+    this.postData = JSON.stringify(pharmacy);
+    console.log(this.postData);
+    return this.http.post<any>(`${ this.adminService }InsertUpdatePharmacyLoginDetails`, this.postData,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  deletePharmacyLoginDetails(id: any){
+    return this.http.get<any>(`${ this.adminService }DeletePharmacyLoginDetails?id=` + id,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
 }

@@ -21,6 +21,7 @@ import { SendmailPatientComponent } from './modules/admin/components/sendmail-pa
 import { PharmacyReportComponent } from './modules/admin/components/pharmacy-report/pharmacy-report.component';
 import { MedicineComponent } from './modules/admin/components/medicine/medicine.component';
 import { MedicineDeliveryReportComponent } from './modules/reports/component/medicine-delivery-report/medicine-delivery-report.component';
+import { ManagePharmacyComponent } from './modules/admin/components/manage-pharmacy/manage-pharmacy.component';
 
 
 const routes: Routes = [ {
@@ -105,6 +106,10 @@ const routes: Routes = [ {
         path: 'medicine',
         component : MedicineComponent
       },
+      {
+        path: 'managepharmacy',
+        component : ManagePharmacyComponent
+      }
 
     ]
   },
