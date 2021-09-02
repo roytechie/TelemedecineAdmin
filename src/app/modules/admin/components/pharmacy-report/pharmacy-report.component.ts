@@ -125,7 +125,7 @@ export class PharmacyReportComponent implements OnInit {
   openCompleteDelivery(element) {
     const dialogRef = this.dialog.open(EditNoteComponent, { data : element });
     dialogRef.afterClosed().subscribe(data => {
-      alert();
+     // alert();
       this.getPharmacyDetails();
     });
   }

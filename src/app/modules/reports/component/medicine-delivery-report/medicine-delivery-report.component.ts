@@ -17,7 +17,7 @@ import { ChangePharmacyComponent } from './change-pharmacy/change-pharmacy.compo
 })
 export class MedicineDeliveryReportComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'firstName', 'lastName', 'phone', 'email', 'address', 'state', 'amount', 'paymentDate', 'actions'];
+  displayedColumns: string[] = ['id', 'firstName', 'lastName', 'phone', 'email', 'address', 'state','package' ,'amount', 'paymentDate', 'actions'];
 
   dataSource = new MatTableDataSource<any>();
   data: Observable<any>;
