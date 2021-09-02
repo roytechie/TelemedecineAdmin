@@ -22,6 +22,7 @@ export class ViewSubmissionComponent implements OnInit {
   userList: any =[];
   isAdmin: boolean = false;
   userId: number = 0;
+  pharmacySpecificData : any
 
   constructor(@Inject(MAT_DIALOG_DATA) public data:any, 
   public adminService: AdminService, private dialog : MatDialog,
@@ -38,6 +39,7 @@ export class ViewSubmissionComponent implements OnInit {
       this.loginDetails.UserId = this.athenticationService.currentUserValue.id;
       this.isAdmin = this.athenticationService.currentUserValue.isAdmin;
     } 
+
   }
 
   ngOnInit() {  
@@ -45,7 +47,15 @@ export class ViewSubmissionComponent implements OnInit {
       this.adminService.getAnswers(this.data).subscribe(response => {
         //this.answers = response; 
         this.answers = response.surveySteps;
+
+        // response.surveySteps.forEach(element => {
+        //   console.log(element);
+        // });
       }); 
+
+      this.getPharmacyReportSpecific();
+      
+      //console.log("Pharmacy Specific Data : " + this.pharmacySpecificData);
 
       this.getUsersList();
   } 
@@ -201,4 +211,16 @@ export class ViewSubmissionComponent implements OnInit {
       });
     }); 
   } 
+
+  getPharmacyReportSpecific(){
+    this.adminService.getPharmacyReportSpecific(this.data).subscribe(response => {
+      //this.answers = response; 
+
+      this.pharmacySpecificData = response;
+
+      console.log (response);
+
+    }); 
+  }
+
 }
