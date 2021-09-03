@@ -63,11 +63,7 @@ export class EditPharmacyComponent implements OnInit {
   submitPharmacyForm() {
     console.log(this.data.pharmacyList.map(m=> m.loginUserName));
     let form = this.editPharmacyForm;
-    if(this.isInArray(form.value['LoginUserName'], this.data.pharmacyList.map(m=> m.loginUserName))){
-      this.openAlertDialog("Entered user name already exists.");
-      return false;
-    }
-
+    
     let PSId = 0;
     let UId = 0;
     let operationMessage = "Data inserted successfully!";
@@ -91,6 +87,13 @@ export class EditPharmacyComponent implements OnInit {
       pharmacyCountry: form.value['PharmacyCountry'],
       PharmacyPassword: form.value['PharmacyPassword']
    };
+
+   if(PSId <= 0){
+    if(this.isInArray(form.value['LoginUserName'], this.data.pharmacyList.map(m=> m.loginUserName))){
+      this.openAlertDialog("Entered user name already exists.");
+      return false;
+    }
+  }
 
    this.adminService.insertUpdatePharmacyLoginDetails(pharmacyModel).subscribe(data => {
     if(data == 1){
