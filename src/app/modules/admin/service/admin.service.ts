@@ -115,6 +115,12 @@ export class AdminService {
     { headers: this.headers}).pipe(catchError(this.errorHandler));
   } 
 
+  getPharmacyReportSpecific(submissionId: any){
+    this.postData = JSON.stringify(submissionId);
+    return this.http.post<any>(`${ this.adminService }PharmacyReportSpecific`, this.postData,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
   GetActivityLogs(reportRequest: ReportRequest) {
     this.postData = JSON.stringify(reportRequest);
     return this.http.post<any>(`${ this.adminService }GetActivityLogs`, this.postData,
@@ -194,12 +200,20 @@ export class AdminService {
       catchError(this.errorHandler)
     )
   }  
+  
+  //For format yyyy-MM-dd
   returnFormatedDate(inputDate: any) : any {
    let month = inputDate.getMonth() + 1;
    return inputDate.getFullYear() + '-' + 
     ("0" + month).slice(-2) + '-' + 
     ("0" + inputDate.getDate()).slice(-2);
   }
+
+  //For format MM/dd/yyyy
+  returnFormatedDate2(inputDate: any) : any {
+    let month = inputDate.getMonth() + 1;
+    return ("0" + month).slice(-2) + '/' + ("0" + inputDate.getDate()).slice(-2) + '/' + inputDate.getFullYear();
+   }
 
   errorHandler(error: HttpErrorResponse){
     let errorMessage = `Error code ${error.status}\nMessage: ${error.message}`;
@@ -272,7 +286,7 @@ export class AdminService {
 
   updateDeliveryNote(pharmacyModel) {
     this.postData = JSON.stringify(pharmacyModel);
-    console.log(this.postData);
+    //console.log("Withing the Delivery Note : " + this.postData);
     return this.http.post<any>(`${ this.adminService }updateDeliveryNote`, this.postData,
     { headers: this.headers}).pipe(catchError(this.errorHandler));
   }

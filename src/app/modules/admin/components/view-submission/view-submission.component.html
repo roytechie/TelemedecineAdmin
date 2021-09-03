@@ -27,7 +27,22 @@
     </mat-tab-group>
   </div>
 </div>
-  <div class="row">
+
+
+  <div class="col-md-12 row" *ngIf="pharmacySpecificData">
+  <!-- <ng-container *ngIf="!pharmacySpecificData">loading... Pharmacy Data</ng-container> -->
+    <div class="col-md-4">
+      <mat-label>Pharmacy Name: {{pharmacySpecificData.pharmacyName}} </mat-label>
+    </div>
+    <div class="col-md-4">
+      <mat-label>Delivery Note: {{pharmacySpecificData.deliveryNote}}</mat-label>
+    </div>
+    <div class="col-md-4">
+      <mat-label>Delivery Date: {{pharmacySpecificData.deliveryDate}}</mat-label>
+    </div>
+  </div>
+  
+<div class="row">
 
     <mat-form-field class="col-sm-6">
       <mat-label>Status</mat-label> 

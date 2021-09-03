@@ -20,7 +20,7 @@ export class PharmacyReportComponent implements OnInit {
   dataSummary: any;
   displayedColumns: string[] = [ 
   'patientName', 'pharmacyName', 'patientDOB', 'weight','transactionDescription','patientAddress', 'patientState', 
-  'phone',  'prescribedDate', 'amount', 'PrescriptionNote', 'prescribedMedicineNames', 'action', 'deliveryNote'];
+  'phone',  'prescribedDate', 'amount', 'PrescriptionNote', 'prescribedMedicineNames', 'action', 'deliveryNote','deliveryDate'];
   endDate: Date = new Date();
   startDate: Date = new Date(new Date().getFullYear(), (new Date().getMonth() -1), new Date().getDate());
   showNoRecordsDiv: boolean = true;
