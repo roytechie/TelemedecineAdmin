@@ -1,13 +1,13 @@
 <div class="col-sm-12">
   <div style="width: 100%;height: 500px;overflow-y: scroll;" > 
-      <div class="col-sm-12">Submission by : <span style="color:blue;">{{ data.firstName }} {{ data.lastName }}</span>
+      <div class="col-sm-12">Submission by : <span style="color:blue;">{{ data.response.firstName }} {{ data.response.lastName }}</span>
       on
-      <span style="color:blue;">{{ data.submissionTime | date:"MM/dd/yyyy HH:mm" }}  </span>
+      <span style="color:blue;">{{ data.response.submissionTime | date:"MM/dd/yyyy HH:mm" }}  </span>
       <div class="col-sm-12 text-right">
         <!-- <button mat-raised-button color="primary" style="margin-right: 97px;" (click)="showPrescriptionPopup('', true)"
           cdkFocusInitial>Prescription Advice</button> -->
-        <button mat-raised-button mat-dialog-close style="margin: 0 16px 0 0;">Cancel</button> 
-        <button class="mat-focus-indicator mat-raised-button mat-button-base mat-primary" 
+        <button mat-raised-button mat-dialog-close style="margin: 0 16px 0 0;">{{closeButtonText}}</button> 
+        <button *ngIf="operationVisibility" class="mat-focus-indicator mat-raised-button mat-button-base mat-primary" 
         (click)="updatePatiantDetails()"
         [mat-dialog-close]="patiantInformation" cdkFocusInitial>Update</button>
       </div> 
@@ -42,7 +42,7 @@
     </div>
   </div>
   
-<div class="row">
+<div class="row" *ngIf="operationVisibility">
 
     <mat-form-field class="col-sm-6">
       <mat-label>Status</mat-label> 
@@ -62,7 +62,7 @@
     </div>  -->
 </div>
 
-<div class="row"> 
+<div class="row" *ngIf="operationVisibility"> 
   <mat-form-field class="col-sm-6" *ngIf="isAdmin">
     <mat-label>Assign To</mat-label>
     <mat-select required [(value)]="patiantInformation.UserId">  

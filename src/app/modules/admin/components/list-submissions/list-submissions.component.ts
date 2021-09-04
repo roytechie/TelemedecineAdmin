@@ -355,7 +355,8 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     this.adminService.getPatientsList(this.reportRequest).subscribe(response=>{
       patiantDetails = response[0]; 
       localStorage.patiantData = JSON.stringify(patiantDetails); 
-      const dialogRef = this.dialog.open(ViewSubmissionComponent, { data : patiantDetails });
+      let viewSubmissionModel = { response: patiantDetails, modalViewType: 'viewSubmission' }
+      const dialogRef = this.dialog.open(ViewSubmissionComponent, { data : viewSubmissionModel });
 
       dialogRef.afterClosed().subscribe(result => { 
         localStorage.pharmacyValue = "";  

@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -5,6 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { ViewSubmissionComponent } from 'src/app/modules/admin/components/view-submission/view-submission.component';
 import { AccessLavel, ReportRequest } from 'src/app/modules/admin/model/login-details';
 import { AdminService } from 'src/app/modules/admin/service/admin.service';
 import { AthenticationService } from 'src/app/modules/admin/service/athentication.service';
@@ -38,7 +40,7 @@ export class MedicineDeliveryReportComponent implements OnInit {
   constructor(public adminService: AdminService,
     private reportRequest: ReportRequest, private route: Router, 
     private athenticationService: AthenticationService,
-    private dialog: MatDialog) {
+    private dialog: MatDialog, private datepipe: DatePipe) {
       if(this.athenticationService.currentUserValue==null) {
         this.route.navigate(['/login']);
       }
@@ -57,6 +59,7 @@ export class MedicineDeliveryReportComponent implements OnInit {
   }
 
   getMedicineDeliveryReport() {
+    this.disabledButton = true;
     let deliverySearchModel = {
       startData: this.startDate,
       endDate: this.endDate
@@ -110,5 +113,32 @@ export class MedicineDeliveryReportComponent implements OnInit {
       //this.getMedicine();
     });
   }
+
+  openViewSubmission(element) {
+
+    this.reportRequest.startDate = this.datepipe.transform(this.startDate, 'yyyy-MM-dd'),
+    this.reportRequest.endDate = this.datepipe.transform(this.endDate, 'yyyy-MM-dd'),
+    this.reportRequest.isAdmin = true,
+    this.reportRequest.isSingleSubmission = true;
+    this.reportRequest.reportType = 'Submission',
+    this.reportRequest.submissionId = element.submissionId,
+    this.reportRequest.userId = 1
+
+    console.log(this.reportRequest);
+
+    this.adminService.getPatientsList(this.reportRequest).subscribe(response => {
+
+      localStorage.patiantData = JSON.stringify(response[0]); 
+      let medicineDeliveryData = { response: response[0], modalViewType: 'medicineDeliveryReport' }
+      const dialogRef = this.dialog.open(ViewSubmissionComponent, { data : medicineDeliveryData });
+
+      dialogRef.afterClosed().subscribe(result => { 
+        //this.getMedicineDeliveryReport();
+      });
+    });  
+
+
+
+    }
 
 }

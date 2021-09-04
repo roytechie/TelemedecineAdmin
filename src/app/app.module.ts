@@ -8,6 +8,7 @@ import { AdminModule } from './modules/admin/admin.module';
 import { HttpClientModule } from '@angular/common/http';  
 import { DndDirective } from './directives/dnd.directive';
 import { ReportsModule } from './modules/reports/reports.module';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,7 @@ import { ReportsModule } from './modules/reports/reports.module';
     HttpClientModule,
     ReportsModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

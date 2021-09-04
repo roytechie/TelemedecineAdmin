@@ -23,6 +23,8 @@ export class ViewSubmissionComponent implements OnInit {
   isAdmin: boolean = false;
   userId: number = 0;
   pharmacySpecificData : any
+  closeButtonText = 'Cancel';
+  operationVisibility = true;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data:any, 
   public adminService: AdminService, private dialog : MatDialog,
@@ -30,7 +32,7 @@ export class ViewSubmissionComponent implements OnInit {
   private athenticationService: AthenticationService,
   private loginDetails: LoginDetails) 
   { 
-    this.patiantInformation.set(this.data); 
+    this.patiantInformation.set(this.data.response); 
     
     if (this.athenticationService.currentUserValue) { 
       //this.route.navigate(['user/submissions-list']);
@@ -44,7 +46,8 @@ export class ViewSubmissionComponent implements OnInit {
 
   ngOnInit() {  
       //this.options = this.stausOptions.options; 
-      this.adminService.getAnswers(this.data).subscribe(response => {
+      this.checkVisibility(this.data.modalViewType);
+      this.adminService.getAnswers(this.data.response).subscribe(response => {
         //this.answers = response; 
         this.answers = response.surveySteps;
 
@@ -62,10 +65,10 @@ export class ViewSubmissionComponent implements OnInit {
 
   updatePatiantDetails() 
   {
-    let isStatusChanged = this.patiantInformation.Status != this.data.status;
-    let isNotesUpdated = this.patiantInformation.Notes != this.data.notes;
-    let isDoctorChanged = this.patiantInformation.UserId != this.data.loginDetails.userId
-    let isFollowupNotesUpdated = this.patiantInformation.FollowupNotes != this.data.followupNotes
+    let isStatusChanged = this.patiantInformation.Status != this.data.response.status;
+    let isNotesUpdated = this.patiantInformation.Notes != this.data.response.notes;
+    let isDoctorChanged = this.patiantInformation.UserId != this.data.response.loginDetails.userId
+    let isFollowupNotesUpdated = this.patiantInformation.FollowupNotes != this.data.response.followupNotes
 
     let statusInfo: any = [];
     let activityInfo: any = [];
@@ -84,10 +87,10 @@ export class ViewSubmissionComponent implements OnInit {
       activityInfo.push("Status updated - " + objStatus[0].name);
 
       this.patiantInformation.IsPrescribed = this.patiantInformation.Status == 3 && 
-      this.patiantInformation.Status != this.data.status;
+      this.patiantInformation.Status != this.data.response.status;
 
       this.patiantInformation.IsCompleted = this.patiantInformation.Status == 7 && 
-      this.patiantInformation.Status != this.data.status; 
+      this.patiantInformation.Status != this.data.response.status; 
     }
     else 
     {
@@ -185,9 +188,9 @@ export class ViewSubmissionComponent implements OnInit {
   } 
   
   showPrescriptionPopup(status : number) { 
-    console.log(this.data);
+    console.log(this.data.response);
     if(status == 3) { 
-      this.dialog.open( DoctorsFormComponent, { data : this.data})
+      this.dialog.open( DoctorsFormComponent, { data : this.data.response})
     }  
   }
 
@@ -213,7 +216,7 @@ export class ViewSubmissionComponent implements OnInit {
   } 
 
   getPharmacyReportSpecific(){
-    this.adminService.getPharmacyReportSpecific(this.data).subscribe(response => {
+    this.adminService.getPharmacyReportSpecific(this.data.response).subscribe(response => {
       //this.answers = response; 
 
       this.pharmacySpecificData = response;
@@ -221,6 +224,16 @@ export class ViewSubmissionComponent implements OnInit {
       console.log (response);
 
     }); 
+  }
+
+  checkVisibility(viewType: string): void {
+    if(viewType == 'viewSubmission') {
+      this.operationVisibility = true;
+    }
+    else {
+      this.closeButtonText = 'Close';
+      this.operationVisibility = false;
+    }
   }
 
 }
