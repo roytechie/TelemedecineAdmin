@@ -77,7 +77,8 @@ export class MedicineDeliveryReportComponent implements OnInit {
   }
 
   applyFilter(event) {
-
+    const symptomsFilter = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = symptomsFilter.trim().toLowerCase();
   }
 
   exportToExcel() {
