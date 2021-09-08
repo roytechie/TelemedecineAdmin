@@ -1,0 +1,43 @@
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <mat-card>
+            <form [formGroup]="editUserAccessForm" (ngSubmit)="submitUserAccessForm()">
+                <div class="row">
+                    <div class="col-md-4">
+                        <mat-form-field appearance="standard">
+                            <mat-label>User Type<span style="color: red;">*</span></mat-label>
+                            <mat-select formControlName="userType" (selectionChange)="userTypeChange($event)">
+                                <mat-option *ngFor="let type of userTypes" [value]="type.code">{{type.name}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="checkError('userType', 'required')">Password is required</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-right: 10px;">
+                    <!-- <div class="col-md-12"> -->
+                    <div class="col-md-2" *ngFor="let nemu of menues; let i = index">
+
+                        <mat-checkbox formControlName="menuControl" [(ngModel)]="nemu.checked"
+                            (ngModelChange)="updateAllComplete()">
+                            {{nemu.name}}
+                        </mat-checkbox>
+
+                        <!-- <mat-checkbox id="nemu.code">{{nemu.name}}</mat-checkbox> -->
+                    </div>
+                    <!-- </div> -->
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <button mat-raised-button color="primary" type="submit"
+                            [disabled]="!editUserAccessForm.valid">Save</button>
+                    </div>
+                </div>
+            </form>
+        </mat-card>
+    </div>
+
+</div>

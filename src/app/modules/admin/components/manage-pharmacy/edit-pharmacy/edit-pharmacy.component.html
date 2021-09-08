@@ -6,24 +6,43 @@
                 <div class="row">
                     <div class="col-md-6">
                         <mat-form-field appearance="standard">
-                            <mat-label>Pharmacy Name</mat-label>
-                            <input matInput placeholder="Enter pharmacy name..." formControlName="PharmacyName">
-                            <mat-error *ngIf="checkError('PharmacyName', 'required')">Pharmacy Name is required</mat-error>
+                            <mat-label>Name<span style="color: red;">*</span></mat-label>
+                            <input matInput placeholder="Enter Name..." formControlName="PharmacyName">
+                            <mat-error *ngIf="checkError('PharmacyName', 'required')">Name is required</mat-error>
                         </mat-form-field>
                     </div>
                     <div class="col-md-6">
                         <mat-form-field appearance="standard">
-                            <mat-label>Pharmacy Login User Name</mat-label>
+                            <mat-label>Login User Name<span style="color: red;">*</span></mat-label>
                             <input matInput (keydown)="disallowSpace($event)" placeholder="Enter user name..." 
                             formControlName="LoginUserName" [readonly]="disableInEditMode" (change)="ckeckExistingUserName($event)">
-                            <mat-error *ngIf="checkError('LoginUserName', 'required')">Pharmacy login user name is required</mat-error>
+                            <mat-error *ngIf="checkError('LoginUserName', 'required')">Login user name is required</mat-error>
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
                         <mat-form-field appearance="standard">
-                            <mat-label>Contact No.</mat-label>
+                            <mat-label>Password<span style="color: red;">*</span></mat-label>
+                            <input matInput placeholder="Enter password..." formControlName="PharmacyPassword" [readonly]="disableInEditMode">
+                            <mat-error *ngIf="checkError('PharmacyPassword', 'required')">Password is required</mat-error>
+                            <mat-error *ngIf="checkError('PharmacyPassword', 'minlength')">Password length should be greater than 8</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                            <mat-form-field appearance="standard">
+                                <mat-label>User Type<span style="color: red;">*</span></mat-label>
+                                <mat-select formControlName="userType">
+                                  <mat-option *ngFor="let type of userTypes" [value]="type.code">{{type.name}}</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="checkError('userType', 'required')">Password is required</mat-error>
+                              </mat-form-field>
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Contact No.<span style="color: red;">*</span></mat-label>
                             <input matInput placeholder="Enter contact no..." formControlName="PharmacyContactNum">
                             <mat-error *ngIf="checkError('PharmacyContactNum', 'required')">Contact no is required</mat-error>
                             <mat-error *ngIf="checkError('PharmacyContactNum', 'maxlength')">Contact no should be 10 digits</mat-error>
@@ -80,17 +99,9 @@
                         </mat-form-field>
                     </div>
                 </div>
+               
                 <div class="row">
-                    <div class="col-md-6">
-                        <mat-form-field appearance="standard">
-                            <mat-label>Pharmacy Password</mat-label>
-                            <input matInput placeholder="Enter password..." formControlName="PharmacyPassword" [readonly]="disableInEditMode">
-                            <mat-error *ngIf="checkError('PharmacyPassword', 'required')">Password is required</mat-error>
-                            <mat-error *ngIf="checkError('PharmacyPassword', 'minlength')">Password length should be greater than 8</mat-error>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-md-6" style="text-align: right; margin-top: 25px;">
+                    <div class="col-md-12" style="text-align: right; margin-top: 25px;">
                         <button mat-raised-button color="primary" type="submit"
                             [disabled]="!editPharmacyForm.valid">{{submitButtonText}}</button>
                         <button mat-raised-button (click)="closeDialog()" style="margin-left:10px ;"

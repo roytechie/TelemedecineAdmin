@@ -312,4 +312,19 @@ export class AdminService {
     return this.http.get<any>(`${ this.adminService }DeletePharmacyLoginDetails?id=` + id,
     { headers: this.headers}).pipe(catchError(this.errorHandler));
   }
+
+  getUserTypes() {
+    return this.http.get<any>(`${ this.adminService }GetUserTypes`,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  getMenues() {
+    return this.http.get<any>(`${ this.adminService }GetMenues`,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  getSelectedMenuesByUserType(id: any){
+    return this.http.get<any>(`${ this.adminService }GetSelectedMenuesByUserType?id=` + id,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
 }

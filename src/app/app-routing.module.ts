@@ -22,6 +22,7 @@ import { PharmacyReportComponent } from './modules/admin/components/pharmacy-rep
 import { MedicineComponent } from './modules/admin/components/medicine/medicine.component';
 import { MedicineDeliveryReportComponent } from './modules/reports/component/medicine-delivery-report/medicine-delivery-report.component';
 import { ManagePharmacyComponent } from './modules/admin/components/manage-pharmacy/manage-pharmacy.component';
+import { UserAccessComponent } from './modules/admin/components/user-access/user-access.component';
 
 
 const routes: Routes = [ {
@@ -144,7 +145,16 @@ const routes: Routes = [ {
       path: 'medicine-Delivery-report',
       component: MedicineDeliveryReportComponent
     }]
+  },
+  {
+    path: 'admin',
+    component: LayoutComponent,
+    children: [{
+      path: 'user-access',
+      component: UserAccessComponent
+    }]
   }
+
 ];
 
 @NgModule({

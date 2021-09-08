@@ -15,6 +15,7 @@ export class EditPharmacyComponent implements OnInit {
   
   disableInEditMode: boolean = false;
   submitButtonText: string = "Submit";
+  userTypes: any;
   editPharmacyForm = new FormGroup({
     PharmacyName: new FormControl('', [Validators.required]),
     LoginUserName: new FormControl('', [Validators.required]),
@@ -27,7 +28,8 @@ export class EditPharmacyComponent implements OnInit {
     PharmacyFax: new FormControl(''),
     PharmacyZipCode: new FormControl(''),
     PharmacyCountry: new FormControl(''),
-    PharmacyPassword: new FormControl('', [Validators.required, Validators.minLength(8)])
+    PharmacyPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
+    userType: new FormControl('', [Validators.required]),
  });
 
   constructor(@Inject(MAT_DIALOG_DATA) public data:any,public adminService: AdminService, private route: Router, 
@@ -36,10 +38,16 @@ export class EditPharmacyComponent implements OnInit {
   ngOnInit(): void {
     this.dialogRef.updateSize("70%");
     this.dialogRef.disableClose = true;
+
+    this.adminService.getUserTypes().subscribe(data => {
+      this.userTypes = data;
+    }, error => {});
+
     if(this.data != null && this.data.element != null && this.data.element.pharmacySequenceId > 0) {
       this.disableInEditMode = true;
       this.submitButtonText = "Update";
       this.adminService.GetPharmacyUserLoginDetailsById(this.data.element.pharmacySequenceId).subscribe(data => {
+        console.log(data);
         this.editPharmacyForm.setValue({
           PharmacyName: data.pharmacyName, 
           LoginUserName: data.loginUserName, 
@@ -51,7 +59,8 @@ export class EditPharmacyComponent implements OnInit {
           PharmacyFax: data.pharmacyFax, 
           PharmacyZipCode: data.pharmacyZipCode, 
           PharmacyCountry: data.pharmacyCountry,
-          PharmacyPassword: data.pharmacyPassword
+          PharmacyPassword: data.pharmacyPassword,
+          userType: data.accessLavel
         });
       }, error => {
 
@@ -85,7 +94,8 @@ export class EditPharmacyComponent implements OnInit {
       pharmacyFax: form.value['PharmacyFax'],
       pharmacyZipCode: form.value['PharmacyZipCode'],
       pharmacyCountry: form.value['PharmacyCountry'],
-      PharmacyPassword: form.value['PharmacyPassword']
+      PharmacyPassword: form.value['PharmacyPassword'],
+      accessLavel: form.value['userType']
    };
 
    if(PSId <= 0){
