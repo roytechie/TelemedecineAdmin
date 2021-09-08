@@ -33,7 +33,7 @@
           </mat-select>
         </mat-form-field>
 
-        <div class="col-md-2 align-bottom">
+        <div class="col-md-1 align-bottom">
           <div class="row">
             <div class="col-md-2" style="padding-top: 8px;">
               <button mat-raised-button [disabled]="disabledButton" (click)="getPharmacyReport()">View</button>
@@ -41,8 +41,18 @@
           </div>
         </div>
 
-
-        
+        <mat-form-field class="col-md-2">
+          <mat-label>Delivery Status</mat-label>
+          <mat-select [disabled]="exportButtonDisabled"
+            (selectionChange)="filterByDeciveryStatus($event)">
+            <mat-option [value]="0">--All--</mat-option>
+            <mat-option [value]="1">Pending</mat-option>
+            <mat-option [value]="2">Completed</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <div class="col-md-8"></div>
         <mat-form-field class="col-md-2">
           <mat-label>Filter</mat-label>
           <input matInput type="text" matInput (keyup)="applyFilter($event)">

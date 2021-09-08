@@ -17,6 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class PharmacyReportComponent implements OnInit {
   dataSource?: MatTableDataSource<any> = new MatTableDataSource<any>();
+  getPharmacyResponse: any;
   dataSummary: any;
   displayedColumns: string[] = [ 
   'patientName', 'pharmacyName', 'patientDOB', 'weight','transactionDescription','patientAddress', 'patientState', 
@@ -98,13 +99,9 @@ export class PharmacyReportComponent implements OnInit {
      }
       this.exportButtonDisabled = false;
       if(response.length > 0) {
-        this.dataSummary = {
-          totalAmount: response.map(curr => parseFloat(curr.pharmacyCharges)).reduce(function(a, b)
-          {
-            return a + b;
-          }),
-        };
+        this.calculateTableSummary(response);
       }
+      this.getPharmacyResponse = response;
       this.dataSource = new MatTableDataSource<any>(response);
       setTimeout(() => this.dataSource.paginator = this.paginator);
       setTimeout(() => this.dataSource.sort = this.sort);
@@ -141,6 +138,32 @@ export class PharmacyReportComponent implements OnInit {
     }
   }
 
+  filterByDeciveryStatus(event) {
+    this.dataSource.data = this.getPharmacyResponse;
+
+    if(event.value == 1) {
+      this.dataSource.data = this.dataSource.filteredData.filter(function(item) {
+        return (item.deliveryDate == "" && item.deliveryNote == "");
+      });
+    }
+    else if(event.value == 2) {
+      this.dataSource.data = this.dataSource.filteredData.filter(function(item) {
+        return (item.deliveryDate != "" || item.deliveryNote != "");
+      });
+    }
+
+    this.calculateTableSummary(this.dataSource.data);
+  }
+
+  calculateTableSummary(data) {
+    this.dataSummary = {
+      totalAmount: data.map(curr => parseFloat(curr.pharmacyCharges)).reduce(function(a, b)
+      {
+        return a + b;
+      }),
+    };
+  }
+
   exportexcel() {
     debugger;
     let fileName= 'Pharmacy.xlsx';
@@ -148,17 +171,18 @@ export class PharmacyReportComponent implements OnInit {
     let readyToExport = this.dataSource.data;
 
     for(var j in readyToExport) {
-      delete readyToExport[j].pharmacyId;
-      delete readyToExport[j].submisionId;
-      delete readyToExport[j].patientId;
+      //delete readyToExport[j].pharmacyId;
+      //delete readyToExport[j].submisionId;
+      //delete readyToExport[j].patientId;
       delete readyToExport[j].amount;
-      delete readyToExport[j].pharmacyCharges;
+      delete readyToExport[j].procedureCharges;
       delete readyToExport[j].submissionType;
       readyToExport[j].prescribedMedicineNames = readyToExport[j].prescribedMedicineNames.replace("&lt;", "<").replace("&gt;", ">").replace("&le;", "≤").replace("&ge;", "≥");
    }
     //var a = JSON.stringify(this.dataSource.data);
     //delete readyToExport["pharmacyId"];
-    const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(readyToExport)
+    const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(readyToExport);
+
     console.log(readyToExport);
     var header = Object.keys(readyToExport[0]); // columns name
 
