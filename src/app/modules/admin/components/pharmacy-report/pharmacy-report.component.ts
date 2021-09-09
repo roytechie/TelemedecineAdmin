@@ -44,13 +44,15 @@ export class PharmacyReportComponent implements OnInit {
     }
     else {
       
-      let accessValue: AccessLavel = this.athenticationService.checkAccessLavel(this.athenticationService.currentUserValue);
-      if(accessValue == AccessLavel.Admin){
-        this.isAdminAccess = true;
-      }
-      else {
-        this.selectedPharmacyId = this.athenticationService.currentUserValue.id;
-      }
+      let accessableMenues = JSON.parse(localStorage.getItem("accessableMenues"));
+        if(accessableMenues) {
+          if(accessableMenues.filter(f => f.code == 10).length <= 0) {
+            this.route.navigate(['/login']);
+          }
+        }
+        else {
+          this.route.navigate(['/login']);
+        }
     }
   }
 

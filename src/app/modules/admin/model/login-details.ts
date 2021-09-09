@@ -16,6 +16,7 @@ export class LoginDetails {
 
 export enum AccessLavel {
     Admin = 1,
+    Doctor = 2,
     Pharmacy = 9,
     Other = 10
 }

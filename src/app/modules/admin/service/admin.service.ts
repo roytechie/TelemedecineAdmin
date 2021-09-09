@@ -327,4 +327,10 @@ export class AdminService {
     return this.http.get<any>(`${ this.adminService }GetSelectedMenuesByUserType?id=` + id,
     { headers: this.headers}).pipe(catchError(this.errorHandler));
   }
+
+  mapMenuAccessToUser (requestModel) {
+    this.postData = JSON.stringify(requestModel);
+    return this.http.post<any>(`${ this.adminService }MapMenuAccessToUser`, this.postData,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
 }

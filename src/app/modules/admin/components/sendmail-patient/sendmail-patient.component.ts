@@ -142,13 +142,17 @@ export class SendmailPatientComponent implements OnInit {
     if(this.athenticationService.currentUserValue==null) {
       this.route.navigate(['/login']);
     }
-    else{
-      let accessValue: AccessLavel = this.athenticationService.checkAccessLavel(this.athenticationService.currentUserValue);
-      if(accessValue != AccessLavel.Admin) {
-        this.route.navigate(['/login']);
+    else {
+      let accessableMenues = JSON.parse(localStorage.getItem("accessableMenues"));
+        if(accessableMenues) {
+          if(accessableMenues.filter(f => f.code == 9).length <= 0) {
+            this.route.navigate(['/login']);
+          }
+        }
+        else {
+          this.route.navigate(['/login']);
+        }
       }
-    }
-    
    }
 
   ngOnInit(): void {

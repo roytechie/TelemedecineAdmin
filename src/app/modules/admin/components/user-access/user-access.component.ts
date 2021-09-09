@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { flatten } from '@angular/compiler';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AdminService } from '../../service/admin.service';
 import { AthenticationService } from '../../service/athentication.service';
+import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
 
 @Component({
   selector: 'app-user-access',
@@ -14,22 +16,20 @@ export class UserAccessComponent implements OnInit {
 
   userTypes: any;
   menues: any[];
-  selectedMenues: any;
-  checkedMenues: any[] = [];
 
   editUserAccessForm = new FormGroup({
     userType: new FormControl('', [Validators.required]),
-    menuControl:  new FormControl(),
+    menuControl:  new FormControl(''),
  });
 
   constructor(public adminService: AdminService, private route: Router, 
-    private athenticationService: AthenticationService, private dialog: MatDialog) { 
+    private athenticationService: AthenticationService, private dialog: MatDialog, 
+    private formBuilder: FormBuilder) { 
       
     }
 
   ngOnInit(): void {
     this.getUserTypes();
-    //this.getMenues();
   }
 
   getUserTypes() {
@@ -38,33 +38,51 @@ export class UserAccessComponent implements OnInit {
     }, error => {});
   }
 
-  // getMenues() {
-  //   this.menues = [];
-  //   this.adminService.getMenues().subscribe(data => {
-  //     if(data && data.length > 0) {
-  //       data.forEach(f => {
-  //         this.menues.push({name: f.name, code: f.code, checked: false});
-  //       });
-  //     }
-  //   }, error => {});
-  // }
 
+  
   submitUserAccessForm() {
+    let form = this.editUserAccessForm;
 
+    let model = {
+      userType: form.value["userType"],
+      menues: this.menues
+    }
+    this.adminService.mapMenuAccessToUser(model).subscribe(data => {
+      if(data > 0){
+        this.openAlertDialog("Data mapped!");
+      }
+    }, error => {});
   }
 
   userTypeChange(event) {
+    this.menues = [];
     this.adminService.getSelectedMenuesByUserType(event.value).subscribe(data => {
-      console.log(data);
         this.menues = data;
-        
       }, error => {
   
       });
   }
 
-  updateAllComplete() {
-    
+  menuchange(event) {
+    let isCheckedElement = event.target.checked;
+    let elementVal = event.target.value;
+    if(isCheckedElement) {
+      this.menues.find(f => f.code == elementVal).checked = true;
+    }
+    else {
+      this.menues.find(f => f.code == elementVal).checked = false;
+    }
+  }
+
+  openAlertDialog(alertMessage: string) {
+    const dialogRef = this.dialog.open(AlertDialogComponent, {
+      data: {
+        message: alertMessage,
+        buttonText: {
+          cancel: 'OK'
+        }
+      },
+    });
   }
 
   public checkError = (controlName: string, errorName: string) => {

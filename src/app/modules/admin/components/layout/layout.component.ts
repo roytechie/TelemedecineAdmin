@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccessLavel, LoginDetails } from '../../model/login-details';
+import { AdminService } from '../../service/admin.service';
 import {AthenticationService} from '../../service/athentication.service'
 
 @Component({
@@ -8,6 +9,8 @@ import {AthenticationService} from '../../service/athentication.service'
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss']
 })
+
+
 export class LayoutComponent implements OnInit {
   userName: string;
   isAdmin : boolean = false;
@@ -31,6 +34,21 @@ export class LayoutComponent implements OnInit {
      }
 
   ngOnInit() { 
+    
+  }
+
+  isAccessableTouser(menuCode): boolean {
+    let flag: boolean = false;
+    let accessData = localStorage.getItem("accessableMenues");
+    console.log(accessData);
+    if(accessData) {
+      var result: any = JSON.parse(accessData);
+      result = result.filter(f=>f.code == menuCode);
+      if(result.length > 0){
+        flag = true;
+      }
+    }
+    return flag;
   }
 
   logOut() {

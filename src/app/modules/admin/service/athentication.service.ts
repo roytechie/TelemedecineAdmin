@@ -42,9 +42,16 @@ export class AthenticationService {
     else if(user.accessLevel == AccessLavel.Pharmacy){
       return AccessLavel.Pharmacy
     }
+    else if(user.accessLevel == AccessLavel.Doctor){
+      return AccessLavel.Doctor
+    }
     else {
       return AccessLavel.Other
     }
+  }
+
+  public isMenuAccessbableToUser (menuCode) {
+    
   }
 
   public defaultRerirectionAfterLogin(accessValue: AccessLavel) {

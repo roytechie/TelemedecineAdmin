@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
+import { AdminService } from '../../../service/admin.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,7 @@ export class LoginComponent implements OnInit {
   constructor(private authenticationService: AthenticationService,
     private fb: FormBuilder,
     public loginDetails: LoginDetails,
-    private route: Router) { 
+    private route: Router, private adminService: AdminService) { 
       if (this.authenticationService.currentUserValue) { 
         this.route.navigate(['user/submissions-list']);
       }
@@ -57,7 +58,14 @@ export class LoginComponent implements OnInit {
               {
                 this.isInvalidInput = false;
                 this.route.navigate(['user/submissions-list']);
-              } 
+              }
+              
+              // user access check
+              this.adminService.getSelectedMenuesByUserType(this.authenticationService.currentUserValue.accessLevel).subscribe(data => {
+                let accessableMenues = JSON.stringify(data.filter(f => f.checked == true));
+                console.log(accessableMenues);
+                localStorage.setItem("accessableMenues", accessableMenues);
+              }, error => {});
             },
             error => {
                 //console.log(error);

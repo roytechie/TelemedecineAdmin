@@ -33,8 +33,13 @@ export class UserListComponent implements OnInit {
         this.route.navigate(['/login']);
       } 
       else {
-        let accessValue: AccessLavel = this.athenticationService.checkAccessLavel(this.athenticationService.currentUserValue);
-        if(accessValue != AccessLavel.Admin) {
+        let accessableMenues = JSON.parse(localStorage.getItem("accessableMenues"));
+        if(accessableMenues) {
+          if(accessableMenues.filter(f => f.code == 3).length <= 0) {
+            this.route.navigate(['/login']);
+          }
+        }
+        else {
           this.route.navigate(['/login']);
         }
       }

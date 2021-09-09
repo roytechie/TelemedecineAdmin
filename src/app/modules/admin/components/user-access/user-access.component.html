@@ -1,6 +1,5 @@
 <div class="row">
-    <div class="col-md-1"></div>
-    <div class="col-md-10">
+    <div class="col-md-12">
         <mat-card>
             <form [formGroup]="editUserAccessForm" (ngSubmit)="submitUserAccessForm()">
                 <div class="row">
@@ -16,14 +15,19 @@
                     </div>
                 </div>
 
-                <div class="row" style="margin-right: 10px;">
+                <div class="row">
                     <!-- <div class="col-md-12"> -->
-                    <div class="col-md-2" *ngFor="let nemu of menues; let i = index">
+                    <div class="col-md-2" *ngFor="let menu of menues; let i = index">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" [checked]="menu.checked" name="{{menu.code}}"
+                            [value]="menu.code" class="custom-control-input" id="{{menu.code}}"
+                            (change)="menuchange($event)">
+                            <label class="custom-control-label" for="{{menu.code}}">{{menu.name}}</label>
+                          </div>
 
-                        <mat-checkbox formControlName="menuControl" [(ngModel)]="nemu.checked"
-                            (ngModelChange)="updateAllComplete()">
-                            {{nemu.name}}
-                        </mat-checkbox>
+                        <!-- <mat-checkbox formControlName="menuControl" [(ngModel)]="menu.checked" [checked]="true" [value]="menu.code">
+                            {{menu.name}}
+                        </mat-checkbox> -->
 
                         <!-- <mat-checkbox id="nemu.code">{{nemu.name}}</mat-checkbox> -->
                     </div>
@@ -31,12 +35,16 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4" style="text-align: center;" >
                         <button mat-raised-button color="primary" type="submit"
-                            [disabled]="!editUserAccessForm.valid">Save</button>
+                            [disabled]="!editUserAccessForm.valid">Map</button>
                     </div>
+                    <div class="col-md-4"></div>
                 </div>
             </form>
+
+            
         </mat-card>
     </div>
 

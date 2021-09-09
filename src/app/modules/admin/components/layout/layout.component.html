@@ -39,49 +39,49 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
 
-      <li class="nav-item active" *ngIf="accessValue == 1">
+      <li class="nav-item active" *ngIf="isAccessableTouser(1)">
         <a class="nav-link" class="mat-focus-indicator mat-raised-button mat-button-base mat-primary"
           routerLink="../user/submissions-list">
           <span matLine>Submissions</span>
         </a>
       </li>
 
-      <li class="nav-item" *ngIf="isAdmin && (accessValue == 1)">
+      <li class="nav-item" *ngIf="isAccessableTouser(2)">
         <a class="nav-link" style="margin-left: 9px;"
           class="mat-focus-indicator mat-raised-button mat-button-base mat-primary" routerLink="../user/payment-list">
           <span matLine>Payment Report</span>
         </a>
       </li>
 
-      <li class="nav-item" *ngIf="isAdmin && (accessValue == 1)">
+      <li class="nav-item" *ngIf="isAccessableTouser(3)">
         <a class="nav-link" style="margin-left: 9px;"
           class="mat-focus-indicator mat-raised-button mat-button-base mat-primary" routerLink="../user/user-list">
           <span matLine>Users</span>
         </a>
       </li>
 
-      <li class="nav-item" *ngIf="(accessValue == 1)">
+      <li class="nav-item" *ngIf="isAccessableTouser(4)">
         <a class="nav-link" style="margin-left: 9px;"
           class="mat-focus-indicator mat-raised-button mat-button-base mat-primary" routerLink="../user/activity-log">
           <span matLine>Activity Logs</span>
         </a>
       </li>
 
-      <li class="nav-item" *ngIf="!isAdmin && (accessValue == 1)">
+      <li class="nav-item" *ngIf="isAccessableTouser(5)">
         <a class="nav-link" style="margin-left: 9px;"
           class="mat-focus-indicator mat-raised-button mat-button-base mat-primary" routerLink="authorization-form">
           <span matLine>Profile</span>
         </a>
       </li>
 
-      <li class="nav-item" *ngIf="(accessValue == 1)">
+      <li class="nav-item" *ngIf="isAccessableTouser(5)">
         <a class="nav-link" style="margin-left: 9px;"
           class="mat-focus-indicator mat-raised-button mat-button-base mat-primary" routerLink="../report/pharmacy">
           <span matLine>Reports</span>
         </a>
       </li>
 
-      <li class="nav-item" *ngIf="(accessValue == 1)">
+      <li class="nav-item" *ngIf="isAccessableTouser(6)">
         <a class="nav-link" style="margin-left: 9px;"
           class="mat-focus-indicator mat-raised-button mat-button-base mat-primary"
           [routerLink]="['../report/pharmacy/', 'PrescribedReport']">
@@ -89,21 +89,21 @@
         </a>
       </li>
 
-      <li class="nav-item" *ngIf="(accessValue == 1)">
+      <li class="nav-item" *ngIf="isAccessableTouser(7)">
         <a class="nav-link" style="margin-left: 9px;"
           class="mat-focus-indicator mat-raised-button mat-button-base mat-primary" routerLink="../report/refills">
           <span matLine>Refills</span>
         </a>
       </li>
 
-      <li class="nav-item" *ngIf="(accessValue == 1)">
+      <li class="nav-item" *ngIf="isAccessableTouser(8)">
         <a class="nav-link" style="margin-left: 9px;"
           class="mat-focus-indicator mat-raised-button mat-button-base mat-primary" routerLink="../report/referrals">
           <span matLine>Referrals</span>
         </a>
       </li>
 
-      <li class="nav-item" *ngIf="(accessValue == 1)">
+      <li class="nav-item" *ngIf="isAccessableTouser(9)">
         <a class="nav-link" style="margin-left: 9px;"
           class="mat-focus-indicator mat-raised-button mat-button-base mat-primary"
           routerLink="../user/sendmailtopatient">
@@ -111,7 +111,7 @@
         </a>
       </li>
 
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="isAccessableTouser(10)">
         <a class="nav-link" style="margin-left: 9px;"
           class="mat-focus-indicator mat-raised-button mat-button-base mat-primary"
           routerLink="../user/pharmacy-report">
@@ -119,34 +119,34 @@
         </a>
       </li>
 
-      <li class="nav-item" *ngIf="(accessValue == 1)" style="margin-left: 9px;">
+      <li class="nav-item" style="margin-left: 9px;">
         <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Admin Task</button>
         <!-- #enddocregion mat-menu-trigger-for -->
         <mat-menu #menu="matMenu">
-          <button mat-menu-item>
+          <button mat-menu-item  *ngIf="isAccessableTouser(11)">
             <a class="nav-link" class="mat-focus-indicator mat-raised-button mat-button-base mat-primary"
               routerLink="../user/medicine">
               <span matLine>Manage Medicine</span>
             </a>
           </button>
-          <button mat-menu-item>
+          <button mat-menu-item *ngIf="isAccessableTouser(12)">
             <a class="nav-link" class="mat-focus-indicator mat-raised-button mat-button-base mat-primary"
               routerLink="../report/medicine-Delivery-report">
               <span matLine>Mdedicine Delivery Report</span>
             </a>
           </button>
-          <button mat-menu-item>
+          <button mat-menu-item *ngIf="isAccessableTouser(13)">
             <a class="nav-link" class="mat-focus-indicator mat-raised-button mat-button-base mat-primary"
               routerLink="../user/managepharmacy">
               <span matLine>Manage User</span>
             </a>
           </button>
-          <!-- <button mat-menu-item>
+          <button mat-menu-item *ngIf="isAccessableTouser(14)">
             <a class="nav-link" class="mat-focus-indicator mat-raised-button mat-button-base mat-primary"
               routerLink="../admin/user-access">
               <span matLine>User Access</span>
             </a>
-          </button> -->
+          </button>
 
           <!-- <button mat-menu-item>Item 2</button> -->
         </mat-menu>
