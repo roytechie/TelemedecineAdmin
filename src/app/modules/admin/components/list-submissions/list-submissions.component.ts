@@ -149,7 +149,7 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
 
 
   patientsList: any
-  displayedColumns: string[] = ['submissionId', 'firstName', 'lastName', 'DOB',
+  displayedColumns: string[] = ['submissionId', 'patientId', 'firstName', 'lastName', 'DOB',
    'phone', 'isCovid', 'submissionTime', 'state','doctorName', 'transactionDescription', 'returningPatient', 'status', 'Action'];
   covidQuestions : number [];
 

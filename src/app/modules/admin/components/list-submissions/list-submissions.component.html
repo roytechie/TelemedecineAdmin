@@ -99,6 +99,11 @@
   <div class="row">
     <div class="col-sm-12" *ngIf="rowsAdded">
         <table mat-table class="mat-elevation-z8" [dataSource]="dataSource" style="width:100%" matSort>
+              <ng-container matColumnDef="patientId" >
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Pat Id</th>
+                <td mat-cell *matCellDef="let element;" > {{element.patientId}} </td>
+                <!-- <td mat-cell *matCellDef="let element; let j=index;"> {{j + 1}} </td> -->
+              </ng-container>
               <ng-container matColumnDef="submissionId" >
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Id</th>
                 <td mat-cell *matCellDef="let element;" > {{element.submissionId}} </td>
