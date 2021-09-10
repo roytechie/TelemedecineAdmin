@@ -49,7 +49,7 @@ export class UserAccessComponent implements OnInit {
     }
     this.adminService.mapMenuAccessToUser(model).subscribe(data => {
       if(data > 0){
-        this.openAlertDialog("Data mapped!");
+        this.openAlertDialog("Menus are mapped with the user type!");
       }
     }, error => {});
   }

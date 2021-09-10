@@ -21,9 +21,9 @@ export class ManagePharmacyComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   isAdminAccess: boolean = false;
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['pharmacySequenceId', 'pharmacyName', 'loginUserName', 
+  displayedColumns = ['userId', 'pharmacyName', 'userTypeName', 'mappedMenues', 'loginUserName', 
   'pharmacyContactNum', 'pharmacyEmailAddress', 'pharmacyAddress', 'pharmacyCity', 'pharmacyState', 
-  'pharmacyFax', 'pharmacyZipCode', 'pharmacyCountry', 'actions']
+   'actions']
 
   constructor(public adminService: AdminService, private route: Router, 
     private athenticationService: AthenticationService, private dialog: MatDialog) { 

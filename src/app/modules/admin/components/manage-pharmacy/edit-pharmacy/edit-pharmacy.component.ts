@@ -43,10 +43,10 @@ export class EditPharmacyComponent implements OnInit {
       this.userTypes = data;
     }, error => {});
 
-    if(this.data != null && this.data.element != null && this.data.element.pharmacySequenceId > 0) {
+    if(this.data != null && this.data.element != null && this.data.element.userId > 0) {
       this.disableInEditMode = true;
       this.submitButtonText = "Update";
-      this.adminService.GetPharmacyUserLoginDetailsById(this.data.element.pharmacySequenceId).subscribe(data => {
+      this.adminService.GetPharmacyUserLoginDetailsById(this.data.element.userId).subscribe(data => {
         console.log(data);
         this.editPharmacyForm.setValue({
           PharmacyName: data.pharmacyName, 
@@ -76,8 +76,7 @@ export class EditPharmacyComponent implements OnInit {
     let PSId = 0;
     let UId = 0;
     let operationMessage = "Data inserted successfully!";
-    if(this.data != null && this.data.element != null && this.data.element.pharmacySequenceId > 0) {
-      PSId = this.data.element.pharmacySequenceId;
+    if(this.data != null && this.data.element != null && this.data.element.userId > 0) {
       UId = this.data.element.userId;
       operationMessage = "Data updated successfully!";
     }
@@ -98,7 +97,7 @@ export class EditPharmacyComponent implements OnInit {
       accessLavel: form.value['userType']
    };
 
-   if(PSId <= 0){
+   if(UId <= 0){
     if(this.isInArray(form.value['LoginUserName'], this.data.pharmacyList.map(m=> m.loginUserName))){
       this.openAlertDialog("Entered user name already exists.");
       return false;
