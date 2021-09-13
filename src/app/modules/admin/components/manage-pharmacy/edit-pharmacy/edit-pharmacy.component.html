@@ -54,6 +54,7 @@
                         <mat-form-field appearance="standard">
                             <mat-label>Email</mat-label>
                             <input matInput placeholder="Enter email..." formControlName="PharmacyEmailAddress">
+                            <mat-error *ngIf="checkError('PharmacyEmailAddress', 'pattern')">Invalid email address.</mat-error>
                         </mat-form-field>
                     </div>
                 </div>
