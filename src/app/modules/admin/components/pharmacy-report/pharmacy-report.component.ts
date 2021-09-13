@@ -46,8 +46,14 @@ export class PharmacyReportComponent implements OnInit {
       
       let accessableMenues = JSON.parse(localStorage.getItem("accessableMenues"));
         if(accessableMenues) {
+          this.selectedPharmacyId = this.athenticationService.currentUserValue.id;
           if(accessableMenues.filter(f => f.code == 10).length <= 0) {
             this.route.navigate(['/login']);
+          }
+          else {
+            if(accessableMenues.filter(f => f.code == 10)[0].userTypeCode == 1  || accessableMenues.filter(f => f.code == 10)[0].userTypeCode == 0) {
+              this.isAdminAccess = true;
+            }
           }
         }
         else {
