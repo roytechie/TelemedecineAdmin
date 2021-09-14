@@ -64,7 +64,7 @@
       </div>
       <div class="row">
         <div class="col-md-10">
-          <div class="col-md-6" *ngIf="isAdminAccess"
+          <div class="col-md-6" *ngIf="isAdminAccess && displayPharmaPaySection"
             style="margin-top: 10px; border: 2px solid blue; border-radius: 5px; background-color: lightgray;">
             Outstanding Amount: <strong>{{outstandingAmountToPay | currency}} </strong>
             <span *ngIf="this.displaySelectedFharmaName">

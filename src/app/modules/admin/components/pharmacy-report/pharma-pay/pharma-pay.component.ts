@@ -21,6 +21,7 @@ export class PharmaPayComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.dialogRef.updateSize("30%");
   }
 
   pharmaPaySubmit() {

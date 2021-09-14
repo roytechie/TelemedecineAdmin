@@ -42,6 +42,7 @@ export class PharmacyReportComponent implements OnInit {
   deliveryDefaultStatus: number = 0;
   pharmaPaidDefaultStatus: number = 0;
   disablePharmaPaidStatus: boolean = true;
+  displayPharmaPaySection: boolean = false;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -75,6 +76,7 @@ export class PharmacyReportComponent implements OnInit {
     this.getPharmacyDetails();
     if(this.pharmacy)
     this.disabledButton = true;
+    
   }
 
   updatePharmacyValue(event: any) {
@@ -108,6 +110,8 @@ export class PharmacyReportComponent implements OnInit {
     }
     console.log(searchModel);
     this.disabledButton = true;
+    this.disablePharmaPaidStatus= true;
+    this.displayPharmaPaySection = false;
     this.pharmaPaidDefaultStatus = 0;
     this.deliveryDefaultStatus = 0;
     this.adminService.getPharmacyReport(searchModel).subscribe(response => {
@@ -205,6 +209,7 @@ export class PharmacyReportComponent implements OnInit {
   filterByDeciveryStatus(event) {
     this.dataSource.data = this.getPharmacyResponse;
     this.disablePharmaPaidStatus = true;
+    this.displayPharmaPaySection = false;
 
     if(event.value == 1) {
       this.dataSource.data = this.dataSource.filteredData.filter(function(item) {
@@ -213,6 +218,7 @@ export class PharmacyReportComponent implements OnInit {
     }
     else if(event.value == 2) {
       //active pharma pay filter
+      this.displayPharmaPaySection = true;
       this.disablePharmaPaidStatus = false;
       this.dataSource.data = this.dataSource.filteredData.filter(function(item) {
         return (item.deliveryDate != "" || item.deliveryNote != "");
