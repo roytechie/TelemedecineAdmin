@@ -43,22 +43,41 @@
 
         <mat-form-field class="col-md-2">
           <mat-label>Delivery Status</mat-label>
-          <mat-select [disabled]="exportButtonDisabled"
-            (selectionChange)="filterByDeciveryStatus($event)">
+          <mat-select [(value)]="deliveryDefaultStatus" [disabled]="exportButtonDisabled" (selectionChange)="filterByDeciveryStatus($event)">
             <mat-option [value]="0">--All--</mat-option>
             <mat-option [value]="1">Pending</mat-option>
             <mat-option [value]="2">Completed</mat-option>
           </mat-select>
         </mat-form-field>
-      </div>
-      <div class="row">
-        <div class="col-md-8"></div>
+        <mat-form-field class="col-md-1">
+          <mat-label>Paid Status</mat-label>
+          <mat-select [(value)]="pharmaPaidDefaultStatus" [disabled]="disablePharmaPaidStatus" (selectionChange)="filterByPharmacyPay($event)">
+            <mat-option [value]="0">--All--</mat-option>
+            <mat-option [value]="1">Paid</mat-option>
+            <mat-option [value]="2">Unpaid</mat-option>
+          </mat-select>
+        </mat-form-field>
         <mat-form-field class="col-md-2">
           <mat-label>Filter</mat-label>
           <input matInput type="text" matInput (keyup)="applyFilter($event)">
         </mat-form-field>
-        <div class="col-md-2"  style="text-align: right;">
-          <button mat-button mat-raised-button color="primary" [disabled]="exportButtonDisabled" (click)="exportexcel()"> Export to Excel</button>
+      </div>
+      <div class="row">
+        <div class="col-md-10">
+          <div class="col-md-6" *ngIf="isAdminAccess"
+            style="margin-top: 10px; border: 2px solid blue; border-radius: 5px; background-color: lightgray;">
+            Outstanding Amount: <strong>{{outstandingAmountToPay | currency}} </strong>
+            <span *ngIf="this.displaySelectedFharmaName">
+              to pay to
+              <a href="javascript:void(0)" (click)="openPharmacyToPay()">{{this.displaySelectedFharmaName}}</a>
+
+            </span>
+          </div>
+        </div>
+
+        <div class="col-md-2" style="text-align: right;">
+          <button mat-button mat-raised-button color="primary" [disabled]="exportButtonDisabled"
+            (click)="exportexcel()"> Export to Excel</button>
         </div>
       </div>
     </mat-card>
@@ -84,12 +103,12 @@
               <td mat-cell *matCellDef="let element"> {{element.patientId}} </td>
             </ng-container> -->
             <ng-container matColumnDef="patientName">
-              <th mat-header-cell *matHeaderCellDef>PatientName</th>
+              <th mat-header-cell *matHeaderCellDef>Patient Name</th>
               <td mat-cell *matCellDef="let element"> {{element.patientName}} </td>
               <td mat-footer-cell *matFooterCellDef></td>
 
             </ng-container>
-             
+
             <ng-container matColumnDef="patientDOB">
               <th mat-header-cell *matHeaderCellDef>PatientDOB</th>
               <td mat-cell *matCellDef="let element"> {{element.patientDOB}} </td>
@@ -146,6 +165,12 @@
               <td mat-footer-cell *matFooterCellDef> {{dataSummary.totalAmount | currency }} </td>
             </ng-container>
 
+            <ng-container matColumnDef="medicationAllergies">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Mediation Allergies</th>
+              <td mat-cell *matCellDef="let element"> {{element.medicationAllergies}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
             <ng-container matColumnDef="prescribedMedicineNames">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>PrescribedMedicine Names</th>
               <td mat-cell *matCellDef="let element"> {{element.prescribedMedicineNames}} </td>
@@ -169,13 +194,24 @@
 
             <ng-container matColumnDef="action">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
-              <td mat-cell *matCellDef="let element"> 
-                <button mat-raised-button (click)="openCompleteDelivery(element)" 
-                [disabled]="disableDeliveryOperation(element.deliveryNote)" style="margin-top: 0;">{{deliveryOperationText}}</button>
+              <td mat-cell *matCellDef="let element">
+                <div>
+                  <button mat-raised-button (click)="openCompleteDelivery(element)"
+                    [disabled]="disableDeliveryOperation(element.deliveryNote)"
+                    style="margin-top: 0;">{{deliveryOperationText}}</button>
+                </div>
+                <div *ngIf="disableDeliveryOperation(element.deliveryNote)">
+                  <div>
+                    Delivery Note: {{element.deliveryNote}}
+                  </div>
+                  <div>
+                    Delivery Date: {{element.deliveryDate}}
+                  </div>
+                </div>
               </td>
               <td mat-footer-cell *matFooterCellDef></td>
             </ng-container>
-            <ng-container matColumnDef="deliveryNote">
+            <!-- <ng-container matColumnDef="deliveryNote">
               <th mat-header-cell *matHeaderCellDef mat-sort-header  style="text-align: center;">Delivery Note</th>
               <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.deliveryNote}} </td>
               <td mat-footer-cell *matFooterCellDef></td>
@@ -185,6 +221,14 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header  style="text-align: center;">Delivery Date</th>
               <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.deliveryDate}} </td>
               <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container> -->
+
+            <ng-container matColumnDef="pharmaPayNote">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">Is Pharma Paid</th>
+              <td mat-cell *matCellDef="let element" style="text-align: center;">
+                {{ element.deliveryNote != '' ? (element.pharmaPayNote != '' ? 'Paid' : 'Unpaid') : '' }}
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
             </ng-container>
 
             <!-- <ng-container matColumnDef="isHydroxychloroquineTaken">
@@ -193,8 +237,9 @@
             </ng-container> -->
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true" class="example-first-footer-row" style="background-color: lightgray;"></tr>
-            
+            <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true" class="example-first-footer-row"
+              style="background-color: lightgray;"></tr>
+
           </table>
           <mat-paginator [pageSizeOptions]="[100, 200, 300]" showFirstLastButtons></mat-paginator>
         </div>

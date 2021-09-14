@@ -9,6 +9,8 @@ import { AthenticationService } from '../../service/athentication.service';
 import * as XLSX from 'xlsx';
 import { EditNoteComponent } from './edit-note/edit-note.component';
 import { MatDialog } from '@angular/material/dialog';
+import { PharmaPayComponent } from './pharma-pay/pharma-pay.component';
+import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
 
 @Component({
   selector: 'app-pharmacy-report',
@@ -21,7 +23,7 @@ export class PharmacyReportComponent implements OnInit {
   dataSummary: any;
   displayedColumns: string[] = [ 
   'patientName', 'pharmacyName', 'patientDOB', 'weight','transactionDescription','patientAddress', 'patientState', 
-  'phone',  'prescribedDate', 'amount', 'PrescriptionNote', 'prescribedMedicineNames', 'action', 'deliveryNote','deliveryDate'];
+  'phone',  'prescribedDate', 'amount', 'PrescriptionNote', 'prescribedMedicineNames', 'medicationAllergies', 'action', 'pharmaPayNote'];
   endDate: Date = new Date();
   startDate: Date = new Date(new Date().getFullYear(), (new Date().getMonth()), new Date().getDate());
   showNoRecordsDiv: boolean = true;
@@ -31,8 +33,15 @@ export class PharmacyReportComponent implements OnInit {
   pharmacy: any;
   isAdminAccess: boolean = false;
   selectedPharmacyId: number;
+  selectedPharmacyName: string;
+  displaySelectedFharmaName: string;
   exportButtonDisabled: boolean = true;
   deliveryOperationText: string = "Delivery";
+  outstandingAmountToPay: number = 0;
+  deliveredRecords: any;
+  deliveryDefaultStatus: number = 0;
+  pharmaPaidDefaultStatus: number = 0;
+  disablePharmaPaidStatus: boolean = true;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -69,7 +78,9 @@ export class PharmacyReportComponent implements OnInit {
   }
 
   updatePharmacyValue(event: any) {
-    this.selectedPharmacyId = event.value.pharmacySequenceId
+    this.selectedPharmacyId = event.value.pharmacySequenceId;
+    this.selectedPharmacyName = event.source.triggerValue;
+
   }
 
   getPharmacyDetails() {
@@ -97,6 +108,8 @@ export class PharmacyReportComponent implements OnInit {
     }
     console.log(searchModel);
     this.disabledButton = true;
+    this.pharmaPaidDefaultStatus = 0;
+    this.deliveryDefaultStatus = 0;
     this.adminService.getPharmacyReport(searchModel).subscribe(response => {
       for(var j in response) {
         response[j].prescribedMedicineNames = response[j].prescribedMedicineNames.replace("&lt;", "<")
@@ -106,14 +119,32 @@ export class PharmacyReportComponent implements OnInit {
         .replace('&gt;200lbs', "<200lbs");
      }
       this.exportButtonDisabled = false;
+      this.calculateTableSummary(response);
+      //outstanding amount calculatetion.
       if(response.length > 0) {
-        this.calculateTableSummary(response);
+        this.deliveredRecords = response.filter(function(item) {
+          return (item.deliveryDate != "" || item.deliveryNote != "") && (item.pharmaPayNote == "");
+        });
+
+        if(this.deliveredRecords && this.deliveredRecords.length > 0) {
+          this.outstandingAmountToPay = this.deliveredRecords
+          .map(curr => parseFloat(curr.pharmacyCharges))
+          .reduce(function(a, b) { return a + b; })
+        }
+        else {
+          this.outstandingAmountToPay = 0;
+        }
+        
+      }
+      else {
+        this.outstandingAmountToPay = 0;
       }
       this.getPharmacyResponse = response;
       this.dataSource = new MatTableDataSource<any>(response);
       setTimeout(() => this.dataSource.paginator = this.paginator);
       setTimeout(() => this.dataSource.sort = this.sort);
       this.disabledButton = false;
+      this.displaySelectedFharmaName = this.selectedPharmacyName;
       if(this.dataSource.data.length > 0){
         this.rowsAdded = true;
         this.showNoRecordsDiv = false;
@@ -125,6 +156,31 @@ export class PharmacyReportComponent implements OnInit {
     
     const symptomsFilter = (event.target as HTMLInputElement).value;
     this.dataSource.filter = symptomsFilter.trim().toLowerCase();
+  }
+
+  openPharmacyToPay() {
+    if(this.outstandingAmountToPay > 0) {
+      const dialogRef = this.dialog.open(PharmaPayComponent, { data : this.deliveredRecords });
+      dialogRef.afterClosed().subscribe(data => {
+       // alert();
+        this.getPharmacyReport();
+      });
+    }
+    else {
+      this.openAlertDialog("There is no outstanding to pay");
+    }
+    
+  }
+
+  openAlertDialog(alertMessage: string) {
+    const dialogRef = this.dialog.open(AlertDialogComponent, {
+      data: {
+        message: alertMessage,
+        buttonText: {
+          cancel: 'OK'
+        }
+      },
+    });
   }
 
   openCompleteDelivery(element) {
@@ -148,6 +204,7 @@ export class PharmacyReportComponent implements OnInit {
 
   filterByDeciveryStatus(event) {
     this.dataSource.data = this.getPharmacyResponse;
+    this.disablePharmaPaidStatus = true;
 
     if(event.value == 1) {
       this.dataSource.data = this.dataSource.filteredData.filter(function(item) {
@@ -155,6 +212,8 @@ export class PharmacyReportComponent implements OnInit {
       });
     }
     else if(event.value == 2) {
+      //active pharma pay filter
+      this.disablePharmaPaidStatus = false;
       this.dataSource.data = this.dataSource.filteredData.filter(function(item) {
         return (item.deliveryDate != "" || item.deliveryNote != "");
       });
@@ -163,13 +222,35 @@ export class PharmacyReportComponent implements OnInit {
     this.calculateTableSummary(this.dataSource.data);
   }
 
+  filterByPharmacyPay (event) {
+    if(event.value == 1) {
+      this.dataSource.data = this.dataSource.filteredData.filter(function(item) {
+        return (item.pharmaPayNote != "");
+      });
+    }
+    else if(event.value == 2) {
+      this.dataSource.data = this.dataSource.filteredData.filter(function(item) {
+        return (item.pharmaPayNote == "");
+      });
+    }
+  }
+
   calculateTableSummary(data) {
-    this.dataSummary = {
-      totalAmount: data.map(curr => parseFloat(curr.pharmacyCharges)).reduce(function(a, b)
-      {
-        return a + b;
-      }),
-    };
+    console.log(data);
+    if(data && data.length > 0) {
+      this.dataSummary = {
+        totalAmount: data.map(curr => parseFloat(curr.pharmacyCharges)).reduce(function(a, b)
+        {
+          return a + b;
+        }),
+      };
+    }
+    else {
+      this.dataSummary = {
+        totalAmount: 0,
+      };
+    }
+    
   }
 
   exportexcel() {

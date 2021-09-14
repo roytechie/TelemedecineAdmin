@@ -200,8 +200,8 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
       }
       else {
         let accessValue: AccessLavel;
-        accessValue = this.athenticationService.checkAccessLavel(this.athenticationService.currentUserValue);
-        this.athenticationService.defaultRerirectionAfterLogin(accessValue);
+        //accessValue = this.athenticationService.checkAccessLavel(this.athenticationService.currentUserValue);
+        //this.athenticationService.defaultRerirectionAfterLogin(accessValue);
       }
       this.JSON = JSON;
       localStorage.pharmacyValue = "";

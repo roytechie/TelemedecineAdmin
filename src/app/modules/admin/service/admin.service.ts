@@ -333,4 +333,9 @@ export class AdminService {
     return this.http.post<any>(`${ this.adminService }MapMenuAccessToUser`, this.postData,
     { headers: this.headers}).pipe(catchError(this.errorHandler));
   }
+  updatePharmaPayDetails (requestModel) {
+    this.postData = JSON.stringify(requestModel);
+    return this.http.post<any>(`${ this.adminService }UpdatePharmaPayDetails`, this.postData,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
 }

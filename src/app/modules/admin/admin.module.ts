@@ -50,6 +50,7 @@ import { EditNoteComponent } from './components/pharmacy-report/edit-note/edit-n
 import { ManagePharmacyComponent } from './components/manage-pharmacy/manage-pharmacy.component';
 import { EditPharmacyComponent } from './components/manage-pharmacy/edit-pharmacy/edit-pharmacy.component';
 import { UserAccessComponent } from './components/user-access/user-access.component';
+import { PharmaPayComponent } from './components/pharmacy-report/pharma-pay/pharma-pay.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +88,8 @@ import { UserAccessComponent } from './components/user-access/user-access.compon
     EditNoteComponent,
     ManagePharmacyComponent,
     EditPharmacyComponent,
-    UserAccessComponent
+    UserAccessComponent,
+    PharmaPayComponent
   ], 
   imports: [
     CommonModule,
