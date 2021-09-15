@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" *ngIf="!urlEmail">
     <div class="col-md-12">
         <mat-card>
             <div class="row">
@@ -47,6 +47,10 @@
         <div class="col-md-12">
             <mat-card>
                 <div class="row">
+                    <div class="col-md-12" *ngIf="urlEmail">
+                        <mat-label>To Address : </mat-label>
+                        <mat-label>{{urlEmail}}</mat-label> 
+                    </div>
                     <div class="col-md-12">
                         <mat-form-field appearance="standard">
                             <mat-label>Email Subject</mat-label>
@@ -78,7 +82,7 @@
             <mat-card>
                 <div class="row">
                     <div class="col-md-12">
-                        <button class="mat-focus-indicator mat-raised-button mat-button-base mat-primary">Send Mail to Selected Patient</button>
+                        <button class="mat-focus-indicator mat-raised-button mat-button-base mat-primary">{{sendMailButtonLabel}}</button>
                     </div>
                 </div>
             </mat-card>

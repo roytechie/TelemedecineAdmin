@@ -21,7 +21,10 @@
                     [class.col-md-4]="question.itemsInRow == 3"
                     [class.col-md-12]="question.itemsInRow == 1"
                     [class.col-md-6]="question.itemsInRow == 2">
-              <span style="color: darkslategrey;">  {{ question.question }} : </span> <span style="color:blue;"> {{ question.answer }}</span>
+              <span style="color: darkslategrey;" *ngIf="question.question!=='Email'">  {{ question.question }} : </span> 
+              <span style="color:blue;"  *ngIf="question.question!=='Email'"> {{ question.answer }}</span>
+              <span style="color: darkslategrey;" *ngIf="question.question==='Email'">  {{ question.question }} : </span> 
+              <span style="color:blue;"  *ngIf="question.question==='Email'"> <a href="../user/sendmailtopatient?email={{ question.answer }}">{{ question.answer }}</a></span>
             </div>
          </mat-tab>
     </mat-tab-group>

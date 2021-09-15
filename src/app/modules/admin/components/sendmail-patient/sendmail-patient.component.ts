@@ -12,6 +12,7 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-sendmail-patient',
@@ -31,6 +32,8 @@ export class SendmailPatientComponent implements OnInit {
   dataSource = new MatTableDataSource<any>(); 
   dataSourceOriginal = new MatTableDataSource<any>();
 
+  urlEmail : any;
+  sendMailButtonLabel : string;
   /**************************************************/
   @ViewChild('select') select: MatSelect;
 
@@ -138,7 +141,7 @@ export class SendmailPatientComponent implements OnInit {
     ]
   };
 
-  constructor(public adminService: AdminService, private dialog: MatDialog, private route: Router, private athenticationService: AthenticationService) {
+  constructor(public adminService: AdminService, private dialog: MatDialog, private route: Router, private router: ActivatedRoute, private athenticationService: AthenticationService) {
     if(this.athenticationService.currentUserValue==null) {
       this.route.navigate(['/login']);
     }
@@ -152,6 +155,18 @@ export class SendmailPatientComponent implements OnInit {
         else {
           this.route.navigate(['/login']);
         }
+      }
+
+      this.router.queryParams.subscribe(params => {
+        this.urlEmail = params['email'];
+        //console.log(this.URL2); // Print the parameter to the console. 
+      });
+
+      if(this.urlEmail){
+        this.sendMailButtonLabel = "Send Mail";
+      }
+      else{
+        this.sendMailButtonLabel = "Send Mail to Selected Patient";
       }
    }
 
@@ -177,23 +192,41 @@ export class SendmailPatientComponent implements OnInit {
         return;
      }
      else{
-      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        data: {
-          message: 'Are you sure want to send email to selected patients?',
-          buttonText: {
-            ok: 'Send',
-            cancel: 'No'
+      
+      let tempdialogRef:any;
+
+      if(!this.urlEmail){
+        tempdialogRef = this.dialog.open(ConfirmDialogComponent, {
+          data: {
+            message: 'Are you sure want to send email to selected patients?',
+            buttonText: {
+              ok: 'Send',
+              cancel: 'No'
+            }
           }
-        }
-      });
-  
+        });
+      }
+      if(this.urlEmail){
+        tempdialogRef = this.dialog.open(ConfirmDialogComponent, {
+          data: {
+            message: 'Are you sure want to send email?',
+            buttonText: {
+              ok: 'Send',
+              cancel: 'No'
+            }
+          }
+        });
+      }
+
+      const dialogRef = tempdialogRef;
+
       dialogRef.afterClosed().subscribe((confirmed: boolean) => {
         if (confirmed) {
           const a = document.createElement('a');
           a.click();
           a.remove();
 
-
+        if(!this.urlEmail){
           this.emailprop = {
             Subject: this.emailForm.value['subject'],
             EmailBody: this.emailForm.value['body'],
@@ -201,12 +234,25 @@ export class SendmailPatientComponent implements OnInit {
             EndDate: this.adminService.returnFormatedDate(this.endDate),
             Status: this.statusFilter < 0 ? null:this.statusFilter
           };
-  
+         }
+
+         if(this.urlEmail){
+          this.emailprop = {
+            Subject: this.emailForm.value['subject'],
+            EmailBody: this.emailForm.value['body'],
+            StartDate: this.adminService.returnFormatedDate(this.startDate),
+            EndDate: this.adminService.returnFormatedDate(this.endDate),
+            Status: this.statusFilter < 0 ? null:this.statusFilter,
+            ToAddress:this.urlEmail
+          };
+         }
+
           console.log("Subject : " + this.emailprop.Subject);
           console.log("EmailBody : " + this.emailprop.EmailBody);
           console.log("StartDate : " + this.emailprop.StartDate);
           console.log("EndDate : " + this.emailprop.EndDate);
           console.log("Status : " + this.emailprop.Status);
+          console.log("ToAddress : " + this.emailprop.ToAddress);
 
           this.adminService.sendmailToAllPatient(this.emailprop).subscribe(response => {
             if(response == true){
