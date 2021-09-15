@@ -1,34 +1,48 @@
-.mat-column-transactionDescription {
-    word-wrap: break-word !important;
-    white-space: unset !important;
-    flex: 0 0 8% !important;
-    width: 8% !important;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
+// .mat-column-transactionDescription {
+//     word-wrap: break-word !important;
+//     white-space: unset !important;
+//     flex: 0 0 8% !important;
+//     width: 8% !important;
+//     overflow-wrap: break-word;
+//     word-wrap: break-word;
   
-    word-break: break-word;
+//     word-break: break-word;
   
-    -ms-hyphens: auto;
-    -moz-hyphens: auto;
-    -webkit-hyphens: auto;
-    hyphens: auto;
-  }
-  .mat-column-prescribedMedicineNames {
-    word-wrap: break-word !important;
-    white-space: unset !important;
-    flex: 0 0 20% !important;
-    width: 20% !important;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
+//     -ms-hyphens: auto;
+//     -moz-hyphens: auto;
+//     -webkit-hyphens: auto;
+//     hyphens: auto;
+//   }
+  // .mat-column-prescribedMedicineNames {
+  //   word-wrap: break-word !important;
+  //   white-space: unset !important;
+  //   flex: 0 0 20% !important;
+  //   width: 20% !important;
+  //   overflow-wrap: break-word;
+  //   word-wrap: break-word;
   
-    word-break: break-word;
+  //   word-break: break-word;
   
-    -ms-hyphens: auto;
-    -moz-hyphens: auto;
-    -webkit-hyphens: auto;
-    hyphens: auto;
-  }
-  .mat-column-patientAddress {
+  //   -ms-hyphens: auto;
+  //   -moz-hyphens: auto;
+  //   -webkit-hyphens: auto;
+  //   hyphens: auto;
+  // }
+  // .mat-column-patientAddress {
+  //   word-wrap: break-word !important;
+  //   white-space: unset !important;
+  //   flex: 0 0 9% !important;
+  //   width: 9% !important;
+  //   overflow-wrap: break-word;
+  //   word-wrap: break-word; 
+  //   word-break: break-word; 
+  //   -ms-hyphens: auto;
+  //   -moz-hyphens: auto;
+  //   -webkit-hyphens: auto;
+  //   hyphens: auto;
+  // }
+  
+.mat-column-mediationAllergies {
     word-wrap: break-word !important;
     white-space: unset !important;
     flex: 0 0 9% !important;
@@ -41,7 +55,6 @@
     -webkit-hyphens: auto;
     hyphens: auto;
   }
-
   tr.mat-footer-row {
     font-weight: bold;
   }
@@ -50,3 +63,15 @@
     border-top: 1px solid #e0e0e0;
   }
   
+  td.mat-cell {
+    margin-left: 1%;
+    margin-right: 1%;
+    border: 1px solid lightgray;
+}
+
+th.mat-header-cell {
+  margin-left: 1%;
+  margin-right: 1%;
+    font-weight: bold;
+    border: 1px solid lightgray;
+}

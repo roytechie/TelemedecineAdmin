@@ -40,7 +40,7 @@ export class LayoutComponent implements OnInit {
   isAccessableTouser(menuCode): boolean {
     let flag: boolean = false;
     let accessData = localStorage.getItem("accessableMenues");
-    console.log(accessData);
+    //console.log(accessData);
     if(accessData) {
       var result: any = JSON.parse(accessData);
       result = result.filter(f=>f.code == menuCode);

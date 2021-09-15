@@ -49,22 +49,29 @@ export class LoginComponent implements OnInit {
     this.authenticationService.login(this.loginDetails).pipe(first())
         .subscribe(
             data => {
-              if(isNullOrUndefined(data))
+              // user access check
+              this.adminService.getSelectedMenuesByUserType(this.authenticationService.currentUserValue.accessLevel).subscribe(res => {
+                let accessableMenues = JSON.stringify(res.filter(f => f.checked == true));
+                console.log(accessableMenues);
+                localStorage.setItem("accessableMenues", accessableMenues);
+
+                if(isNullOrUndefined(data))
               {
                 this.loading = false;
                 this.isInvalidInput = true;
               }
               else
               {
+                if(data.accessLevel == 9) {
+                  this.route.navigate(['user/pharmacy-report']);
+                }
+                else {
+                  
+                  this.route.navigate(['user/submissions-list']);
+                }
                 this.isInvalidInput = false;
-                this.route.navigate(['user/submissions-list']);
+                
               }
-              
-              // user access check
-              this.adminService.getSelectedMenuesByUserType(this.authenticationService.currentUserValue.accessLevel).subscribe(data => {
-                let accessableMenues = JSON.stringify(data.filter(f => f.checked == true));
-                console.log(accessableMenues);
-                localStorage.setItem("accessableMenues", accessableMenues);
               }, error => {});
             },
             error => {
