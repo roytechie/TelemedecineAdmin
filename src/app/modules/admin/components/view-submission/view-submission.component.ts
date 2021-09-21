@@ -25,6 +25,10 @@ export class ViewSubmissionComponent implements OnInit {
   pharmacySpecificData : any
   closeButtonText = 'Cancel';
   operationVisibility = true;
+  selectedPatientFName : string;
+  selectedPatientMName : string;
+  selectedPatientLName : string;
+  selectedPatientEMail : string;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data:any, 
   public adminService: AdminService, private dialog : MatDialog,
@@ -51,9 +55,38 @@ export class ViewSubmissionComponent implements OnInit {
         //this.answers = response; 
         this.answers = response.surveySteps;
 
+        console.log("--------------");
         // response.surveySteps.forEach(element => {
-        //   console.log(element);
-        // });
+        //    console.log(element);
+        //  });
+
+        response.surveySteps.forEach(step => {
+          //console.log(step.title);
+          if(step.title === "Personal Details")
+          {
+            step.questions.forEach(questions => {
+            //console.log("questionId : " + questions.questionID + "," + "question : " + questions.question + "," + "answer : " + questions.answer);
+              if(questions.question === "First Name"){
+                this.selectedPatientFName = questions.answer.trim();
+              }
+              if(questions.question === "Middle Name"){
+                this.selectedPatientMName = questions.answer.trim();
+              }
+              if(questions.question === "Last Name"){
+                this.selectedPatientLName = questions.answer.trim();
+              }
+              if(questions.question === "Email"){
+                this.selectedPatientEMail = questions.answer.trim();
+              }
+            });
+          }
+          //console.log(element);
+        });
+        console.log(this.selectedPatientFName);
+        console.log(this.selectedPatientMName);
+        console.log(this.selectedPatientLName);
+        console.log(this.selectedPatientEMail);
+        console.log("--------------");
       }); 
 
       this.getPharmacyReportSpecific();
