@@ -33,6 +33,10 @@ export class SendmailPatientComponent implements OnInit {
   dataSourceOriginal = new MatTableDataSource<any>();
 
   urlEmail : any;
+  urlFname : any;
+  urlMname : any;
+  urlLname : any;
+
   sendMailButtonLabel : string;
   /**************************************************/
   @ViewChild('select') select: MatSelect;
@@ -159,7 +163,14 @@ export class SendmailPatientComponent implements OnInit {
 
       this.router.queryParams.subscribe(params => {
         this.urlEmail = params['email'];
-        //console.log(this.URL2); // Print the parameter to the console. 
+        this.urlFname = params['fname'];
+        this.urlMname = params['mname'];
+        this.urlLname = params['lname'];
+
+        console.log(this.urlEmail); // Print the parameter to the console. 
+        console.log(params['fname']); // Print the parameter to the console. 
+        console.log(params['mname']); // Print the parameter to the console. 
+        console.log(params['lname']); // Print the parameter to the console. 
       });
 
       if(this.urlEmail){
@@ -243,7 +254,10 @@ export class SendmailPatientComponent implements OnInit {
             StartDate: this.adminService.returnFormatedDate(this.startDate),
             EndDate: this.adminService.returnFormatedDate(this.endDate),
             Status: this.statusFilter < 0 ? null:this.statusFilter,
-            ToAddress:this.urlEmail
+            ToAddress: this.urlEmail,
+            Fname: this.urlFname,
+            Mname: this.urlMname,
+            Lname: this.urlLname
           };
          }
 
@@ -253,6 +267,9 @@ export class SendmailPatientComponent implements OnInit {
           console.log("EndDate : " + this.emailprop.EndDate);
           console.log("Status : " + this.emailprop.Status);
           console.log("ToAddress : " + this.emailprop.ToAddress);
+          console.log("Fname : " + this.emailprop.Fname);
+          console.log("Mname : " + this.emailprop.Mname);
+          console.log("Lname : " + this.emailprop.Lname);
 
           this.adminService.sendmailToAllPatient(this.emailprop).subscribe(response => {
             if(response == true){
