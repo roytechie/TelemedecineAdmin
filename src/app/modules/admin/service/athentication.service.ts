@@ -45,6 +45,9 @@ export class AthenticationService {
     else if(user.accessLevel == AccessLavel.Doctor){
       return AccessLavel.Doctor
     }
+    else if(user.accessLevel == AccessLavel.Member){
+      return AccessLavel.Member
+    }
     else {
       return AccessLavel.Other
     }

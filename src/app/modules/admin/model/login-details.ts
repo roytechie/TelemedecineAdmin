@@ -15,10 +15,11 @@ export class LoginDetails {
 }
 
 export enum AccessLavel {
-    Admin = 1,
+    Member = 1,
     Doctor = 2,
     Pharmacy = 9,
-    Other = 10
+    Other = 10,
+    Admin = 0
 }
 
 @Injectable()
@@ -31,6 +32,7 @@ export class ReportRequest {
     isSingleSubmission: boolean = false;
     reportType: string
     symptomList:string
+    accessLevel: number
 }
 
 export class AuthProperties {

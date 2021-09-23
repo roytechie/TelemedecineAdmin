@@ -135,7 +135,7 @@ export class MedicineDeliveryReportComponent implements OnInit {
     this.adminService.getPatientsList(this.reportRequest).subscribe(response => {
 
       localStorage.patiantData = JSON.stringify(response[0]); 
-      let medicineDeliveryData = { response: response[0], modalViewType: 'medicineDeliveryReport' }
+      let medicineDeliveryData = { response: response[0], modalViewType: 'medicineDeliveryReport', tableParameterId: element.id }
       const dialogRef = this.dialog.open(ViewSubmissionComponent, { data : medicineDeliveryData });
 
       dialogRef.afterClosed().subscribe(result => { 

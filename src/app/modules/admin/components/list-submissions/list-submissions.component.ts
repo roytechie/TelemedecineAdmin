@@ -187,6 +187,7 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
   showNoRecordsDiv: boolean = false;
   fileName= 'Sheet.xlsx';
   statusList: any;
+  userAccesslevel: number;
 
   constructor(public adminService: AdminService,public dialog: MatDialog,
     private router: Router,
@@ -200,7 +201,8 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
       }
       else {
         let accessValue: AccessLavel;
-        //accessValue = this.athenticationService.checkAccessLavel(this.athenticationService.currentUserValue);
+        accessValue = this.athenticationService.checkAccessLavel(this.athenticationService.currentUserValue);
+        this.userAccesslevel = accessValue;
         //this.athenticationService.defaultRerirectionAfterLogin(accessValue);
       }
       this.JSON = JSON;
@@ -277,6 +279,7 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     this.reportRequest.isSingleSubmission = false;
     this.reportRequest.reportType = 'Submission';
     this.reportRequest.symptomList = this.symptomsFilter;
+    this.reportRequest.accessLevel = this.userAccesslevel;
 
     if (this.reportRequest.symptomList == undefined || this.reportRequest.symptomList == null || this.reportRequest.symptomList == "") {
       this.reportRequest.symptomList = "All";
@@ -705,7 +708,7 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
   } 
 
   downloadInvoicePDF(patientDetails){
-    //console.log(patientDetails)
+    console.log(patientDetails)
     this.adminService.getAnswers(patientDetails).subscribe(response => {
       console.log(response);
       var transactionDescription = response.transactionDescription
@@ -769,7 +772,8 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
       
               body: [
                 [ 'Sr #', 'Item', 'Price', 'Qty', 'Total' ],
-                [ '1',  itemdesc + '\n\n\n', '$' + patientDetails.paymentAmount.toString(), '1', '$' + patientDetails.paymentAmount.toString() ],
+                [ '1',  itemdesc + '\n\n\n', '$' + patientDetails.pharmacyCharges.toString(), '1', '$' + patientDetails.pharmacyCharges.toString() ],
+                [ '2',  "Procedure Charges" + '\n\n\n', '$' + patientDetails.procedureCharges.toString(), '1', '$' + patientDetails.procedureCharges.toString() ],
                 [ '', 'Total', '', '', '$' + patientDetails.paymentAmount.toString() ],
               ]
             }

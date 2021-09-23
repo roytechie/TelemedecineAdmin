@@ -209,21 +209,37 @@ export class ViewSubmissionComponent implements OnInit {
     let sortingOrder ='userName';
     this.adminService.getUserDetails(sortingOrder).subscribe(response=>{
       //this.userList = response; 
+      console.log(response);
       this.userList = response.filter(obj=>{
-        return obj.isActiveUser;
+        return (obj.isActiveUser && obj.accessLevel == 2);
       });
     }); 
   } 
 
   getPharmacyReportSpecific(){
-    this.adminService.getPharmacyReportSpecific(this.data.response).subscribe(response => {
-      //this.answers = response; 
-
-      this.pharmacySpecificData = response;
-
-      console.log (response);
-
-    }); 
+    if(this.data.modalViewType== "viewSubmission") {
+      this.adminService.getPharmacyReportSpecific(this.data.response).subscribe(response => {
+        //this.answers = response; 
+  
+        this.pharmacySpecificData = response;
+  
+        console.log (response);
+  
+      });
+    }
+    else {
+      this.data.response.submissionId = this.data.tableParameterId;
+      console.log(this.data.response);
+      this.adminService.getPharmacyReportSpecific(this.data.response).subscribe(response => {
+        //this.answers = response; 
+  
+        this.pharmacySpecificData = response;
+  
+        console.log (response);
+  
+      });
+    }
+     
   }
 
   checkVisibility(viewType: string): void {
