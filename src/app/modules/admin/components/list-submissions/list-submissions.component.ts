@@ -270,7 +270,7 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     { 
       //newEndDate.setDate( newEndDate.getDate() + 1 ) 
     }  
-
+    
     this.disabledButton = true;
     this.reportRequest.startDate = this.adminService.returnFormatedDate(this.startDate);
     this.reportRequest.endDate = this.adminService.returnFormatedDate(this.endDate);;
@@ -279,7 +279,7 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit  {
     this.reportRequest.isSingleSubmission = false;
     this.reportRequest.reportType = 'Submission';
     this.reportRequest.symptomList = this.symptomsFilter;
-    this.reportRequest.accessLevel = this.userAccesslevel;
+    this.reportRequest.accessLavel = this.userAccesslevel;
 
     if (this.reportRequest.symptomList == undefined || this.reportRequest.symptomList == null || this.reportRequest.symptomList == "") {
       this.reportRequest.symptomList = "All";
