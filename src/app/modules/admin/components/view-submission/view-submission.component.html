@@ -24,7 +24,7 @@
               <span style="color: darkslategrey;" *ngIf="question.question!=='Email'">  {{ question.question }} : </span> 
               <span style="color:blue;"  *ngIf="question.question!=='Email'"> {{ question.answer }}</span>
               <span style="color: darkslategrey;" *ngIf="question.question==='Email'">  {{ question.question }} : </span> 
-              <span style="color:blue;"  *ngIf="question.question==='Email'"> <a href="../user/sendmailtopatient?email={{selectedPatientEMail}}&fname={{selectedPatientFName}}&mname={{selectedPatientMName}}&lname={{selectedPatientLName}}">{{ question.answer }}</a></span>
+              <span style="color:blue;"  *ngIf="question.question==='Email'"> <a target="_blank" href="https://frontlinemds.com/intakeform/admin/user/sendmailtopatient?email={{selectedPatientEMail}}&fname={{selectedPatientFName}}&mname={{selectedPatientMName}}&lname={{selectedPatientLName}}">{{ question.answer }}</a></span>
             </div>
          </mat-tab>
     </mat-tab-group>
