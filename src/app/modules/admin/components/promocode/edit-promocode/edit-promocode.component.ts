@@ -75,10 +75,7 @@ export class EditPromocodeComponent implements OnInit {
         PromocodeId: PromoId,
         PromocodeName: form.value['PromocodeName'],
         PromocodePercent: parseFloat(form.value['PromocodePercent']),
-        PromocodeIsActive: Boolean(form.value['PromocodeIsActive']),
-        // PromocodeStartDate: this.adminService.returnFormatedDate(form.value['PromocodeStartDate']),
-        // PromocodeEndDate: this.adminService.returnFormatedDate(form.value['PromocodeEndDate'])
-
+        PromocodeIsActive: Boolean(form.value['PromocodeIsActive'] === "true" ? 1:0),
         PromocodeStartDate: this.datepipe.transform(form.value['PromocodeStartDate'], 'yyyy-MM-dd'),
         PromocodeEndDate: this.datepipe.transform(form.value['PromocodeEndDate'], 'yyyy-MM-dd')
       };
