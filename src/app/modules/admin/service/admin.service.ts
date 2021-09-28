@@ -313,6 +313,28 @@ export class AdminService {
     { headers: this.headers}).pipe(catchError(this.errorHandler));
   }
 
+  getPromocodeDetails(){
+    return this.http.get<any>(`${ this.adminService }GetPromocodeDetails`,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  GetPromocodeDetailsById(id){
+    return this.http.get<any>(`${ this.adminService }GetPromocodeDetailsById?id=` + id,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  insertUpdatePromocodeDetails (promo) {
+    this.postData = JSON.stringify(promo);
+    console.log('IN ADMIN SERVICE : ' + this.postData);
+    return this.http.post<any>(`${ this.adminService }InsertUpdatePromocodeDetails`, this.postData,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
+  deletePromocodeDetails(id: any){
+    return this.http.get<any>(`${ this.adminService }DeletePromocodeDetails?id=` + id,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
+
   getUserTypes() {
     return this.http.get<any>(`${ this.adminService }GetUserTypes`,
     { headers: this.headers}).pipe(catchError(this.errorHandler));

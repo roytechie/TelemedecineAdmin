@@ -1,0 +1,124 @@
+<div class="row">
+
+    <form [formGroup]="editPromocodeForm" (ngSubmit)="submitPromocodeForm()" style="width: 100%;">
+        <mat-card>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Promocode Name<span style="color: red;">*</span></mat-label>
+                            <input matInput matInput placeholder="Enter Promocode Name..." 
+                            formControlName="PromocodeName">
+                            <mat-error *ngIf="checkError('PromocodeName', 'required')">Promocode Name is required</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Promocode Percent (%)<span style="color: red;">*</span></mat-label>
+                            <input matInput (keydown)="disallowSpace($event)" placeholder="Enter Promocode Percent..." 
+                            formControlName="PromocodePercent">
+                            <mat-error *ngIf="checkError('PromocodePercent', 'required')">Promocode Percent is required</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- <div class="col-md-6">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Promocode Start Date<span style="color: red;">*</span></mat-label>
+                            <input matInput matInput (keydown)="disallowSpace($event)" placeholder="Enter Promocode Start Date..." 
+                            formControlName="PromocodeStartDate">
+                            <mat-error *ngIf="checkError('PromocodeStartDate', 'required')">Promocode Start Date is required</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field >
+                            <mat-label>Promocode End Date<span style="color: red;">*</span></mat-label>
+                            <input matInput (keydown)="disallowSpace($event)" placeholder="Enter Promocode End Date..." 
+                            formControlName="PromocodeEndDate">
+                            <mat-error *ngIf="checkError('PromocodeEndDate', 'required')">Promocode End Date is required</mat-error>
+                        </mat-form-field>
+                    </div> -->
+
+                    <div class="col-md-6">
+                    <mat-form-field appearance="standard">
+                        <mat-label>Promocode Start Date</mat-label>
+                        <input matInput [matDatepicker]="picker" 
+                            formControlName="PromocodeStartDate">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                    </div>
+        
+                    <div class="col-md-6">
+                    <mat-form-field appearance="standard">
+                        <mat-label>Promocode End Date</mat-label>
+                        <input matInput [matDatepicker]="picker2"
+                            formControlName="PromocodeEndDate">
+                        <mat-datepicker-toggle matSuffix [for]="picker2">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- <mat-form-field appearance="standard">
+                            <mat-label>Promocode Is Active<span style="color: red;">*</span></mat-label>
+                            <input matInput (keydown)="disallowSpace($event)" placeholder="" 
+                            formControlName="PromocodeIsActive">
+                        </mat-form-field> -->
+
+                        <!-- <mat-form-field appearance="fill">
+                            <mat-label>Promocode Active Status</mat-label>
+                            <mat-select [(ngModel)]="PromocodeIsActive" name="PromocodeIsActive">
+                              <mat-option [value]="1" selected>Active</mat-option>
+                              <mat-option [value]="0">Not-Active</mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+
+
+
+                    
+                        <!-- <mat-form-field appearance="fill">
+                            <mat-label>Promocode Active Status</mat-label>
+                            <mat-select formControlName="PromocodeIsActive">
+                              <mat-option value="true" selected>Active</mat-option>
+                              <mat-option value="false">Not-Active</mat-option>
+                            </mat-select>
+                        </mat-form-field>    -->
+                        
+                        
+
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>Promocode Active Status</mat-label>
+                            <select matNativeControl required formControlName="PromocodeIsActive">
+                              <option value="true">Active</option>
+                              <option value="false">Not-Active</option>
+                            </select>
+                          </mat-form-field>
+
+                    </div>
+                    <div class="col-md-6">
+                        <!-- <mat-form-field appearance="standard">
+                            <mat-label>Email</mat-label>
+                            <input matInput placeholder="Enter email..." formControlName="PharmacyEmailAddress">
+                            <mat-error *ngIf="checkError('PharmacyEmailAddress', 'pattern')">Invalid email address.</mat-error>
+                        </mat-form-field> -->
+                    </div>
+                </div>
+                
+               
+                <div class="row">
+                    <div class="col-md-12" style="text-align: right; margin-top: 25px;">
+                        <button mat-raised-button color="primary" type="submit"
+                            [disabled]="!editPromocodeForm.valid">{{submitButtonText}}</button>
+                        <button mat-raised-button (click)="closeDialog()" style="margin-left:10px ;"
+                            type="button">cancel</button>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+    </form>
+</div>

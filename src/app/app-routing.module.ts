@@ -23,6 +23,7 @@ import { MedicineComponent } from './modules/admin/components/medicine/medicine.
 import { MedicineDeliveryReportComponent } from './modules/reports/component/medicine-delivery-report/medicine-delivery-report.component';
 import { ManagePharmacyComponent } from './modules/admin/components/manage-pharmacy/manage-pharmacy.component';
 import { UserAccessComponent } from './modules/admin/components/user-access/user-access.component';
+import { PromocodeComponent } from './modules/admin/components/promocode/promocode.component';
 
 
 const routes: Routes = [ {
@@ -102,6 +103,10 @@ const routes: Routes = [ {
       {
         path: 'pharmacy-report',
         component : PharmacyReportComponent
+      },
+      {
+        path: 'promocode',
+        component : PromocodeComponent
       },
       {
         path: 'medicine',

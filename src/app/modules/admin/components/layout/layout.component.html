@@ -119,6 +119,14 @@
         </a>
       </li>
 
+      <!-- <li class="nav-item" *ngIf="isAccessableTouser(10)">
+        <a class="nav-link" style="margin-left: 9px;"
+          class="mat-focus-indicator mat-raised-button mat-button-base mat-primary"
+          routerLink="../user/promocode">
+          <span matLine>Manage Promocode</span>
+        </a>
+      </li> -->
+
       <li class="nav-item" style="margin-left: 9px;"
        *ngIf="isAccessableTouser(11) || isAccessableTouser(12) || isAccessableTouser(13) || isAccessableTouser(14)">
         <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Admin Task</button>
@@ -148,7 +156,12 @@
               <span matLine>User Access</span>
             </a>
           </button>
-
+          <button mat-menu-item *ngIf="isAccessableTouser(14)">
+            <a class="nav-link" class="mat-focus-indicator mat-raised-button mat-button-base mat-primary"
+              routerLink="../user/promocode">
+              <span matLine>Manage Promocode</span>
+            </a>
+          </button>
           <!-- <button mat-menu-item>Item 2</button> -->
         </mat-menu>
       </li>
