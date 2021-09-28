@@ -180,7 +180,13 @@ export class AdminService {
     )
   }
 
+  getPrescriptionDetails(submissionId: number): Observable<any>{
+    this.webApiUrl = `${this.adminService}GetPrescriptionDetails?submissionId=` + submissionId; 
 
+    return this.http.post(this.webApiUrl,{ headers: this.headers}).pipe(
+      catchError(this.errorHandler)
+    )
+  }
   getRefills(reportRequest: ReportRequest): Observable<any>{
       this.webApiUrl = `${this.adminService}GetRefills`;
   
