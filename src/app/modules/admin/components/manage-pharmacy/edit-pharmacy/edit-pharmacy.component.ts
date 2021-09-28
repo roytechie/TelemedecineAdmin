@@ -19,8 +19,7 @@ export class EditPharmacyComponent implements OnInit {
   editPharmacyForm = new FormGroup({
     PharmacyName: new FormControl('', [Validators.required]),
     LoginUserName: new FormControl('', [Validators.required]),
-    PharmacyContactNum: new FormControl('', [Validators.required, Validators.maxLength(10), 
-      Validators.minLength(10), Validators.pattern(/^-?(0|[1-9]\d*)?$/)]),
+    PharmacyContactNum: new FormControl(''),
     PharmacyEmailAddress: new FormControl('', [Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]),
     PharmacyAddress: new FormControl(''),
     PharmacyCity: new FormControl(''),
@@ -28,7 +27,7 @@ export class EditPharmacyComponent implements OnInit {
     PharmacyFax: new FormControl(''),
     PharmacyZipCode: new FormControl(''),
     PharmacyCountry: new FormControl(''),
-    PharmacyPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
+    PharmacyPassword: new FormControl(''),
     userType: new FormControl('', [Validators.required]),
  });
 
