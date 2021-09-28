@@ -32,7 +32,7 @@ export class ReportRequest {
     isSingleSubmission: boolean = false;
     reportType: string
     symptomList:string
-    accessLevel: number
+    accessLavel: number
 }
 
 export class AuthProperties {

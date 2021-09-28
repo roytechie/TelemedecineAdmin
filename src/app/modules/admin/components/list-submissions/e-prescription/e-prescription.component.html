@@ -1,0 +1,256 @@
+<div class="row">
+<div class="col-md-6">
+    <button (click)="printPrescription()" id="printPageButton">Print</button>
+</div>
+<div class="col-md-6" style="text-align: right;">
+    <button (click)="closePrescription()">Close</button>
+</div>
+</div>
+
+
+<table width="100%" cellpadding="5" cellspacing="0" border="0" id="pdfTable" #pdfTable>
+	<tr>
+		<td style="text-align: center; padding: 0;">
+
+			<table cellpadding="5" cellspacing="0" border="0" style="width: 100%; margin: 10px auto; border: solid 1px #ddd;">
+				<tr>
+					<td style="text-align: center; vertical-align: middle; font-size: 20px; padding: 10px; font-weight: bold;">
+						&nbsp;
+					</td>
+				</tr>
+
+				<tr>
+					<td style="text-align: center; vertical-align: middle; font-size: 20px; padding: 10px; font-weight: bold;">
+						DR. STELLA IMMANUEL, M.D.
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align: center; vertical-align: middle; font-size: 16px; padding: 10px; font-weight: bold;">
+						REHOBOTH MEDICAL CENTER
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align: center; vertical-align: middle; font-size: 14px; ">
+						6728 SOUTH HIGHWAY 6 AT BELLAIRE, HOUSTON TEXAS 77083
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align: center; vertical-align: middle; font-size: 14px; ">
+						<table cellpadding="5" cellspacing="0" border="0" style="width: 100%; margin: 0px auto; ">
+							<tr>
+								<td style="text-align: center; vertical-align: middle; font-size: 14px; width: 33%; padding: 10px;">
+									OFFICE PHONE: 281-530-1230
+								</td>
+								<td style="text-align: center; vertical-align: middle; font-size: 14px; width: 33%; padding: 10px;">
+									FAX: 281-530-2882
+								</td>
+								<td style="text-align: center; vertical-align: middle; font-size: 14px; width: 33%; padding: 10px;">
+									PHARMACYDIRECT: 8328085574
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align: center; vertical-align: middle; font-size: 14px; ">
+						<table cellpadding="5" cellspacing="0" border="0" style="width: 100%; margin: 0px auto; ">
+							<tr>
+								<td style="text-align: center; vertical-align: middle; font-size: 14px; width: 17%; padding: 5px;">
+									Patient's Last Name:
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 16%; padding: 5px; border-bottom: solid 1px #ddd;">
+									{{data.lastName}}
+								</td>
+								<td style="text-align: center; vertical-align: middle; font-size: 14px; width: 17%; padding: 5px;">
+									First Name:
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 16%; padding: 5px; border-bottom: solid 1px #ddd;">
+									{{data.firstName}}
+								</td>
+								<td style="text-align: center; vertical-align: middle; font-size: 14px; width: 17%; padding: 5px;">
+									DOB:
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 16%; padding: 5px; border-bottom: solid 1px #ddd;">
+									{{data.dob}}
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align: center; vertical-align: middle; font-size: 14px; ">
+						<table cellpadding="5" cellspacing="0" border="0" style="width: 100%; margin: 0px auto; ">
+							<tr>
+								<td style="text-align: center; vertical-align: middle; font-size: 14px; width: 20%; padding: 5px;">
+									Patien's Address:
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 80%; padding: 5px; border-bottom: solid 1px #ddd;">
+									{{data.address}}
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align: center; vertical-align: middle; font-size: 14px; ">
+						<table cellpadding="5" cellspacing="0" border="0" style="width: 100%; margin: 0px auto; ">
+							<tr>
+								<td style="text-align: left; vertical-align: middle; font-size: 18px; width: 40%; padding: 5px; font-weight: bold;">
+									Rx
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 30%; padding: 5px;">
+									Patient ID:
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 30%; padding: 5px;">
+									{{data.patientId}}
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align: left; vertical-align: middle; font-size: 14px; padding: 10px; ">
+						<table cellpadding="5" cellspacing="0" border="0" style="width: 100%; margin: 0px auto; ">
+							<tr *ngFor='let medicine of prescribedMedicines'>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; ">
+									{{medicine}}
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align: center; vertical-align: middle; font-size: 20px; padding: 10px; font-weight: bold;">
+						&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align: left; vertical-align: middle; font-size: 14px; padding: 10px; ">
+						<table cellpadding="5" cellspacing="0" border="0" style="width: 100%; margin: 0px auto; ">
+							<tr>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; ">
+									CAN ORDER COMPOUNDED VITAMINS AT DRSTELLAMD.COM
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align: center; vertical-align: middle; font-size: 14px; padding: 2px 10px ">
+						<table cellpadding="5" cellspacing="0" border="0" style="width: 100%; margin: 0px auto; ">
+							<tr>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 70%; padding: 5px;">
+									<img src="../../../../../../assets/drstella_logo.png">
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 15%; padding: 5px;">
+									DEA:
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 15%; padding: 5px; border-bottom: solid 1px #ddd;">
+									FI8888616
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align: center; vertical-align: middle; font-size: 20px; padding: 10px; font-weight: bold;">
+						&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align: center; vertical-align: middle; font-size: 14px; padding: 2px 10px ">
+						<table cellpadding="5" cellspacing="0" border="0" style="width: 100%; margin: 0px auto; ">
+							<tr>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 20%; padding: 5px;">
+									Diagnosis code:
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 20%; padding: 5px; border-bottom: solid 1px #ddd;">
+									
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 20%; padding: 5px;">
+									&nbsp;
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 20%; padding: 5px;">
+									Patient Phone #:
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 20%; padding: 5px; border-bottom: solid 1px #ddd;">
+									
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align: center; vertical-align: middle; font-size: 14px; padding: 2px 10px ">
+						<table cellpadding="5" cellspacing="0" border="0" style="width: 100%; margin: 0px auto; ">
+							<tr>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 20%; padding: 5px;">
+									EFFECTIVE Date:
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 20%; padding: 5px; border-bottom: solid 1px #ddd;">
+									
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 20%; padding: 5px;">
+									&nbsp;
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 20%; padding: 5px;">
+									Fax Confirmation:
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 20%; padding: 5px; border-bottom: solid 1px #ddd;">
+									
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align: center; vertical-align: middle; font-size: 14px; padding: 2px 10px ">
+						<table cellpadding="5" cellspacing="0" border="0" style="width: 100%; margin: 0px auto; ">
+							<tr>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 20%; padding: 5px;">
+									Time:
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 20%; padding: 5px; border-bottom: solid 1px #ddd;">
+									
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 20%; padding: 5px;">
+									&nbsp;
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 20%; padding: 5px;">
+									&nbsp;
+								</td>
+								<td style="text-align: left; vertical-align: middle; font-size: 14px; width: 20%; padding: 5px;">
+									&nbsp;
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align: center; vertical-align: middle; font-size: 14px; padding: 2px 10px ">
+						<table cellpadding="5" cellspacing="0" border="0" style="width: 100%; margin: 0px auto; ">
+							<tr>
+								<td style="text-align: center; vertical-align: middle; font-size: 14px; width: 50%; padding: 5px;">
+                                    EMAIL: REHOBOTHMEDICALCENTER2016@GMAIL.COM
+								</td>
+								<td style="text-align: center; vertical-align: middle; font-size: 14px; width: 50%; padding: 5px;">
+									WEBSITE: DRSTELLAMD.COM
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+
+
+
+
+				<tr>
+					<td style="text-align: center; vertical-align: middle; font-size: 20px; padding: 10px; font-weight: bold;">
+						&nbsp;
+					</td>
+				</tr>
+			</table>
+
+		</td>
+	</tr>
+</table>
