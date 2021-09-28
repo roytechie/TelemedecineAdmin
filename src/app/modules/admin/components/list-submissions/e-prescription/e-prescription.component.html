@@ -1,4 +1,13 @@
-<button (click)="printPrescription()" id="printPageButton">Print</button>
+<div class="row">
+<div class="col-md-6">
+    <button (click)="printPrescription()" id="printPageButton">Print</button>
+</div>
+<div class="col-md-6" style="text-align: right;">
+    <button (click)="closePrescription()">Close</button>
+</div>
+</div>
+
+
 <table width="100%" cellpadding="5" cellspacing="0" border="0" id="pdfTable" #pdfTable>
 	<tr>
 		<td style="text-align: center; padding: 0;">

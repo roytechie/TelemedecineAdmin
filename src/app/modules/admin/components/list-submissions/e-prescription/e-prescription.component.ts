@@ -32,4 +32,8 @@ export class EPrescriptionComponent implements OnInit {
     window.print();
   }
 
+  closePrescription() {
+    this.dialogRef.close();
+  }
+
 }
