@@ -19,7 +19,7 @@ export class PaymentReportComponent implements OnInit {
   isTodayList: boolean = false;
   
   displayedColumns: string[] = ['patientId', 'firstName', 'lastName', 
-    'paymentTime', 'authTranId', 'paymentAmount'];
+    'paymentTime', 'authTranId', 'paymentAmount', 'promocodeName'];
 
   startDate: Date = new Date();
   endDate: Date = new Date();
