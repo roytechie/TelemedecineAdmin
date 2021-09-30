@@ -79,6 +79,12 @@ export class AdminService {
       return answers;
   }));
   }
+
+
+  getPromocodeBySubmission(submissionId : string) { 
+    return this.http.get<any>(`${ this.adminService }GetPromocodeBySubmission?submissionId=` + submissionId,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  } 
   
   addUserLoginDetails(loginDetails: LoginDetails) {
     this.postData = JSON.stringify(loginDetails);

@@ -701,108 +701,126 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit {
 
   downloadInvoicePDF(patientDetails) {
     console.log(patientDetails)
-    this.adminService.getAnswers(patientDetails).subscribe(response => {
-      console.log(response);
-      var transactionDescription = response.transactionDescription
-      var steps = response.surveySteps;
-      var answers: { [id: number]: string; } = {};
-      steps.forEach(step => {
-        step.questions.forEach(question => {
-          answers[question.questionID] = question.answer;
-        });
-      });
-
-      var itemdesc = transactionDescription;
-      // if(patientDetails.isCovid)
-      //   itemdesc = 'Medical Review Charges (Patient With Covid-19 Symptoms)'
-      // else
-      //   itemdesc = 'Medical Review Charges (Patient With No Covid-19 Symptoms)'
-      var name = answers[1] + ' ' + answers[3];
-      var address = answers[5] + '\n' + answers[6] + '\n' + answers[7] + ' ' + answers[8];
-
-      let docDefinition: any = {
-        content: [
-          { canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595 - 2 * 40, y2: 5, lineWidth: 2 }] },
-          {
-            layout: 'lightHorizontalLines', // optional
-            text: 'Frontline MDs Tele-Health Services',
-            style: 'header'
-          },
-          {
-            layout: 'lightHorizontalLines', // optional
-            text: 'Invoice',
-            style: 'subheader'
-          },
-          { canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595 - 2 * 40, y2: 5, lineWidth: 2 }] },
-          {
-            columns: [
-              [
-                '\n',
-                { text: 'Bill To :', bold: true },
-                name,
-                address,
-                '\n'
-              ]
-              ,
-              [
-                '\n',
-                'Invoice # :' + patientDetails.submissionId.toString(),
-                'Payment Reference Number : ' + patientDetails.authTranId,
-                // 'Date :' + new DatePipe('en-US').transform( new Date(), 'MM/dd/yyyy' ),
-                'Date :' + new DatePipe('en-US').transform(patientDetails.submissionTime, 'MM/dd/yyyy'),
-                '\n'
-              ],
-            ]
-          },
-          {
-            layout: 'lightHorizontalLines', // optional
-            table: {
-              // headers are automatically repeated if the table spans over multiple pages
-              // you can declare how many rows should be treated as headers
-              headerRows: 1,
-              widths: ['10%', '30%', '20%', '20%', '20%'],
-
-              body: [
-                ['Sr #', 'Item', 'Price', 'Qty', 'Total'],
-                ['1', itemdesc + '\n\n\n', '$' + patientDetails.pharmacyCharges.toString(), '1', '$' + patientDetails.pharmacyCharges.toString()],
-                ['2', "Procedure Charges" + '\n\n\n', '$' + patientDetails.procedureCharges.toString(), '1', '$' + patientDetails.procedureCharges.toString()],
-                ['', 'Total', '', '', '$' + patientDetails.paymentAmount.toString()],
-              ]
-            }
-          },
-          { canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595 - 2 * 40, y2: 5, lineWidth: 2 }] },
-          {
-            layout: 'lightHorizontalLines', // optional
-            text: '\n\n\nThank you for your payment to Frontline MDs Tele-Health Services.\n',
-            style: 'subheader'
-          },
-          { canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595 - 2 * 40, y2: 5, lineWidth: 2 }] },
-        ],
-        styles: {
-          header: {
-            fontSize: 16,
-            bold: true,
-            alignment: 'center'
-          },
-          subheader: {
-            fontSize: 13,
-            bold: false,
-            alignment: 'center'
-          },
-          leftalignedtext: {
-            fontSize: 11,
-            bold: false,
-            alignment: 'left'
-          },
-          rightalignedtext: {
-            fontSize: 11,
-            bold: false,
-            alignment: 'right'
-          }
+    let promoDetails: any = null;
+    this.adminService.getPromocodeBySubmission(patientDetails.submissionId).subscribe(data => {
+      this.adminService.getAnswers(patientDetails).subscribe(response => {
+        console.log(response);
+        if(data != null) {
+          promoDetails = data;
         }
-      };
-      pdfMake.createPdf(docDefinition).download('telemedicine-invoice-' + patientDetails.submissionId.toString() + '.pdf');
-    });
+        var transactionDescription = response.transactionDescription
+        var steps = response.surveySteps;
+        var answers: { [id: number]: string; } = {};
+        steps.forEach(step => {
+          step.questions.forEach(question => {
+            answers[question.questionID] = question.answer;
+          });
+        });
+        
+        var printPromoPercent = 0;
+        var printPromoDescription = 'NA';
+        var promoDiscountAmount = 0;
+
+        if(promoDetails !=null) {
+          printPromoPercent = promoDetails.promocodePercent;
+          printPromoDescription = promoDetails.promocodeName; 
+          promoDiscountAmount = Math.round(((patientDetails.pharmacyCharges + patientDetails.procedureCharges) * printPromoPercent)/100);
+        }
+
+        var itemdesc = transactionDescription;
+        // if(patientDetails.isCovid)
+        //   itemdesc = 'Medical Review Charges (Patient With Covid-19 Symptoms)'
+        // else
+        //   itemdesc = 'Medical Review Charges (Patient With No Covid-19 Symptoms)'
+        var name = answers[1] + ' ' + answers[3];
+        var address = answers[5] + '\n' + answers[6] + '\n' + answers[7] + ' ' + answers[8];
+  
+        let docDefinition: any = {
+          content: [
+            { canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595 - 2 * 40, y2: 5, lineWidth: 2 }] },
+            {
+              layout: 'lightHorizontalLines', // optional
+              text: 'Frontline MDs Tele-Health Services',
+              style: 'header'
+            },
+            {
+              layout: 'lightHorizontalLines', // optional
+              text: 'Invoice',
+              style: 'subheader'
+            },
+            { canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595 - 2 * 40, y2: 5, lineWidth: 2 }] },
+            {
+              columns: [
+                [
+                  '\n',
+                  { text: 'Bill To :', bold: true },
+                  name,
+                  address,
+                  '\n'
+                ]
+                ,
+                [
+                  '\n',
+                  'Invoice # :' + patientDetails.submissionId.toString(),
+                  'Payment Reference Number : ' + patientDetails.authTranId,
+                  // 'Date :' + new DatePipe('en-US').transform( new Date(), 'MM/dd/yyyy' ),
+                  'Date :' + new DatePipe('en-US').transform(patientDetails.submissionTime, 'MM/dd/yyyy'),
+                  '\n'
+                ],
+              ]
+            },
+            {
+              layout: 'lightHorizontalLines', // optional
+              table: {
+                // headers are automatically repeated if the table spans over multiple pages
+                // you can declare how many rows should be treated as headers
+                headerRows: 1,
+                widths: ['10%', '30%', '20%', '20%', '20%'],
+  
+                body: [
+                  ['Sr #', 'Item', 'Price', 'Qty', 'Total'],
+                  ['1', itemdesc + '\n\n\n', '$' + patientDetails.pharmacyCharges.toString(), '1', '$' + patientDetails.pharmacyCharges.toString()],
+                  ['2', "Procedure Charges" + '\n\n\n', '$' + patientDetails.procedureCharges.toString(), '1', '$' + patientDetails.procedureCharges.toString()],
+                  ['3', 'Less Promo Code' + printPromoDescription + '\n\n\n', ' ' + printPromoPercent + '%', '1', '- $' + promoDiscountAmount],
+                  ['', 'Total', '', '', '$' + patientDetails.paymentAmount.toString()],
+                ]
+              }
+            },
+            { canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595 - 2 * 40, y2: 5, lineWidth: 2 }] },
+            {
+              layout: 'lightHorizontalLines', // optional
+              text: '\n\n\nThank you for your payment to Frontline MDs Tele-Health Services.\n',
+              style: 'subheader'
+            },
+            { canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595 - 2 * 40, y2: 5, lineWidth: 2 }] },
+          ],
+          styles: {
+            header: {
+              fontSize: 16,
+              bold: true,
+              alignment: 'center'
+            },
+            subheader: {
+              fontSize: 13,
+              bold: false,
+              alignment: 'center'
+            },
+            leftalignedtext: {
+              fontSize: 11,
+              bold: false,
+              alignment: 'left'
+            },
+            rightalignedtext: {
+              fontSize: 11,
+              bold: false,
+              alignment: 'right'
+            }
+          }
+        };
+        pdfMake.createPdf(docDefinition).download('telemedicine-invoice-' + patientDetails.submissionId.toString() + '.pdf');
+      });
+    }, error => {});
+    
   }
 
   getEscribeDetails(submissionId: number) {
