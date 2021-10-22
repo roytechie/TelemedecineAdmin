@@ -325,8 +325,9 @@ export class AdminService {
     { headers: this.headers}).pipe(catchError(this.errorHandler));
   }
 
-  getPromocodeDetails(){
-    return this.http.get<any>(`${ this.adminService }GetPromocodeDetails`,
+  getPromocodeDetails(startDate, endDate){
+    console.log(startDate);
+    return this.http.get<any>(`${ this.adminService }GetPromocodeDetails?startDate=` + startDate + `&endDate=` + endDate,
     { headers: this.headers}).pipe(catchError(this.errorHandler));
   }
 

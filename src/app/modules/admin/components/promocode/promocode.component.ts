@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -21,7 +22,13 @@ export class PromocodeComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   isAdminAccess: boolean = false;
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['promocodeId','promocodeName','promocodePercent','promocodeIsActive', 'promocodeStartDate', 'promocodeEndDate', 'actions']
+  displayedColumns = ['promocodeId','promocodeName','promocodePercent', 'totalPromoAmount', 'promocodeIsActive', 'promocodeStartDate', 'promocodeEndDate', 'actions']
+
+  disabledButton: boolean = false;
+  startDate: Date = new Date();
+  endDate: Date = new Date();
+  maxDate: Date = new Date(2100, 1, 1);
+  sumOfPromoAmount: number = 0;
 
   constructor(public adminService: AdminService, private route: Router, 
     private athenticationService: AthenticationService, private dialog: MatDialog) { 
@@ -46,16 +53,26 @@ export class PromocodeComponent implements OnInit {
   }
 
   getPromocodeDetails() {
-    this.adminService.getPromocodeDetails().subscribe(data => {
+    this.disabledButton = true;
+    let startDate = new DatePipe("en-us").transform(this.startDate, "MM/dd/yyyy HH:mm:ss");
+    let endDate = new DatePipe("en-us").transform(this.endDate, "MM/dd/yyyy HH:mm:ss");
+    this.adminService.getPromocodeDetails(startDate, endDate).subscribe(data => {
+      this.disabledButton = false;
       this.dataSource = new MatTableDataSource<any>(data);
       this.dataSource.data = data;
       console.log(this.dataSource.data);
       setTimeout(() => this.dataSource.paginator = this.paginator);
       setTimeout(() => this.dataSource.sort = this.sort);
+      this.sumOfPromoAmount = this.dataSource.data
+      .map(curr => parseFloat(curr.totalPromoAmount))
+      .reduce(function(a, b) { return a + b; });
     }, error => {
 
     });
     //console.log(this.dataSource.data);
+  }
+  viewPromodetailsByDateRange() {
+    this.getPromocodeDetails();
   }
   openEditForm(element) {
     let data = { element: element, promocodeList: this.dataSource.data }
