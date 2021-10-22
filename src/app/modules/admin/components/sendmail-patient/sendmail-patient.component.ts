@@ -54,7 +54,8 @@ export class SendmailPatientComponent implements OnInit {
     {value: '7', viewValue: 'Complete'},
     {value: '8', viewValue: 'Refund'},
     {value: '9', viewValue: 'Recovered'},
-    {value: '10', viewValue: 'NP'}
+    {value: '10', viewValue: 'NP'},
+    {value:'11', viewValue: 'Well RX'}
   ];
 
   toggleAllSelectionPatientStatus(event: any) {

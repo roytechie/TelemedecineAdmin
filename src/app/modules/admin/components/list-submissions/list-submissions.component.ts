@@ -97,7 +97,8 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit {
     { value: '7', viewValue: 'Complete' },
     { value: '8', viewValue: 'Refund' },
     { value: '9', viewValue: 'Recovered' },
-    { value: '10', viewValue: 'NP' }
+    { value: '10', viewValue: 'NP' },
+    { value: '11', viewValue: 'Well RX' }
   ];
 
   toggleAllSelectionPatientStatus(event: any) {
@@ -503,7 +504,8 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit {
         status7: number = 0,
         status8: number = 0,
         status9: number = 0,
-        status10: number = 0;
+        status10: number = 0,
+        status11: number = 0;
 
       statusArrVal.forEach(element => {
         if (parseInt(element) == 1) {
@@ -536,10 +538,13 @@ export class ListSubmissionsComponent implements OnInit, AfterViewInit {
         if (parseInt(element) == 10) {
           status10 = 10;
         }
+        if (parseInt(element) == 11) {
+          status11 = 11;
+        }
       });
 
       this.dataSource.data = this.dataSource.filteredData.filter(function (item) {
-        return (item.status == status1 || item.status == status2 || item.status == status3 || item.status == status4 || item.status == status5 || item.status == status6 || item.status == status7 || item.status == status8 || item.status == status9 || item.status == status10);
+        return (item.status == status1 || item.status == status2 || item.status == status3 || item.status == status4 || item.status == status5 || item.status == status6 || item.status == status7 || item.status == status8 || item.status == status9 || item.status == status10 || item.status == status11);
       });
     }
 
