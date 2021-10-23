@@ -40,6 +40,7 @@ export class SendmailPatientComponent implements OnInit {
   sendMailButtonLabel : string;
   /**************************************************/
   @ViewChild('select') select: MatSelect;
+  @ViewChild('SelectSymptom') SubmissionListSelectSymptom: MatSelect;
 
   allSelectedPatientStatus=false;
 
@@ -58,6 +59,12 @@ export class SendmailPatientComponent implements OnInit {
     {value:'11', viewValue: 'Well RX'}
   ];
 
+  allSelected = false;
+  covidSymptoms: any[] = [
+    { value: '1', viewValue: 'Covid' },
+    { value: '2', viewValue: 'NonCovid' }
+  ];
+
   toggleAllSelectionPatientStatus(event: any) {
     if (this.allSelectedPatientStatus) {
       this.select.options.forEach((item: MatOption) => item.select());
@@ -69,6 +76,43 @@ export class SendmailPatientComponent implements OnInit {
       this.select.options.forEach((item: MatOption) => item.deselect());
     }
     this.optionClickPatientStatus(event);   
+  }
+  optionClick(event: any) {
+    let newStatus = true;
+    var symptomInfo: string = "";
+    this.SubmissionListSelectSymptom.options.forEach((item: MatOption) => {
+      if (!item.selected) {
+        newStatus = false;
+      }
+
+      if (item.selected == true) {
+        if (symptomInfo == "") {
+          symptomInfo = item.value;
+        }
+        else {
+          symptomInfo = symptomInfo + "," + item.value;
+        }
+
+      }
+
+
+    });
+
+    this.symptomsFilter = symptomInfo;
+    event.value = symptomInfo;
+    this.allSelected = newStatus;
+  }
+  toggleAllSelection(event: any) {
+
+    if (this.allSelected) {
+      this.SubmissionListSelectSymptom.options.forEach((item: MatOption) => item.select());
+      this.SubmissionListSelectSymptom.options.forEach(element => {
+        this.symptomsFilter
+      });
+      //this.symptomsFilter
+    } else {
+      this.SubmissionListSelectSymptom.options.forEach((item: MatOption) => item.deselect());
+    }
   }
   optionClickPatientStatus(event: any) {
     let newStatus = true;
@@ -204,7 +248,8 @@ export class SendmailPatientComponent implements OnInit {
         return;
      }
      else{
-      
+      alert("selected status: " + this.statusFilter);
+      alert("selected symptom: " + this.symptomsFilter);
       let tempdialogRef:any;
 
       if(!this.urlEmail){
@@ -244,7 +289,8 @@ export class SendmailPatientComponent implements OnInit {
             EmailBody: this.emailForm.value['body'],
             StartDate: this.adminService.returnFormatedDate(this.startDate),
             EndDate: this.adminService.returnFormatedDate(this.endDate),
-            Status: this.statusFilter < 0 ? null:this.statusFilter
+            Status: this.statusFilter < 0 ? null:this.statusFilter,
+            Symptom: this.symptomsFilter
           };
          }
 
@@ -255,6 +301,7 @@ export class SendmailPatientComponent implements OnInit {
             StartDate: this.adminService.returnFormatedDate(this.startDate),
             EndDate: this.adminService.returnFormatedDate(this.endDate),
             Status: this.statusFilter < 0 ? null:this.statusFilter,
+            Symptom: null,
             ToAddress: this.urlEmail,
             Fname: this.urlFname,
             Mname: this.urlMname,

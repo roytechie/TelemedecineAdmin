@@ -20,7 +20,7 @@
                     <mat-datepicker #picker2></mat-datepicker>
                 </mat-form-field>
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <mat-form-field>
                       <mat-label>Status</mat-label>
                       <mat-select  #select multiple>
@@ -36,7 +36,21 @@
                       </mat-select>
                     </mat-form-field>
                 </div>
-
+                <div class="col-md-3">
+                    <mat-form-field>
+                      <mat-label>Symptoms</mat-label>
+                      <mat-select #SelectSymptom multiple>
+                        <div class="select-all" style="padding-left: 16px; padding-top: 15px; padding-bottom: 7px;">
+                          <mat-checkbox [(ngModel)]="allSelected" [ngModelOptions]="{standalone: true}"
+                            (change)="toggleAllSelection($event)">Select All</mat-checkbox>
+                        </div>
+                        <mat-option class="DD1" (click)="optionClick($event)" *ngFor="let symptoms of covidSymptoms"
+                          [value]="symptoms.value">
+                          {{symptoms.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
             </div>
         </mat-card>
     </div>

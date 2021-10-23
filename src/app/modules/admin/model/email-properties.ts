@@ -10,6 +10,7 @@ export interface EmailProperties {
     StartDate: Date;
     EndDate: Date;
     Status?: string; 
+    Symptom: string;
     Fname? : string;
     Mname? : string;
     Lname? : string;   
