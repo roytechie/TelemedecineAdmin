@@ -248,8 +248,7 @@ export class SendmailPatientComponent implements OnInit {
         return;
      }
      else{
-      alert("selected status: " + this.statusFilter);
-      alert("selected symptom: " + this.symptomsFilter);
+      
       let tempdialogRef:any;
 
       if(!this.urlEmail){

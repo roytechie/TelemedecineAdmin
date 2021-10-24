@@ -14,14 +14,14 @@ export class DynamicServiceUrls {
     //blobUrl = "https://gracesoft.blob.core.windows.net/userfiles/Telemedicine/Esign/";
 
     //port = "https://162.215.215.117:8001/"; // docker-test
-    //port = "https://frontlinemds.com/intakeformapi/"; // production
+    port = "https://frontlinemds.com/intakeformapi/"; // production
     // domainUrl  = 'https://gracebeta.com/';
     // rootDomain = 'PMSUI-SVN'; 
     //virtualUrl_PMSUI = this.domainUrl + this.rootDomain +"/"; //this.getSvnRootName(this.rootDomain);
  
     //Service calling url 
    // port = 'https://localhost:44316/'; 
-     port = 'https://localhost:5001/'; // local
+     //port = 'https://localhost:5001/'; // local
     //port = virtualUrl_PMSUI + "";
     //port = "http://localhost/PMS.WebAPI/";
 
