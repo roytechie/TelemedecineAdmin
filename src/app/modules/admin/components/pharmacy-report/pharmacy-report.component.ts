@@ -86,7 +86,10 @@ export class PharmacyReportComponent implements OnInit {
   }
 
   getPharmacyDetails() {
-    this.adminService.getPharmacyDetails().subscribe(list => {
+    let model = {
+      isActiveConsidered: null
+    };
+    this.adminService.getPharmacyDetails(model).subscribe(list => {
       
       this.pharmacyList = list;
       if(this.athenticationService.checkAccessLavel(this.athenticationService.currentUserValue) == AccessLavel.Pharmacy){

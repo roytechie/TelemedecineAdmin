@@ -39,7 +39,10 @@ export class DoctorsFormComponent implements OnInit {
 
   
   getPharmacyDetails() {
-      this.adminService.getPharmacyDetails().subscribe(response=>{
+    let model = {
+      isActiveConsidered: true
+    };
+      this.adminService.getPharmacyDetails(model).subscribe(response=>{
           this.pharmacyList = response;
           //console.log(response);
           let filterKey = localStorage.pharmacyValue != "" ? 

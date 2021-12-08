@@ -101,7 +101,10 @@ export class MedicineDeliveryReportComponent implements OnInit {
   }
 
   getPharmacyDetails() {
-    this.adminService.getPharmacyDetails().subscribe(data => {
+    let model = {
+      isActiveConsidered: true
+    };
+    this.adminService.getPharmacyDetails(model).subscribe(data => {
       this.pharmacyList = data;
     }, error => {
 

@@ -16,10 +16,11 @@ export class ReportServiceService {
   constructor(private http : HttpClient,
     private dynamicServiceUrls: DynamicServiceUrls,) { }
 
-  getPharmacyDetails(): Observable<any>{
+  getPharmacyDetails(model): Observable<any>{
+    this.postData = JSON.stringify(model);
     this.webApiUrl = `${this.adminService}GetPharmacyDetailsList`; 
 
-    return this.http.post(this.webApiUrl,{ headers: this.headers}).pipe(
+    return this.http.post(this.webApiUrl,this.postData,{ headers: this.headers}).pipe(
       catchError(this.errorHandler)
     )
   }
