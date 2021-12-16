@@ -374,4 +374,9 @@ export class AdminService {
     return this.http.post<any>(`${ this.adminService }UpdatePharmaPayDetails`, this.postData,
     { headers: this.headers}).pipe(catchError(this.errorHandler));
   }
+
+  getDeliveryAgencies(){
+    return this.http.get<any>(`${ this.adminService }GetAgencyList`,
+    { headers: this.headers}).pipe(catchError(this.errorHandler));
+  }
 }

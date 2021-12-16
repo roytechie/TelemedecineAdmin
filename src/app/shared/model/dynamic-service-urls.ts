@@ -14,7 +14,7 @@ export class DynamicServiceUrls {
     //blobUrl = "https://gracesoft.blob.core.windows.net/userfiles/Telemedicine/Esign/";
 
     //port = "https://162.215.215.117:8001/"; // docker-test
-    //port = "https://frontlinemds.com/intakeformapi/"; // production
+    // port = "https://frontlinemds.com/intakeformapi/"; // production
     // domainUrl  = 'https://gracebeta.com/';
     // rootDomain = 'PMSUI-SVN'; 
     //virtualUrl_PMSUI = this.domainUrl + this.rootDomain +"/"; //this.getSvnRootName(this.rootDomain);
